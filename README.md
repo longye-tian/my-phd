@@ -1,41 +1,48 @@
 <div align="center">
   
-# ✨ Dev Journey Dashboard ✨
+# 📊 Economics Research Dashboard
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Weekly%20Goals&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=ffffff" width="100%" alt="Header" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,3,30&height=180&section=header&text=ANU%20Economics%20PhD&fontSize=70&fontAlignY=35&animation=fadeIn&fontColor=ffffff" width="100%" alt="Header" />
 
-[![Last Updated](https://img.shields.io/badge/updated-March%202025-81A1C1?style=for-the-badge&logo=github)](https://github.com/YOUR_USERNAME)
-[![Goals](https://img.shields.io/badge/goals-active-A3BE8C?style=for-the-badge&logo=checkmarx)](https://github.com/YOUR_USERNAME)
-[![Streak](https://img.shields.io/badge/streak-building-B48EAD?style=for-the-badge&logo=firebase)](https://github.com/YOUR_USERNAME)
+[![Last Updated](https://img.shields.io/badge/updated-March%202025-00acb5?style=for-the-badge&logo=anu)](https://github.com/YOUR_USERNAME)
+[![Research Status](https://img.shields.io/badge/research-active-00b159?style=for-the-badge&logo=researchgate)](https://github.com/YOUR_USERNAME)
+[![Data Analysis](https://img.shields.io/badge/analysis-ongoing-f37735?style=for-the-badge&logo=jupyter)](https://github.com/YOUR_USERNAME)
   
 </div>
 
 <br>
 
-> *"The secret to getting ahead is getting started."* — Mark Twain
+> *"In economics, the majority is always wrong."* — John Kenneth Galbraith
 
 <br>
 
-## 🌈 Current Focus
+## 🔬 Current Research Focus
 
 <table>
 <tr>
 <td width="70%">
 
-### 🎯 Sprint: `Elevate` | March 17-23, 2025
+### 📘 Semester Goals: March-June 2025
 
-| Goal | Stack | Progress |
+| Research Objective | Methodology | Progress |
 |------|-------|----------|
-| <img src="https://em-content.zobj.net/source/skype/289/fire_1f525.png" width="17" /> **[Primary Goal]** | `react` `node` | ![](https://progress-bar.dev/45/?width=100&color=5E81AC) |
-| <img src="https://em-content.zobj.net/source/skype/289/glowing-star_1f31f.png" width="17" /> **[Secondary Goal]** | `typescript` | ![](https://progress-bar.dev/60/?width=100&color=88C0D0) |
-| <img src="https://em-content.zobj.net/source/skype/289/sparkles_2728.png" width="17" /> **[Stretch Goal]** | `aws` | ![](https://progress-bar.dev/15/?width=100&color=A3BE8C) |
+| 📝 **[Dissertation Chapter X]** | `econometrics` `panel data` | ![](https://progress-bar.dev/45/?width=100&color=00acb5) |
+| 📊 **[Data Collection for Study Y]** | `R` `stata` | ![](https://progress-bar.dev/60/?width=100&color=00b159) |
+| 📚 **[Literature Review on Z]** | `systematic review` | ![](https://progress-bar.dev/35/?width=100&color=f37735) |
 
 </td>
 <td>
 
-### 📊 Stats
+### 📈 Research Output
 
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=YOUR_USERNAME&theme=nord&hide_border=true" width="100%" />
+```
+Publications: X
+Working Papers: Y
+Conference Presentations: Z
+Citations: N
+```
+
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_USERNAME&layout=compact&hide_border=true&theme=calm&custom_title=Analysis%20Tools&hide=html,css" width="100%" />
 
 </td>
 </tr>
@@ -43,28 +50,34 @@
 
 <br>
 
-## 📈 Weekly Activity
+## 📋 Weekly Academic Agenda
 
 <table>
 <tr>
 <td width="60%">
 
-<img src="https://activity-graph.herokuapp.com/graph?username=YOUR_USERNAME&custom_title=This%20Week's%20Contribution%20Graph&theme=nord&bg_color=2E3440&hide_border=true&line=88C0D0&point=ECEFF4" width="100%" />
+### 🎯 This Week's Priorities (March 17-23, 2025)
+
+| Task | Deadline | Status |
+|------|----------|--------|
+| 📊 Run robustness checks on model | March 19 | ![](https://progress-bar.dev/75/?width=80&color=00acb5) |
+| 📚 Review feedback from supervisor | March 20 | ![](https://progress-bar.dev/100/?width=80&color=00b159) |
+| 📝 Draft methodology section (1000 words) | March 22 | ![](https://progress-bar.dev/40/?width=80&color=f37735) |
+| 📈 Prepare visualizations for department seminar | March 23 | ![](https://progress-bar.dev/20/?width=80&color=00acb5) |
 
 </td>
 <td>
 
-### ⚡ Highlights
+### ⏱️ Time Allocation
 
-```js
-// This week's metrics
-const weeklyMetrics = {
-  commits: 17,
-  pullRequests: 3,
-  codeReviews: 5,
-  issuesClosed: 4,
-  coffeeConsumed: "∞"
-};
+```r
+# Weekly hours distribution
+research_hours <- data.frame(
+  activity = c("Data Analysis", "Writing", 
+               "Reading", "Meetings",
+               "Teaching"),
+  hours = c(16, 12, 8, 4, 5)
+)
 ```
 
 </td>
@@ -73,24 +86,25 @@ const weeklyMetrics = {
 
 <br>
 
-## 🏆 Achievements & Learning
+## 🧠 Academic Development
 
 <table>
 <tr>
 <td>
 
-### 🎉 Recent Wins
-- ✅ Deployed [feature/project]
-- ✅ Optimized [component/service]
-- ✅ Learned [technology/concept]
+### 🏆 Recent Achievements
+- ✅ Presented at [departmental/conference name]
+- ✅ Submitted paper to [journal name]
+- ✅ Completed [training/course] on [topic]
+- ✅ Received feedback on [chapter/paper]
 
 </td>
 <td>
 
-### 📚 Learning Path
-- [ ] [Technology 1] - 25% complete
-- [ ] [Book/Course] - 40% complete
-- [ ] [Project] - Planning phase
+### 📚 Learning Queue
+- [ ] [Economic theory/methodology to study] - 35% complete
+- [ ] [Statistical technique] - 50% complete
+- [ ] [Software/language] for data visualization - Planning phase
 
 </td>
 </tr>
@@ -98,23 +112,25 @@ const weeklyMetrics = {
 
 <br>
 
-## 💭 Dev Journal
+## 📖 Research Notes
 
 <table>
 <tr>
 <td>
 
-### 🔍 Key Insights
+### 💡 Key Insights
 ```
-This week I discovered that [insight about your development process].
-Next week I plan to focus more on [area of improvement].
+Recent findings suggest [brief note about research insight].
+Further investigation needed on [specific aspect of research].
 ```
 
 </td>
 <td>
 
-### 🧠 Quote of the Week
-> "Make it work, make it right, make it fast."
+### 📑 Reading List
+- [ ] [Author] (Year). "[Paper Title]"
+- [ ] [Author] (Year). "[Book Title]"
+- [ ] [Author] (Year). "[Working Paper]"
 
 </td>
 </tr>
@@ -124,23 +140,28 @@ Next week I plan to focus more on [area of improvement].
 
 <div align="center">
 
-## 🛠️ Tech Stack Focus
+## 🛠️ Research Toolkit
 
-<img src="https://skillicons.dev/icons?i=js,ts,react,nodejs,aws,docker,git&theme=dark" alt="Skills" />
+<img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white" alt="R" />
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+<img src="https://img.shields.io/badge/Stata-3776AB?style=for-the-badge&logo=stata&logoColor=white" alt="Stata" />
+<img src="https://img.shields.io/badge/LaTeX-008080?style=for-the-badge&logo=latex&logoColor=white" alt="LaTeX" />
+<img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter" />
+<img src="https://img.shields.io/badge/Git-F05033?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
 
 </div>
 
 <br>
 
 <div align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer&animation=twinkling" width="100%" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=2,3,30&height=80&section=footer&animation=fadeIn" width="100%" />
 </div>
 
 <!-- Update Instructions (Hidden) -->
 <!--
 1. Update progress bars: ![](https://progress-bar.dev/XX/?width=100&color=COLOR)
-   Colors: 5E81AC, 88C0D0, A3BE8C, EBCB8B, B48EAD
-2. Update dates and sprint name
+   Colors: 00acb5 (ANU teal), 00b159 (green), f37735 (orange)
+2. Update dates and research objectives
 3. Replace YOUR_USERNAME with your GitHub username
 4. Update all placeholder text in [] brackets
 -->
