@@ -17,7 +17,7 @@
 | Priority | Objective | Tech Stack | Progress | Status |
 |:--------:|-----------|------------|----------|:------:|
 | 🔥 HIGH | [Primary Goal] | `[technologies]` | ![](https://progress-bar.dev/25/?width=80&color=0366d6) | `IN PROGRESS` |
-| 🔹 MED | [Secondary Goal] | `[technologies]` | ![](https://progress-bar.dev/50/?width=80&color=0366d6) | `IN PROGRESS` |
+| 🔹 MED | [Secondary Goal] | `[technologies]` | ![](https://progress-bar.dev/80/?width=80&color=0366d6) | `IN PROGRESS` |
 | 🔸 LOW | [Stretch Goal] | `[technologies]` | ![](https://progress-bar.dev/10/?width=80&color=0366d6) | `STARTED` |
 
 <details>
