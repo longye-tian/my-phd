@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🚀 Developer Progress Dashboard
+# 🚀 Goal 
 
 ![Last Updated](https://img.shields.io/badge/last%20updated-March%202025-blue?style=flat-square)
 ![Goals](https://img.shields.io/badge/goals-active-success?style=flat-square)
@@ -8,10 +8,10 @@
 
 </div>
 
-## 📊 This Week's Development Focus
+## 📊 Quote of the Week
 > `"Continuous improvement is better than delayed perfection" - Mark Twain`
 
-### 🔍 Current Sprint: `[YOUR_CURRENT_SPRINT_NAME]`
+### 🔍 Current goals
 *Week of March 17-23, 2025*
 
 | Priority | Objective | Tech Stack | Progress | Status |
