@@ -10,7 +10,7 @@
 
 ### 📊 Weekly Contribution Stats
 <!-- Replace with your actual username in the URL -->
-![Weekly Contribution Graph](https://github-readme-stats.vercel.app/api?username=YOUR_USERNAME&show_icons=true&count_private=true&hide_title=true&hide_border=true&hide=stars,issues&line_height=24&theme=dark)
+![Weekly Contribution Graph](https://github-readme-stats.vercel.app/api?username=longye-tian&show_icons=true&count_private=true&hide_title=true&hide_border=true&hide=stars,issues&line_height=24&theme=dark)
 
 ### 🏆 Last Week's Achievements
 - [Achievement 1]
