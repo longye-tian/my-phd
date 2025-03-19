@@ -1,0 +1,317 @@
+\documentclass[11pt,xcolor={dvipsnames},hyperref={pdftex,pdfpagemode=UseNone,hidelinks,pdfdisplaydoctitle=true},usepdftitle=false]{beamer}
+\usepackage{presentation}
+
+% Enter presentation title to populate PDF metadata:
+\hypersetup{pdftitle={DP2 Reading Group}}
+
+% Enter path to PDF file with figures:
+\newcommand{\pdf}{figures.pdf}
+\newcommand{\too}{\stackrel { o } {\to} }
+
+\begin{document}
+
+% Enter title:
+\title{DP2 Reading Group}
+
+\information
+%
+% Enter URL to research paper (can be commented out):
+[https://github.com/longye-tian]
+%
+% Enter authors:
+{Longye Tian}
+%
+% Enter location and date (can be commented out):
+{Sydney -- October 2024}
+
+\frame{\titlepage}
+
+% Enter content of presentation:
+\begin{frame}
+\frametitle{Order Converge}
+\begin{definition}
+A sequence $(v_n)$ in a Riesz space $E$ is said to \textbf{order converge} to a point $v\in E$ if there exists $(d_n)\subset E$ such that 
+$$
+|v_n-v|\le d_n\,\,\forall n\in\mathbb{N} \quad\text{and $d_n\downarrow 0$}
+$$
+In this case, we write $v_n\stackrel { o } {\to} v$.
+\end{definition}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Lemma 1.3.1Order convergence generalize monotone convergence}
+Order limits are unique, in the sense that if $v_n\too v$ and $v_n\too u$ then $u=v$. Moreover,
+\begin{enumerate}
+\item[(i)] if $(v_n)$ is increasing, then $v_n\too v$ if and only if $v_n\uparrow v$
+\item[(ii)] if $(v_n)$ is decreasing, then $v_n\too v$ if and only if $v_n\downarrow v$
+\end{enumerate} 
+\begin{proof}
+Let $|v_n-v|\le d_n\downarrow 0$, $|v_n-u|\le b_n\downarrow 0$. We have\\
+$
+|v-u|\le |v-v_n+v_n-u| \le |v-v_n| + |v_n-u|\le d_n+b_n
+$\\
+By Exercsie 1.1.19, we have\\
+$
+|v-u|\le d_n+b_n\downarrow 0
+$\\
+Hence, we have $v=u$.
+\end{proof}
+\end{frame}
+\begin{frame}
+\heading{Eventual Order Contracting}
+\end{frame}
+\begin{frame}
+\frametitle{Eventual Order Contracting}
+\begin{definition}
+Let $S$ be a self-map on a subset $V$ of a Riesz space $E$. We call $S$ \textbf{eventual order contracting} on $V$ if, there exists a order continuous linear operator $K:E\to E$ such that for any $v,w\in V$,
+\begin{equation*}
+|Sv-Sw|\le K|v-w|\quad\text{and $K^n|v-w|\too 0$}
+\end{equation*}
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Definition *}
+\begin{definition}
+Let $S$ be a eventual order contraction on $V$ subset of a Riesz space $E$. We say $S$ is \textbf{bounded by $K$} if $K:E\to E$ is a order continuous linear operator such that for any $v,w\in V$,
+\begin{equation*}
+|Sv-Sw|\le K|v-w|\quad\text{and $K^n|v-w|\too 0$}
+\end{equation*}
+\end{definition}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lemma *}
+
+If $S$ is a eventual order contraction on $V$ a subset of Riesz space $E$ bounded by $K$, then, $S^m$ is also eventual order contraction on $V$ and bounded by $K^m$.
+\begin{proof}
+We have, for any $v,w\in V$,
+$$
+|S^m v-S^mw| = |S(S^{m-1}v)-S(S^{m-1}w)|\le K|S^{m-1} v-S^{m-1}w|
+$$
+Iterating this, we get 
+$$
+|S^mv-S^mw|\le K^m|v-w| \text{ and $(K^m)^n|v-w|\too 0$}
+$$
+Since composition of linear order continuous map is also linear order continuous, this shows the claim.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.29 Revisit}
+Let $S$ be an order preserving self-map on a subset $V$ of a Riesz space $E$.  Suppose there exists a
+    order continuous linear operator $K \colon E \to E$ such that 
+    $|S \,v - S \, w| \leq K |v - w|$ for all $v, w \in V$. Prove that $S$ is 
+    order continuous on $V$.
+\begin{proof}
+Fix $(v_n) \subset V$ with $v_n \uparrow v \in V$.We have\\
+$0 \leq S \, v - S \, v_n \leq K |v - v_n|\le Kd_n\downarrow K0=0$\\
+Hence $S \, v - S \, v_n \downarrow
+    0$.  By Lemma 1.1.12 , this gives $S \, v_n \uparrow S \, v$.
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Tarski-Kantorovich Theorem Revisit}
+\begin{theorem}
+If $S$ is an order continuous self-map on $V$ 
+    and $V$ is $\sigma$-chain complete, then  $S$ has a fixed point in $V$.
+\end{theorem}
+\end{frame}
+\begin{frame}
+\frametitle{Theorem 1.3.2}
+If $V$ is a $\sigma$-chain complete subset of a Riesz space $E$ and
+    $S$ is order preserving and eventually order contracting on $V$, then
+    $S$ has a unique fixed point $\bar v \in V$ and
+    %
+    \begin{equation*}\label{eq:snoc}
+        S^n v \too \bar v 
+        \quad \text{ for any }
+        v \in E. 
+    \end{equation*}
+    %
+\begin{proof}
+$S$ is order continuous (by Exercise 1.1.29) on a $\sigma$-chain complete set $V$. TK implies $S$ has a fixed point $\bar v\in V$. From proposition *, we have,
+$$
+|S^nv-\bar v|= |S^{n}v-S^n\bar v| \le K^n|v-\bar v|\le d_n\downarrow 0
+$$
+Uniqueness is from the uniqueness of the order limits.
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Eventual order contracting  ADP}
+\begin{definition}
+Let $E$ be a Riesz space and let $(V, \mathbb{T})$ be
+a ADP for some $V \subset E$. We call $(V, \mathbb{T})$ \textbf{eventually order
+contracting} if $T_\sigma$ is eventually order contracting on $V$ for all
+$\sigma \in \Sigma$.
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Theorem 1.2.14 Revisit}
+\begin{theorem}
+    Let $(V, \mathbb{T})$ be regular, well-posed and order continuous. If $V$ is
+    $\sigma$-chain complete, then
+    \vspace{0.4em}
+    %
+    \begin{enumerate}
+        \item the fundamental ADP optimality properties hold and
+        \item VFI, OPI and HPI all converge.  
+    \end{enumerate}
+    %
+\end{theorem}
+\end{frame}
+\begin{frame}
+\frametitle{Theorem 1.3.4}
+ If $V$ is a $\sigma$-chain complete subset of a Riesz space $E$ and
+        $(V, \mathbb{T})$ is regular and eventually order contracting, then 
+        \vspace{0.4em}
+        %
+        \begin{enumerate}
+            \item $(V,  \mathbb{T})$ is well-posed,
+            \item the fundamental ADP optimality properties on
+                page hold, and
+            \item VFI, OPI and HPI all converge.  
+        \end{enumerate}
+\begin{proof}
+Well-posed from Theorem 1.3.2.\\
+Order-continuity from Exercise 1.1.29.\\
+Then, ADP optimality property and convergence from Theorem 1.2.14.\\
+\end{proof}
+\end{frame}
+\begin{frame}
+\heading{Affine ADP}
+\end{frame}
+
+\begin{frame}
+\frametitle{Affine ADP}
+\begin{definition}
+Let $(E, \mathbb{T})$ be an ADP where $E$ is an Archemidean Riesz space. We call $(E, \mathbb{T})$
+\textbf{affine} if each $T_\sigma \in \mathbb{T}$ has the form
+%
+\begin{equation*}
+    T_\sigma \, v = r_\sigma + K_\sigma \, v
+    \qquad (v \in E)
+\end{equation*}
+%
+for some $r_\sigma \in E$ and order continuous linear operator $K_\sigma \colon E \to E$.
+\end{definition}
+\end{frame}
+
+\begin{frame}
+\frametitle{Theorem 1.3.3}
+Let $S$ be a self-map on $\sigma$-Dedekind complete Archemidean Riesz space $E$.  If 
+    %
+    \begin{enumerate}
+        \item there exists a $h \in E$ and an order continuous linear operator $K$ on
+            $E$ such that $Sv = h + Kv$ for all $v \in E$, and
+        \item there is an $e \in E$ and $\rho \in [0, 1)$ with $|h| \leq e$ and
+            $Ke \leq \rho e$,
+    \end{enumerate}
+    %
+    then $S$ has a unique fixed point $\bar v$ in the order interval $V \coloneq
+    [-e/(1-\rho), e/(1-\rho)]$ and, moreover,
+$
+S^n v \too \bar v 
+        \quad \text{ for any }
+        v \in V. 
+$
+\begin{proof}
+\begin{enumerate}
+\item Show $S$ is eventual order contracting on $V$
+\item Use Theorem 1.3.2
+\end{enumerate}
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of Theorem 1.3.3}
+\begin{proof}
+First, we show that $S$ is a self-map on $V$
+$$
+|Sv| \underbrace{\leq |h| + |K v|}_{\Delta ineq}
+       \underbrace{ \leq |h| + K|v| }_{o.c\Rightarrow o.p\Rightarrow positive}
+        \leq e + K \frac{e}{1-\rho} 
+        \leq e + \rho \frac{e}{1-\rho} 
+        = \frac{e}{1-\rho}.
+$$
+In Riesz space, we have for any $u,v\in E$ if $u\in E_+$, then $|v|\le u\Rightarrow v\in[-u,u]$. This shows $Sv\in V$, hence $S$ is a self-map
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Proof of Theorem 1.3.3 cont.}
+\begin{proof}
+Fix $v,w\in V$, we have,
+$$
+|Sv-Sw|  = |h+Kv-h-Kw|= \underbrace{|Kv-Kw|=|K(v-w)}_{linear}|\underbrace{\le K|v-w|}_{positive}
+$$
+Moreover, 
+$$
+K^n|v-w|\le K^n\frac{2e}{1-\rho}\le \underbrace{\rho^n\frac{2e}{1-\rho}\downarrow 0}_{\rho\in[0,1)}
+$$
+Hence, $S$ is eventually order contracting on $V$.
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Proof of Theorem 1.3.3 cont.}
+\begin{proof}
+By Lemma 1.1.7, order interval $V$ subset of $\sigma$-Dedekind complete space $E$ is $\sigma$-chain complete.\\
+Use Theorem 1.3.2, we get the result.
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Theorem 1.3.5}
+Let $E$ be $\sigma$-Dedekind complete and let $(E, \mathbb{T})$ be an
+    affine ADP with policy set $\Sigma$.  If $(E,  \mathbb{T})$ is regular and
+    %
+    \begin{equation*}
+        \text{$\exists \; e \in E$ and $\rho \in [0, 1)$ with $|r_\sigma| \leq e$ and
+            $K_\sigma \, e \leq \rho e$ for all $\sigma \in \Sigma$},     
+    \end{equation*}
+    %
+    Let order interval $V \coloneq
+    [-e/(1-\rho), e/(1-\rho)]$
+    then for the second ADP $(V,\mathbb{T})$
+    \vspace{0.4em}
+    %
+    \begin{enumerate}
+        \item $(V,  \mathbb{T})$ is well-posed,
+        \item the fundamental ADP optimality properties hold, and
+        \item VFI, OPI and HPI all converge.  
+    \end{enumerate}
+    %
+\end{frame}
+
+\begin{frame}
+\frametitle{Proof of Theorem 1.3.5}
+\begin{proof}
+\begin{itemize}
+\item $V$ is $\sigma$-chain complete from Lemma 1.1.7.
+\item $(E,\mathbb{T})$ regular implies $(V,\mathbb{T})$ regular
+
+\item $(V,\mathbb{T})$ is eventual order contracting from Theorem 1.3.3.
+
+\item Use Theorem 1.3.4, we get all the results
+\end{itemize}
+\end{proof}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

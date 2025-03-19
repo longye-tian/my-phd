@@ -1,0 +1,464 @@
+\documentclass[11pt,xcolor={dvipsnames},hyperref={pdftex,pdfpagemode=UseNone,hidelinks,pdfdisplaydoctitle=true},usepdftitle=false]{beamer}
+\usepackage{presentation}
+\newtheorem{exercise}{Exercise}[section]
+% Enter presentation title to populate PDF metadata:
+\hypersetup{pdftitle={DP2 Reading Group Week 2}}
+
+% Enter path to PDF file with figures:
+\newcommand{\pdf}{figures.pdf}
+
+\begin{document}
+
+% Enter title:
+\title{DP2 Reading Group}
+
+\information
+%
+% Enter URL to research paper (can be commented out):
+[https://github.com/longye-tian]
+%
+% Enter authors:
+{Longye Tian}
+%
+% Enter location and date (can be commented out):
+{September 2024}
+
+\frame{\titlepage}
+
+% Enter content of presentation:
+
+\begin{frame}
+\frametitle{Monotone Sequences}
+\begin{definition}
+Let $V$ be a poset.\\
+A sequence $(v_n)_{n\ge 1}$ is called \textbf{increasing} if $v_n\precsim v_{n+1}$ for all $n\in\mathbb{N}$.\\
+We write 
+$$
+v_n\uparrow v=\bigvee_n v_n
+$$
+A sequence $(v_n)_{n\ge 1}$ is called \textbf{decreasing} if $v_{n+1}\precsim v_{n}$ for all $n\in\mathbb{N}$.\\
+We write 
+$$
+v_n\downarrow v=\bigwedge_n v_n
+$$
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.11}
+Let  $(u_n), (v_n)$ be sequence in $V$. Prove
+\begin{enumerate}
+\item[1)] $v_n\uparrow v, v_n\precsim u_n\precsim v\implies \bigvee_n u_n =v$
+\begin{proof}
+Define $(w_n)$ be a sequence in $V$ such that $w_n =v$ for all $n\in\mathbb{N}$.\\
+Then the claim follows from Exercise 1.1.6.
+\end{proof}
+\item[2)]  $v_n\downarrow v, v\precsim u_n\precsim v_n \implies \bigwedge_n u_n =v$
+\end{enumerate}
+\end{frame}
+\begin{frame}
+\frametitle{Closed under pointwise suprema}
+\begin{definition}
+We say that $V$ is \textbf{closed under pointwise suprema} if, for every increasing sequence $(v_n)\subset V$ that is bounded above, the pointwise supremum
+$$
+s(x) = \sup_{n} v_n(x)
+$$
+is an element of $V$.
+\end{definition}
+\end{frame}
+
+
+
+\begin{frame}
+\begin{lemma}
+Let $V\subset \mathbb{R}^X$ be closed under pointwise suprema, let $(v_n)$ be a sequence in $V$ and let $v\in V$. Then,
+
+$$
+v_n(x)\uparrow v(x)\text{ in $\mathbb{R}$ for all $x\in X$} \iff v_n\uparrow v
+$$
+\end{lemma}
+\begin{proof}
+% using the definition, we first show that v_n \le v_{n+1} and then show that V_n v_n =v
+$(\implies)$\\
+$v_n(x)\uparrow v(x)\implies v_n(x)\le v_{n+1}(x),\,\forall x\in X \implies v_n\le v_{n+1}$\\
+By Exercise 1.1.7., we know $\bigvee_n v_n =v$.\\
+$(\impliedby)$\\
+$v_n\uparrow v\implies v_n\le v_{n+1} \implies v_n(x)\le v_{n+1}(x)\, \forall x\in X$\\
+Let $s$ be the pointwise supremum, by closed under pointwise suprema, $s\in V$.\\
+We have $v_n\le s\le v\implies s=v$ % v_n\le s by pointwise sup, s\le v by least upper bound. 
+\end{proof}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Mapping over Posets - Order Preserving Maps}
+\begin{definition}
+A self-map $S$ on poset $V = (V,\precsim)$ is called \textbf{order preserving} on $V$ if
+$$
+v,w\in V, v\precsim w\implies Sv\precsim Sw
+$$
+\end{definition}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.12}
+Let $(V,\precsim)$ be a poset and let $\mathcal{S}$ be the set of all order preserving self-map on $V$.Let $\precsim$ be the pointwise order on $\mathcal{S}$, i.e., $Sv\precsim Tv \implies S\precsim T$\\
+Prove
+\begin{enumerate}
+\item[1)] $S\in \mathcal{S}\implies S^k\in \mathcal{S}\,\forall k\in\mathbb{N}$
+\begin{proof}
+Let $v,w\in V, v\precsim w$. 
+$S\in\mathcal{S}\implies Sv\precsim Sw \implies S(Sv)\precsim S(Sw) \implies S^2 v\precsim S^2w$. Then by induction.
+\end{proof}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.12 Continue}
+\begin{enumerate}
+\item[2)] $S,T\in\mathcal{S}, S\precsim T\implies S^k\precsim T^k$ for all $k\in\mathbb{N}$
+\end{enumerate}
+\begin{proof}
+From 1), $S^k,T^k\in\mathcal{S}\,\forall k\in\mathbb{N}$.\\
+We have,
+$$
+\underbrace{S\precsim T\implies Sv\precsim Tv}_{\text{definition}}\implies\underbrace{S(Sv)\precsim S(Tv)}_{S\in \mathcal{S}}\underbrace{\precsim T(Tv)}_{S\precsim T} \implies S^2\precsim T^2
+$$
+Then by induction.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Order Stability}
+\begin{definition}
+Let $V$ be a poset and $S$ be a self-map on $V$ and has a unique fixed point in $\bar v\in V$. We call $S$
+\begin{itemize}
+\item \textbf{upward stable} on $V$ if $v\in V, v\precsim Sv\implies v\precsim \bar v$
+
+\item \textbf{strongly upward stable} on $V$ if $v\in V, v\precsim Sv\implies S^n v\uparrow \bar v$
+
+\item \textbf{downward stable} on $V$ if $v\in V, Sv\precsim v\implies \bar v\precsim  v$
+
+\item \textbf{strongly upward stable} on $V$ if $v\in V, Sv\precsim v\implies S^n v\downarrow \bar v$
+
+\item \textbf{order stable} on $V$ if $S$ is both upward and downward stable.
+
+\item \textbf{strongly order stable} on $V$ if $S$ is both strongly upward and strongly downward stable.
+\end{itemize}
+\end{definition}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.13}
+Consider the self-map on $\mathbb{R}^k$ defined by $Sv = r+Av$ for some $r\in\mathbb{R}^k$ and $A$ is a bounded positive linear operator with $\rho(A)<1$.  Prove that $S$ is strongly order stable on $\mathbb{R}^k$
+
+\begin{proof}
+First, we find the unique fixed point of $S$, $ v = Sv = r+Av \implies \underbrace{v = (I-A)^{-1}r}_{NSL}$
+Second, we show $S$ is strongly upward stable. Let $w\in \mathbb{R}^k, w\le Sw$
+$$
+w\le Sw = r+Aw \underbrace{\implies Aw\le A r+A^2W}_{A \text{ is positive}} \implies Sw= r+Aw \le r+Ar+A^2 W = S^2w
+$$
+
+We have $S^n w\le S^{n+1}w$, and we have $S^n w \to v$ hence $S^n w\uparrow v$.
+\end{proof}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Ordered Vector Space}
+\begin{definition}
+Let $E$ be a vector space and let $\le$ be a partial order on $E$. We call $(E, \le)$ an \textbf{ordered vector space} if the order is preserved under addition and nonnegative scalar multiplication that is if 
+\begin{enumerate}
+\item $u\le v$, $\alpha\in\mathbb{R}$ with $\alpha \ge 0 \implies \alpha u\le \alpha v$
+\item $u\le v\implies u+ b\le v+b$ for any $b\in E$
+\end{enumerate}
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Positive Cone}
+\begin{definition}
+The \textbf{positive cone} of $E$, typically denoted as $E_+$ is all $v\in E$ with $v\ge 0$.
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.16}
+\begin{exercise}
+Let S be the vector space of all $n \times n$ matrices (with addition and scalar multiplication defined in the obvious way) and let N be the negative semidefinite matrices in S. As in §2.1.4.3, we impose the Loewner partial order, writing $A \succeq B$ when $A - B \in N$. Show that $(S, \succeq)$ is an ordered vector space.
+\end{exercise}
+
+\begin{proof}
+To show that $(S, \succeq)$ is an ordered vector space, we need to prove that the Loewner partial order preserves addition and nonnegative scalar multiplication.
+
+(i) For $\alpha \geq 0$ and $A \succeq B$:
+   $\alpha(A - B) \in N$ (since N is closed under nonnegative scalar multiplication)
+   Thus, $\alpha A - \alpha B \in N$, which means $\alpha A \succeq \alpha B$
+
+(ii) For $A \succeq B$ and $C \in S$:
+   $(A + C) - (B + C) = A - B \in N$
+   Thus, $A + C \succeq B + C$
+
+Therefore, $(S, \succeq)$ is an ordered vector space.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.17}
+\begin{exercise}
+Let X be any nonempty set and let $\mathbb{R}^X$ be the vector space of real-valued functions on X. Let $\leq$ be the pointwise partial order. Show that $(\mathbb{R}^X, \leq)$ is an ordered vector space.
+\end{exercise}
+
+\begin{proof}
+To show that $(\mathbb{R}^X, \leq)$ is an ordered vector space:
+
+(i) For $\alpha \geq 0$ and $f \leq g$:
+   $(\alpha f)(x) = \alpha(f(x)) \leq \alpha(g(x)) = (\alpha g)(x)$ for all $x \in X$
+
+(ii) For $f \leq g$ and $h \in \mathbb{R}^X$:
+   $(f + h)(x) = f(x) + h(x) \leq g(x) + h(x) = (g + h)(x)$ for all $x \in X$
+
+Therefore, $(\mathbb{R}^X, \leq)$ is an ordered vector space.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.18}
+
+\begin{exercise}
+Let $(E, \leq)$ be an ordered vector space and fix $u, v, w \in E$. Prove that
+\begin{enumerate}
+\item[(i)] $u \geq 0$ and $v \geq 0$ implies $u + v \geq 0$,
+\item[(ii)] $u \geq v$ implies $-v \geq -u$,
+\item[(iii)] $(u \vee v) + w = (u + w) \vee (v + w)$, and
+\item[(iv)] $\alpha(u \vee v) = (\alpha u) \vee (\alpha v)$ whenever $\alpha \geq 0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{proof}
+(i) $u \geq 0$ and $v \geq 0$ implies $u + v \geq 0$:
+   By the properties of ordered vector spaces, $u \geq 0$ implies $u + v \geq 0 + v = v \geq 0$
+(ii) $u \geq v$ implies $-v \geq -u$:
+$u\ge v\implies u-u\ge v-u\implies 0\ge v-u\implies 0-v\ge v-u-v\implies -v\ge -u$
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.18 continue}
+\begin{proof}
+
+(iii) $(u \vee v) + w = (u + w) \vee (v + w)$:
+   Let $z = (u \vee v) + w$. Then $z \geq u + w$ and $z \geq v + w$.
+   Also, for any $y \geq u + w$ and $y \geq v + w$, we have $y - w \geq u \vee v$, so $y \geq z$.
+   Thus, $z = (u + w) \vee (v + w)$
+
+(iv) $\alpha(u \vee v) = (\alpha u) \vee (\alpha v)$ for $\alpha \geq 0$:\\
+First, we show $\alpha(u \vee v) \ge (\alpha u) \vee (\alpha v)$ for $\alpha \geq 0$.\\ We have, $u\vee v\ge u, u\vee v\ge v\implies \alpha(u\vee v)\ge \alpha u, \alpha (u\vee v)\ge \alpha v\implies \alpha(u\vee v)\ge (\alpha u)\vee (\alpha v)$.\\
+Second, we show $\alpha(u \vee v) \le (\alpha u) \vee (\alpha v)$ for $\alpha \geq 0$:\\
+We have $(\alpha u) \vee (\alpha v)\ge \alpha u; (\alpha u) \vee (\alpha v)\ge \alpha v\implies \frac{1}{\alpha}[(\alpha u) \vee (\alpha v)]\ge u, \frac{1}{\alpha}[(\alpha u) \vee (\alpha v)]\ge v\implies \frac{1}{\alpha}[(\alpha u) \vee (\alpha v)]\ge u \vee v\implies (\alpha u) \vee (\alpha v)\ge \alpha (u\vee v)$
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.19}
+\begin{exercise}
+Prove that
+\begin{enumerate}
+\item[(i)] if $u_n \uparrow 0$ and $v_n \uparrow 0$, then $u_n + v_n \uparrow 0$
+\begin{proof}
+$u_n\le u_{n+1}, v_n\le v_{n+1} \implies u_n+v_n\le u_{n+1}+v_n \le u_{n+1}+v_{n+1}\implies (u_n+v_n)$ is increasing.\\
+Then, we show $\bigvee_n (u_n+v_n)\le 0$:\\
+$u_n \le 0 \implies u_n+v_n\le v_n \implies \bigvee_n (u_n+v_n)\le \bigvee_n v_n =0$\\
+Now, we show that $0$ is the least upper bound of $(u_n+v_n)$. Let $w$ be an upper bound of $u_n+v_n$, i.e.,
+$u_n+v_n\le w\,\forall n\implies \left(\bigvee_n w_n\right) + v_n \le w\,\forall n\implies \bigvee_n u_n + \bigvee_n v_n \le w\implies 0\le w$. 
+\end{proof}
+\end{enumerate}
+\end{exercise}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.19 continue}
+\begin{exercise}
+\begin{enumerate}
+\item[(ii)] if $u_n \uparrow u$ and $b \in E$, then $u_n + b \uparrow u + b$.
+\begin{proof}
+$u_n\uparrow u\implies u_n\le u_{n+1}\implies u_n+b\le u_{n+1}+b\implies (u_n+b)$ is increasing\\
+Now we prove $u+b$ is the least upper bound of $(u_n+b)$:\\
+Let $w$ be any upper bound of $(u_n+b)$, then we have $u_n+b\le w\,\forall n\implies (\bigvee_n u_n) + b\le w \implies u+b\le w$
+\end{proof}
+\end{enumerate}
+\end{exercise}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lemma 1.1.12}
+
+Let $(u_n), (v_n)$ be sequences in the ordered vector space $E$ and let $\alpha, \beta$ be nonnegative constants. Then
+
+\begin{enumerate}
+\item $u_n\uparrow u, v_n\uparrow v\implies \alpha u_n+\beta v_n \uparrow \alpha u + \beta v$
+\item $u_n\uparrow u\implies -u_n\downarrow -u$
+\end{enumerate}
+\begin{proof}
+From Exercise 1.1.19
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Partial order induced by cone}
+\begin{definition}
+Let $E$ be any vector space. A nonempty subset $C$ is called a \textbf{cone} if
+\begin{enumerate}
+\item $C$ is convex
+\item $x\in C, -x\in C\implies x=0$
+\item $x\in C, \alpha \ge 0 \implies \alpha x\in C$
+\end{enumerate}
+\end{definition}
+A partial order is introduced into a vector space $E$ by first choosing a pointed convex cone $C$ on $E$ and stating that
+$$
+u\le v\iff v-u\in C
+$$
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.20}
+\begin{exercise}
+With $\leq$ defined as above, show that $(E, \leq)$ is an ordered vector space and that $C$ is the positive cone of $(E, \leq)$.
+\end{exercise}
+
+\begin{proof}
+Part 1. Let $b\in E$ and $\alpha \in\mathbb{R}_+$.
+\begin{enumerate}
+\item $u\le v\implies v-u\in C\implies (v+b)-(u-b)=v-u\in C\implies u+b\le v+b$
+\item $u\le v\implies v-u\in C\implies \alpha (v-u)\in C\implies \alpha v-\alpha u\in C\implies \alpha u\le \alpha v$
+\end{enumerate}
+Part 2: WTS $v\in C\implies v\ge 0$:\\
+$v\in C\implies v-0\in C\implies 0\le v$
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Closed Partial Order}
+\begin{definition}
+A partial order $\precsim$ on topological space $V$ is called \textbf{closed} if, given any two nets $(u_\alpha)_{\alpha\in \Lambda}$ and $(v_\alpha)_{\alpha\in\Lambda}$ contained in $V$,
+$$
+u_\alpha\to u, v_\alpha\to v, u_\alpha\precsim v_\alpha \,\forall \alpha\in\Lambda\implies u\precsim v 
+$$
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.21}
+\begin{exercise}
+Continuing the previous exercise, show that if $E$ is a normed linear space and $C$ is closed in $E$, then $\leq$ is a closed partial order (see page 31).
+\end{exercise}
+
+\begin{proof}
+Let $(u_n), (v_n)$ be two sequences in $E$ such that $u_n\to u, v_n\to v$ and $u_n\le v_n$ for all $n$.\\
+Then, we have $v_n-u_n\in C = E_+\,\forall n$, we want to show $v-u\in E_+$.\\
+Since $C$ is closed, $\lim_{n\to\infty} (v_n-u_n) = \lim_{n\to\infty} v_n -\lim_{n\to\infty} u_n = v-u \in C$.
+\end{proof}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 1.1.22}
+
+\begin{exercise}
+Show conversely that if $(E, \leq)$ is an ordered vector space, then the positive cone in $E$ is a (pointed convex) cone.
+\end{exercise}
+
+\begin{proof}
+We first show that $E_+$ is convex. Let $\lambda\in [0,1]$, $u,v\in E_+$, we have\\
+$u,v\in E_+\implies u, v\ge 0 \implies \lambda u, (1-\lambda)v \ge 0\implies \lambda u+(1-\lambda) v\ge 0$
+Secondly, we show $x\in E_+, -x\in E_+\implies x=0$: $x\in E_+\implies x\ge 0, -x\in E_+\implies x\le 0 \implies x=0$\\
+Last, we show that $x\in E_+, \alpha \in \mathbb{R}_+ \implies \alpha x\in E_+$.\\
+$x\in E_+\implies x\ge 0\implies \alpha x\ge 0\implies \alpha x\in E_+$
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Positive operator}
+\begin{definition}
+A linear operator $T$ mapping ordered vector space $E$ to itself is called \textbf{positive} if $T$ is invariant on the positive cone. That is, if $u\in E, u\ge 0\implies Tu\ge 0$
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.23}
+\begin{exercise}
+Prove that a linear operator mapping $E$ to itself is positive if and only if it is order preserving.
+\end{exercise}
+
+\begin{proof}
+Let $u,v\in E$ and $u\ge v$\\
+$(\implies)$\\
+$u\ge v\implies u-v\ge 0\implies T(u-v)\ge 0\underbrace{\implies Tu-Tv\ge 0}_{\text{linear}}\implies Tu\ge Tv$. \\
+$(\impliedby)$\\
+$u\ge v\implies Tu\ge Tv\implies Tu-Tv\ge 0\implies T(u-v)\ge 0$
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Exercise 1.1.24}
+\begin{exercise}
+Show that, for a linear operator $A : E \to E$, TFAE
+\begin{enumerate}
+\item[(i)] $A$ is order continuous on $E$.
+\item[(ii)] $Av_n \downarrow Av$ whenever $(v_n) \subset E$ and $v_n \downarrow v \in E$.
+\item[(iii)] $Av_n \downarrow 0$ whenever $(v_n) \subset E$ and $v_n \downarrow 0$.
+\end{enumerate}
+\end{exercise}
+
+\begin{proof}
+$(i)\Rightarrow (ii)$ $v_n\downarrow v\in E\Rightarrow -v_n\uparrow -v\in E$ by [L1.1.12]. Then,
+$-Av_n = A(-v_n)\uparrow A(-v) = -Av \implies Av_n \downarrow Av$\\
+$(ii)\Rightarrow(iii)$ since $A0=0$, we get $(iii)$.\\
+$(iii)\Rightarrow(i)$ $v_n\downarrow 0\implies -v_n+v\uparrow v$. Let $u_n = -v_n+v$. Then $Av_n\downarrow 0 \implies -Av_n+Av \uparrow Av\implies Au_n\uparrow Av$
+\end{proof}
+\end{frame}
+\begin{frame}
+\frametitle{Order continuity}
+\begin{definition}
+We call a map $S$ from poset $V$ to poset $W$ \textbf{order continuous} on $V$ if
+$$
+v_n\uparrow v \implies Sv_n \uparrow Sv
+$$
+In other words, if $(v_n)\subset V$ with $v_n\uparrow v\in V$, then $Sv = \bigvee_n Sv_n \in W$
+\end{definition}
+\end{frame}
+\begin{frame}
+\frametitle{Concavity and Convexity}
+\begin{definition}
+A self-map $S$ on a convex subset $C$ of ordered vector space $E:=(E,\le)$ is \textbf{convex} on $C$ if
+$$
+S(\lambda v+(1-\lambda) v')\le \lambda Sv + (1-\lambda)Sv' \text{  whenever $v\le v'\in C$ and $0\le \lambda\le 1$}
+$$
+
+The self-map $S$ is called \textbf{concave} on $C$ if
+$$
+\lambda Sv + (1-\lambda)Sv'  \le S(\lambda v+(1-\lambda) v')\text{  whenever $v\le v'\in C$ and $0\le \lambda\le 1$}
+$$
+\end{definition}
+\end{frame}
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
