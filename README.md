@@ -9,3 +9,10 @@
 - Complete lecture recording on DG
 - Complete lecture recording on fractals
 - List the calender for upcoming assignment
+
+Book that need to be read
+
+- neuro-dynamic programming by Bertsekas and Tsitsiklis
+
+- Reinforcement Learning an Introduction by Sutton and Barto
+- 
