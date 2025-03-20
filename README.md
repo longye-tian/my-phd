@@ -7,7 +7,7 @@
 - Finish assignment 1 for DG
 - Finish weekly assignment for week 5 for econometric
 - ~~Complete lecture recording on DG wk1~~
-- Complete lecture recording on DG wk2
+- ~~Complete lecture recording on DG wk2~~
 - Complete lecture recording on DG wk3
 - Complete lecture recording on DG wk4
 - Complete lecture recording on DG wk5
