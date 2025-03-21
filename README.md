@@ -10,7 +10,7 @@
 - ~~Complete lecture recording on DG wk1~~
 - ~~Complete lecture recording on DG wk2~~
 - ~~Complete lecture recording on DG wk3~~
-- Complete lecture recording on DG wk4
+- ~~Complete lecture recording on DG wk4~~
 - Complete lecture recording on DG wk5
 - Complete lecture recording on fractals wk1
 - Complete lecture recording on fractals wk2
