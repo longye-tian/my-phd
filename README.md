@@ -11,14 +11,18 @@
 - ~~Complete lecture recording on DG wk2~~
 - ~~Complete lecture recording on DG wk3~~
 - ~~Complete lecture recording on DG wk4~~
-- Complete lecture recording on DG wk5
+- ~~Complete lecture recording on DG wk5~~
+The lecture for DG is very useless. Refer to the book to get a deeper understanding. Use the lecture only for direction. 
+
 - Complete lecture recording on fractals wk1
 - Complete lecture recording on fractals wk2
 - Complete lecture recording on fractals wk3
 - Complete lecture recording on fractals wk4
 - Complete lecture recording on fractals wk5
 
-- List the calender for upcoming assignment
+- List the calender for upcoming assignment (Fractals assignment 2, network video, ECMT week 6 assignment, )
+
+- Read about the information geomtry and its relation to RL, write an email to Bryan Wang to discuss potential research direction. 
 
 Book that need to be read
 
