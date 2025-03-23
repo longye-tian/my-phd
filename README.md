@@ -21,7 +21,6 @@ Idea that I have in mind
 - Multiagent RL for QHD
 - Information gemometry, natural gradient descent and its relation to RL
 - Semilinear DP, Read papers from Bertsekas.
-- 
 
 
 
