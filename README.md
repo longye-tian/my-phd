@@ -1,3 +1,31 @@
+
+# Weekly Goal (2025/03/24-03/30)
+- DP2 Section 1.3 and make some note for DP2 section 1.2
+- Send an email to Bryan Wang about the research project 
+- QHD need to catch up and write some update to John.
+
+- Kreyszig Chapter 3 and exercises
+- Finish assignment 1 for DG
+- Finish Homework 2 for Fractals
+- Read Chapter 1 of Deep Reinforcement learning
+- Read Chapter 12 of Information Geometry
+- Complete lecture recording on fractals wk1
+- Complete lecture recording on fractals wk2
+- Complete lecture recording on fractals wk3
+- Complete lecture recording on fractals wk4
+- Complete lecture recording on fractals wk5
+
+Idea that I have in mind
+- Adaptive control
+- PDE and its relation to normal distribution and adverse pde with fat tail distribution
+- Multiagent RL for QHD
+- Information gemometry, natural gradient descent and its relation to RL
+- Semilinear DP, Read papers from Bertsekas.
+- 
+
+
+
+
 # Weekly Goal (2025/03/17 - 03/23)
 - QHD need to catch up and write some update to John. 
 - Kreyszig Chapter 3 and exercises
