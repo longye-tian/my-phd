@@ -1,0 +1,129 @@
+\section{3.1.1.1. Order Isomorphisms}
+\begin{frame}{Order Isomorphism}
+    
+\end{frame}
+\begin{frame}{Order Isomorphism}
+\begin{definition}
+    A surjective map $F$ from poset $(V,\precsim)$ to poset $(\hat V, \le)$ is called an 
+    \begin{itemize}
+        \item \textbf{Order isomorphism} if $v\precsim w\iff Fv\le Fw$
+        \item \textbf{Order anti-isomorphism} if $v\precsim w \iff Fw\le Fv$
+    \end{itemize}
+\end{definition}
+\textbf{Comment}: $F$ under this definition is bijective.
+\end{frame}
+
+\begin{frame}{Exercise 3.1.1.}
+Given $h\in\mathbb{R}^X$, let $Fh = \exp(\theta h)$. Show that $F$ is an order isomorphism from $\mathbb{R}^X$ to $(0,\infty)^X$ whenever $\theta >0$.
+\begin{proof}
+    Fix $\theta>0$. We know that $\exp(\theta x)$ is a bijective function. 
+    Let $h_1,h_2\in \mathbb{R}^X$ such that $h_1\le h_2$. This implies
+    $$
+    \theta h_1\le \theta h_2
+    $$
+    As $\exp(\cdot)$ is order preserving, hence, we have
+    $$
+    Fh_1  = \exp(\theta h_1) \le \exp(\theta h_2) = Fh_2
+    $$
+    Let $k_1, k_2\in (0,\infty)^X$, $k_1\le k_2$ by surjectivity, we have 
+    $$
+    k_1 = F(q_1) = \exp(\theta q_1), k_2 = F(q_2) = \exp(\theta q_2), q_1,q_2\in \mathbb{R}^X
+    $$
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 3.1.1. Continue}
+\begin{proof}
+    We have 
+    $$
+    q_1 = \frac{\ln k_1}{\theta}\le \frac{\ln k_2}{\theta} = q_2
+    $$
+    as $\ln$ is order preserving.
+    Therefore, by definition, $F$ is an order isomorphism from $\mathbb{R}^X$ to $(0,\infty)^X$
+\end{proof}    
+\end{frame}
+
+\begin{frame}{Exercise 3.1.2.}
+Let $V= M^X$ and $\hat V = \hat M^X$, $M,\hat M\subset \mathbb{R}$. Let $\varphi$ be a map from $M$ onto $\hat M$ and let $Fv = \varphi\circ v$. Prove if $\varphi$ is an order isomorphism from $M$ to $\hat M$, then $F$ is an order isomorphism from $V$ to $\hat V$.
+\begin{proof}
+    $\varphi$ is order isomorphism then $\varphi$ is bijective, order preserving with order preserving inverse.
+    Hence apply this $\dim X$ times, we get $F$ is bijective,  order preserving with order preserving inverse.
+\end{proof}
+    
+\end{frame}
+
+\begin{frame}{Exercise 3.1.3}
+Let $V,\hat V$ be posets. Show that every order isomorphism $F$ is a bijection. Show that every order anti-isomorphism is also a bijection.
+\begin{proof}
+    Let $v_1,v_2\in \hat V$ such that $v_1 = v_2$. By surjectivity, we have
+    $$
+    v_1 = F(w_1), \quad v_2=F(w_2),\quad w_1,w_2\in V
+    $$
+    Hence, we have
+    $$
+    F(w_1)\le F(w_2) \implies w_1\precsim w_2
+    $$
+    $$
+    F(w_2) \le F(w_1)\implies w_2\precsim w_1
+    $$
+    Hence,$w_1 = w_2$. This proves that $F$ is injective. 
+\end{proof}
+    
+\end{frame}
+
+\begin{frame}{Exercise 3.1.4.}
+Let $F$ be a bijection from $(V,\precsim)$ to $(\hat V, \le)$. Show that
+\begin{enumerate}
+    \item $F$ is an order isomorphism if and only if $F$ and $F^{-1}$ are order preserving
+    \item $F$ is an order anti-isomorphism if and only if $F$ and $F^{-1}$ are order reversing.
+\end{enumerate}
+\begin{proof}
+    Skip
+\end{proof}
+\end{frame}
+
+\begin{frame}{Lemma 3.1.1.}
+Let $F$ be an order isomorphism from $(V,\precsim)$ to $(\hat V, \le)$. If the supremum of $\{v_\alpha\}_{\alpha\in \Lambda}\subset V$ exists in $V$, then
+$$
+\bigvee_{\alpha} Fv_\alpha \text{ exists in $\hat V$ and $\bigvee_\alpha Fv_\alpha = F\bigvee_\alpha v_\alpha$}
+$$
+\begin{proof}
+    Let $v:= \bigvee_\alpha v_\alpha \in V$. Let $\hat w$ be any upper bound of $\{Fv_\alpha\}$, i.e., $Fv_\alpha \le \hat w$ for all $\alpha \in\Lambda$. By surjectivity, we let $\hat w = F(w)$, and by order isomorphism, we have
+    $$
+    v_\alpha \precsim w \quad \text{for all $\alpha\in\Lambda$}
+    $$
+    Hence, $w$ is an upper bound of $\{v_\alpha\}$, this implies $v\precsim w$. Hence, 
+    $$
+    F(v) \le F(w) =\hat w
+    $$
+    This implies $F(v)= F\bigvee_\alpha v_\alpha$ is the least upper bound of $\{Fv_\alpha\}$. 
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 3.1.6}
+Let $V,\hat V$ be posets and let $(v_n)$ be a sequence in $V$. And let $F$ be a map from $V$ to $\hat V$. Prove the following
+\begin{enumerate}
+    \item If $F$ is an order isomorphism, then $v_n\uparrow v$ if and only if $Fv_n \uparrow Fv$ in $\hat V$
+    \item If $F$ is an order anti-isomorphism, then $v_n\uparrow v$ if and only if $Fv_n\downarrow Fv$ in $\hat V$.
+\end{enumerate}
+\begin{proof}
+    $v_n\uparrow v\implies v_1\le v_2\le \cdots\le v$ and $v= \bigvee_n v_n$.\\
+    Hence, by order isomorphism, we have
+    $$
+    Fv_1\le Fv_2\le \cdots \le Fv
+    $$
+    and $Fv = \bigvee_n Fv_n$
+    Moreover, $F$ is order isomorphism implies $F^{-1}$ is order isomorphism. Hence, the other direction follows. 
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 3.1.7}
+Prove 
+\begin{itemize}
+    \item If $V,\hat V$ are order isomorphic, then $V$ is totally ordered if and only if $\hat V$ is totally ordered
+    \item $F$ is an order anti-isomorphism from $V$ to $\hat V$ if and only if $F$ is an order isomorphism from $V$ to its dual $\hat V^\partial$
+\end{itemize}
+\begin{proof}
+Skip.
+\end{proof}
+\end{frame}

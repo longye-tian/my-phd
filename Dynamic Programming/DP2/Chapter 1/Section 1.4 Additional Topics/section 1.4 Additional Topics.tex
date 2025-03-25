@@ -1,0 +1,461 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+
+
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Title information
+\title[DP2]{Dynamic Programming}
+\subtitle{Thomas J. Sargent and John Stachurski}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{March 7th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% Section 1
+\section{Chapter 1.4.1 Nonstationary Policies}
+\begin{frame}{Nonstationary policies}
+In this section, we will see that under some conditions, the lifetime value of any nonstationary policy will be weakly dominated by the lifetime value of a stationary policy. This ensures that we can focus on the stationary policies without loss of generality.
+    
+\end{frame}
+\begin{frame}{Comparison}
+\textbf{Stationary policy}
+\begin{itemize}
+    \item Fixed a policy $\sigma$
+    \item Lifetime value 
+    $$
+    v_\sigma = \lim_{j\to\infty} T^j_\sigma v
+    $$
+\end{itemize}
+\textbf{Nonstationary policy/Policy Plan}
+\begin{itemize}
+    \item a policy plan $\overline{\sigma} = (\sigma_t)_{t\ge 0}\in \bigtimes_{t\ge0} \Sigma$
+    \item Lifetime value of $v_{\overline{\sigma}}$
+    $$
+    v_{\overline{\sigma}} = \lim_{j\to\infty} T_{\sigma_0}T_{\sigma_1}\cdots T_{\sigma_j} v
+    $$
+    \item Question, why not
+    $$
+     v_{\overline{\sigma}} = \lim_{j\to\infty} T_{\sigma_j}\cdots T_{\sigma_1} T_{\sigma_0} v
+    $$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Existence of Lifetime value of a policy plan}
+    \textbf{We want the limit to exist and, ideally, the limit is independent of $v$}.
+    $$
+    v_{\overline{\sigma}} = \lim_{j\to\infty} T_{\sigma_0}T_{\sigma_1}\cdots T_{\sigma_j} v
+    $$
+\end{frame}
+\begin{frame}{Set up}
+\begin{itemize}
+    \item $V = (V,\precsim)$ a partially ordered \textbf{space} 
+    \item $\mathbb{T} = \{T_\sigma:\sigma\in\Sigma\}$, family of order preserving self-map on $V$
+    \item Metric $d$ on $V$ 
+    \begin{itemize}
+        \item $d$ is complete (Every Cauchy sequence converges.)
+        \item $\exists \lambda\in(0,1)$ such that
+        $$
+        d(T_\sigma v, T_\sigma w)\le \lambda d(v,w)\qquad \text{for all $v,w\in V, \sigma\in \Sigma$}
+        $$
+        \item for all $v\in V$, we have
+        $$
+        \sup_{\sigma\in\Sigma} d(v,T_\sigma v)<\infty
+        $$
+        \item sup-nonexpansive, for any subsets $(v_\alpha)$ and $(w_\alpha)$ in $V$ such that their supremum exists, 
+        $$
+        d\left(\bigvee_\alpha v_\alpha, \bigvee_{\alpha} w_\alpha\right)\le \sup_{\alpha} d(v_\alpha, w_\alpha) 
+        $$
+    \end{itemize}
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Lemma 1.4.1.(i)}
+\begin{lemma}
+    If the above conditions hold, then for each $v\in V$ and policy plan $\hat{\sigma}:=(\sigma_t)_{t\ge 0}$, the limit
+    $$
+    v_{\hat{\sigma}} = \lim_{n\to\infty} \bigtimes_{t=0}^n T_{\sigma_t}v
+    $$
+    exists in $V$ and is independent of $v$.
+\end{lemma}
+\begin{proof}[Proof for Existence]
+    To prove that $(v_n)$ is Cauchy sequence, where $v_n:= \bigtimes_{t=0}^n T_{\sigma_t}v$
+\end{proof}
+\end{frame}
+
+\begin{frame}{Lemma 1.4.1.(i) Continue}
+\begin{proof}
+    Fix $v\in V$, $\hat{\sigma}=(\sigma_t)_{t\ge 0}$, $\epsilon>0$. Let $T_{m,n}:=\bigtimes_{t=m}^{t=n} T_{\sigma_t}$, $v_n = T_{0,n}v$.\\
+    For $m\in \mathbb{N}$, we have
+    \begin{align*}
+        d(v_m,v_{m+1}) &= d\bigg(T_0(T_{1,m} v), T_0(T_{1,m+1}v)\bigg)\\
+        &\le \lambda d\bigg(T_1(T_{2,m} v), T_1(T_{2,m+1}v)\bigg)\tag{contraction}\\
+        &\vdots\\
+        &\le\lambda^{m+1}d(v,T_{m+1}v)\\
+        &\le\lambda^{m+1}b_v\tag{bounded}
+    \end{align*}
+\end{proof}
+
+\end{frame}
+
+\begin{frame}{Lemma 1.4.1.(i) Continue}
+    \begin{proof}
+        WLOG, let $m,n,j\in\mathbb{N}, n = m+j, j\ge 0$.\\
+        \begin{align*}
+        d(v_m,v_{m+j}) &\le d(v_m,v_{m+1})+d(v_{m+1},v_{m+2})+\cdots + d(v_{m+j-1},v_{m+j})\tag{$\Delta$ inequality}\\
+        &\le \lambda^{m+1}b_v + \lambda^{m+2}b_v+\cdots+\lambda^{m+j}b_v\tag{page 7}\\
+        &\le \lambda^{m+1}b_v(1+\lambda+\cdots+\lambda^{m+j-1})\\
+        &\le \lambda^{m+1}b_v(1+\lambda+\cdots+\lambda^{m+j-1}+\cdots)\\
+        &\le \lambda^{m+1}b_v/(1-\lambda)\tag{geom sum}
+    \end{align*}
+    $\implies$ Cauchy. By completeness, we get the limit exists.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Lemma 1.4.1.(i) Continue}
+    \begin{proof}[The limit is independent of $v$]
+        Let $v,w\in V$. Then
+        \begin{align*}
+            d(v_n,w_n) &= d\bigg(T_0 (T_{1,n}v),T_0(T_{1,n}w)\bigg)\\
+            &\le \lambda d\bigg(T_1(T_{2,n} v), T_1(T_{2,n}w)\bigg)\tag{contraction}\\
+        &\vdots\\
+        &\le\lambda^{n+1}d(v,w)
+        \end{align*}   
+        So $(v_n)$ and $(w_n)$ have the same limit.
+    \end{proof}
+\end{frame}
+\begin{frame}{Lemma 1.4.1.(ii)}
+\begin{Lemma}
+    If the conditions in page 5 holds, every $T_\sigma\in\mathbb{T}$ is continuous, globally stable on $V$, with unique fixed point $v_\sigma$ satisfying
+    $$
+    v_\sigma = \lim_{j\to\infty} T_\sigma^j v\qquad\text{for all $v\in V$}
+    $$
+\end{Lemma}
+\begin{proof}
+    From contraction and completeness.
+\end{proof}
+    
+\end{frame}
+
+\begin{frame}{Lemma 1.4.1.(iii)}
+    \begin{lemma}
+        If the conditions in page 5 holds, there exists a $v\in V$ such that $v:=\bigvee_{\sigma\in \Sigma} T_\sigma v$
+    \end{lemma}
+    
+    \begin{proof}
+        If $T$ is well-defined on $V$, then for $v,w \in V$, we have 
+        \begin{align*}
+            d(Tv,Tw) &= d\left(\bigvee_{\sigma\in\Sigma} T_\sigma v, \bigvee_{\sigma\in\Sigma} T_\sigma w \right)\\
+            &\le \sup_{\sigma\in\Sigma} d(T_\sigma v,T_\sigma w)\tag{sup-nonexpansionary}\\
+            &\le \lambda d(v,w)\tag{contraction}
+        \end{align*}
+        Hence, $T$ is a contraction, therefore, it has at least one fixed point in $V$.
+    \end{proof}
+    Question: Do we need $v\in V_G$? Is $T$ continuous, globally stable with unique fixed point?
+\end{frame}
+\begin{frame}{Review Theorem 1.3.3.}
+\begin{theorem}
+    Let $V$ be a pospace, $(V,\mathbb{T})$ be regular, globally stable and $T$ has a fixed point in $V$, then
+    \begin{itemize}
+        \item the fundamental optimality properties hold
+        \item VFI, HPI, OPI converge.
+    \end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Review of the Fundamental Optimality Properties}
+Let $(V,\mathbb{T})$ be regular and well-posed. We say \textbf{the fundamental optimality properties hold} for $(V,\mathbb{T})$ if
+\begin{enumerate}
+    \item[(B1)] at least one optimal (stationary) policy exists
+    \item[(B2)] $v^*:=\bigvee_{\sigma} v_\sigma$ is the unique solution to the Bellman equation
+    \item[(B3)] Bellman's principle of optimality holds (optimal policy is $v^*$-greedy)
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Review on Pospace}
+A partial order $\precsim$ on topological space $V$ is called \textbf{closed} if, given any two nets $(u_\alpha)_{\alpha\in\Lambda}$ and $(v_\alpha)_{\alpha\in\Lambda}$ contained in $V$,
+$$
+u_\alpha \to u, v_\alpha \to v\qquad \text{and $u_\alpha\precsim v_\alpha$ for all $\alpha \in\Lambda \implies u\precsim v$}
+$$
+A \textbf{partially ordered space}, is a Hausdorff topological space \textbf{endowed with a closed partial order}.
+    
+\end{frame}
+
+
+\begin{frame}{Proposition 1.4.2. Any policy plan is weakly dominated by a stationary policy}
+\begin{proof}[Proposition 1.4.2]
+    If $(V,\mathbb{T})$ is regular and conditions in page 5 holds, then
+    \begin{itemize}
+        \item the fundamental optimality properties hold
+        \item Given any policy plan $\overline{\sigma}$, there exists a stationary policy plan $\sigma$ such that $v_{\overline{\sigma}}\precsim v_\sigma$
+    \end{itemize}
+\end{proof}
+\begin{proof}
+    Part One from Theorem 1.3.3.
+    Part Two:
+    Fix a policy plan $\overline{\sigma}$ and let $\sigma$ be the optimal policy(B1). Then, for all $j\in\mathbb{N}$, we have
+    $$
+    T_{\sigma_0}T_{\sigma_1}\cdots T_{\sigma_j} v_\sigma\to v_{\overline{\sigma}}, T^j v_\sigma \to v_\sigma,\qquad  T_{\sigma_0}T_{\sigma_1}\cdots T_{\sigma_j} v_\sigma \precsim T^jv_\sigma = v_\sigma
+    $$
+    The partial order is closed implies $v_{\overline{\sigma}}\precsim v_{\sigma}$.
+\end{proof}
+\end{frame}
+\section{Chapter 1.4.2 Minimization Problem}
+\begin{frame}{Minimization Problem}
+    For a given ADP $(V,\mathbb{T})$, a minimization problem can be converted to a maximization problem by reversing the partial order on $V$. Hence, we can focus on solving the maximization problem without loss of generality.
+\end{frame}
+\subsection{1.4.2.1 Definitions}
+\begin{frame}{Definitions}
+Let $(V,\mathbb{T})$ be an ADP with policy set $\Sigma$. We define
+\begin{itemize}
+    \item \textbf{Bellman min-operator} $T_\perp$ by 
+    $$
+    T_\perp v = \bigwedge_{\sigma\in\Sigma} T_\sigma v\qquad \text{whenever the infimum exists}
+    $$
+    \item $\sigma \in\Sigma$ is \textbf{v-min-greedy} if $T_\sigma v\precsim T_\tau v$ for all $\tau\in\Sigma$
+    \item $(V,\mathbb{T})$ is \textbf{min-regular} if, for each $v\in V$, at least one $v$-min-greedy policy exists ($V_G$ or $V_G^{min}$)
+    \item $v$ satisfies the \textbf{Bellman min-equation} if $v=T_\perp v$
+\end{itemize}
+\end{frame}
+\begin{frame}{Definitions}
+    Suppose $(V,\mathbb{T})$ is well-posed. We define
+    \begin{itemize}
+        \item \textbf{min-value function} by
+        $$v^*_\perp = \bigwedge_{\sigma\in\Sigma} v_\sigma \quad\text{whenever the infimum exists}$$
+        \item $\sigma\in\Sigma$ is \textbf{min-optimal} for $(V,\mathbb{T})$ if $v_\sigma = v_\perp^*$ 
+        \item $(V,\mathbb{T})$ obeys \textbf{Bellman's principle of min-optimality} if
+        $$
+        \sigma\in\Sigma \text{  is min-optimal for $(V,\mathbb{T})\iff \sigma$ is $v^*_\perp$-min-greedy }
+        $$
+    \end{itemize}
+\end{frame}
+\begin{frame}{Definitions}
+    We say that the \textbf{fundamental min-optimality properties hold} if
+    \begin{enumerate}
+        \item[(B1')] at least one min-optimal policy exists
+        \item[(B2')] $v_\perp^*$ is the unique solution to the Bellman min-equation in $V$
+        \item[(B3')] Bellman's principle of min-optimality holds.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Definitions}
+When $(V,\mathbb{T})$ is min-regular, we define the \textbf{Howard policy min-operator} corresponding to $(V,\mathbb{T})$ via
+$$
+H_\perp: V_G\to V_\Sigma,\quad H_\perp v = v_\sigma \quad \text{where $\sigma$ is $v$-min-greedy}
+$$
+For each $m\in\mathbb{N}$, the \textbf{optimistic policy min-operator} via
+$$
+W_\perp: V_G\to V, \quad W_\perp v = T_\sigma^m v\quad \text{where $\sigma$ is $v$-min-greedy}
+$$
+Let $V_D$ be all $v\in V$ with $T_\perp v\precsim v$. We say that
+\begin{itemize}
+    \item \textbf{min-VFI converges} if $T_\perp^n \downarrow v_\perp^*$ for all $v\in V_D$
+    \item \textbf{min-OPI converges} if $W_\perp^n v\downarrow v_\perp^*$ for all $v\in V_D$ and all $m\in\mathbb{N}$
+    \item \textbf{min-HPI converges} if $H_\perp^n v\downarrow v_\perp^*$ for all $v\in V_D$.
+\end{itemize}
+\end{frame}
+\begin{frame}{Dual ADPs}
+How minimization problems can be converted to maximization problem in this abstract setting?
+    
+\end{frame}
+\begin{frame}{Order dual and Dual ADP}
+\begin{definition}
+    Given partially ordered set $V$, let $V^\partial = (V,\precsim^\partial)$ be the \textbf{order dual} (also called the \textbf{dual}), so that, for $u,v\in V$, we have 
+    $$
+    u\precsim^\partial v\iff v\precsim u
+    $$
+\end{definition}
+\begin{definition}
+    For ADP $(V,\mathbb{T})$, we call $(V,\mathbb{T})^\partial:=(V^\partial, \mathbb{T})$ the \textbf{dual} of $(V,\mathbb{T})$. In other words, the dual ADP is created by replacing the poset $V$with its order dual $V^\partial$.
+\end{definition}
+\end{frame}
+\begin{frame}{Exercise 1.4.1}
+Show that $(V,\mathbb{T})^\partial$ is an ADP.
+\begin{proof}
+    We need to show that $V^\partial$ is a poset. And $T_\sigma$ is order-preserving self-map on $V^\partial$ for any $\sigma\in\Sigma$. Let $u,v,w\in V$, we have
+    \begin{itemize}
+        \item (Reflexivity) $u\precsim u\implies u\precsim^\partial u$
+        \item (Antisymmetry) $u\precsim^\partial v, v\precsim^\partial u\implies v\precsim u, u\precsim v\implies u=v $
+        \item (Transitivity) $u\precsim^\partial v, v\precsim^\partial w \implies w\precsim v, v\precsim u\implies w\precsim u\implies u\precsim^\partial w$.
+    \end{itemize}
+    Hence $V^\partial$ is a poset. Let $u,v\in V$ and $u\precsim^\partial v$. We have $v\precsim u\implies T_\sigma v\precsim T_\sigma u\implies T_\sigma u\precsim^\partial T_\sigma v$ for any $\sigma \in\Sigma$. Hence, $T_\sigma$ is order-preserving self map on $V^\partial$.
+\end{proof}
+    
+\end{frame}
+
+\begin{frame}{Notation for the dual ADP}
+For the dual ADP $(V,\mathbb{T})^\partial$, 
+\begin{itemize}
+    \item the Bellman max-operator will be denoted by $T^\partial$
+    \item the Bellman min-operator will be denoted by $T_\perp^\partial$
+    \item the max-value function will be denoted by $(v^*)^\partial$
+\end{itemize}
+\end{frame}
+\begin{frame}{Self-Dual}
+    Each ADP is a self-dual, i.e.,
+    $$
+    ((V,\mathbb{T})^\partial)^\partial = (V,\mathbb{T})
+    $$
+    This follows from the fact that all partially ordered sets are order self-dual.
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2 (i)}
+    Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+    $$
+    \text{$\sigma$ is $v$-min-greedy for $(V,\mathbb{T})$ if and only if $\sigma$ is $v$-max-greedy for $(V,\mathbb{T})^\partial$}
+    $$
+    \begin{proof}[Proof (\iff)]
+    $T_\sigma v\precsim T_\tau v$ for all $\tau\in\Sigma \iff T_\tau v\precsim^\partial T_\sigma v$ for all $\tau\in \Sigma$.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2 (ii)}
+   Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+   $$
+   (V,\mathbb{T}) \text{ is min-regular if and only if $(V,\mathbb{T})^\partial$ is max-regular}
+   $$
+   \begin{proof}
+       By Exercise 1.4.2 (i)
+   \end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2.(iii)}
+    Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+    $$
+\text{If $T^\partial v$ exists then so does $T_\perp v$, and, moreover, $T_\perp v = T^\partial v$}
+    $$
+    \begin{proof}
+        By the definition of Bellman max-operator, we have $T_\sigma v\precsim^\partial T^\partial v$ for all $\sigma\in\Sigma$, i.e., $T^\partial v\precsim T_\sigma v$ for all $\sigma \in\Sigma$. Hence, $T_\perp v$ exists and equals to $T^\partial v$ by definition.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2.(iv)}
+    Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+    $$
+\text{If $W^\partial v$ exists then so does $W_\perp v$, and, moreover, $W_\perp v = W^\partial v$}
+    $$
+    \begin{proof}
+    By definition, we have $W^\partial v = T_\sigma v$ where $\sigma$ is $v$-max-greedy for $(V,\mathbb{T})^\partial$. Hence by Exercise 1.4.2.(i), $\sigma$ is $v$-min-greedy for $(V,\mathbb{T})$. Hence, we have $W^\partial v = W_\perp v$.
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2.(v)}
+    Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+    $$
+\text{If $H^\partial v$ exists then so does $H_\perp v$, and, moreover, $H_\perp v = H^\partial v$}
+    $$
+    \begin{proof}
+    By definition, we have $H^\partial v = v_\sigma$ where $\sigma$ is $v$-max-greedy for $(V,\mathbb{T})^\partial$. Hence by Exercise 1.4.2.(i), $\sigma$ is $v$-min-greedy for $(V,\mathbb{T})$. Hence, we have $H^\partial v = H_\perp v$.
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2.(vi)}
+    Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that: If the max-value function $(v^*)^\partial$ exists for $(V,\mathbb{T})^\partial$ then the min-value function $v_\perp^*$ exists for $(V,\mathbb{T})$, and, moreover,$v_\perp^* = (v^*)^\partial$.
+    \begin{proof}
+    By definition, 
+    $$
+    (v^*)^\partial  = \bigvee^\partial_{\sigma\in\Sigma} v_\sigma = \bigwedge_{\sigma\in\Sigma} v_\sigma  = v_\perp^* 
+    $$
+    following Exercise A.1.15.
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exercise 1.4.2.(vii)}
+Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$. Fix $v\in V$ and verify that:
+    $$
+\text{$\sigma\in\Sigma$ is min-optimal for $(V,\mathbb{T})$ if and only if $\sigma$ is max-optimal for $(V,\mathbb{T})^\partial$ }
+    $$
+    \begin{proof}
+        $\sigma$ is min-optimal for $(V,\mathbb{T})$ if and only if $v_\sigma = v_\perp^* = (v^*)^\partial$, i.e., $\sigma$ is max-optimal for $(V,\mathbb{T})^\partial$ from Exercise 1.4.2.(vi).
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Optimality and Convergence}
+    \begin{theorem}
+        Let $(V,\mathbb{T})$ be a well-posed ADP with dual $(V,\mathbb{T})^\partial$.  The fundamental max-optimality properties hold for $(V,\mathbb{T})^\partial$ if and only if the fundamental min-optimality properties hold for $(V,\mathbb{T})$. Moreover,
+        \begin{enumerate}
+            \item[(i)] max-VFI converges for $(V,\mathbb{T})^\partial$ if and only if min-VFI converges for $(V,\mathbb{T})$
+            \item[(ii)] max-OPI converges for $(V,\mathbb{T})^\partial$ if and only if min-OPI converges for $(V,\mathbb{T})$
+            \item[(iii)] max-HPI converges for $(V,\mathbb{T})^\partial$ if and only if min-HPI converges for $(V,\mathbb{T})$
+            
+        \end{enumerate}
+    \end{theorem}
+\end{frame}
+\end{document}

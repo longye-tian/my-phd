@@ -1,0 +1,53 @@
+\subsection{1.2.1.5 Properties}
+\begin{frame}{Definitions}
+We call $(V,\mathbb{T})$ 
+\begin{itemize}
+    \item \textbf{Well-posed} if each $T_\sigma\in\mathbb{T}$ has a unique fixed point in $V$
+    \item \textbf{Regular} if $V_G=V$, that is all $v\in V$ has a greedy policy
+    \item \textbf{Bounded above}, there exists $u\in V$ such that $T_\sigma u \precsim u$ for all $T_\sigma\in \mathbb{T}$
+    \item \textbf{Downward stable/Upward stable/Order stable/Strongly Order stable/ Order continuous} if each $T_\sigma\in\mathbb{T}$ is downward stable/$\cdots$
+\end{itemize}
+
+\end{frame}
+\begin{frame}{Definitions}
+\begin{definition}
+    Let $V$ be a poset and $S$ be a self-map on $V$. In this setting, we call $S$
+    \begin{itemize}
+        \item \textbf{upward stable} on $V$ if $S$ has a unique fixed point $\bar v\in V$, and, in addition, if $v\in V, v\precsim Sv$, then $v\precsim \bar v$
+        \item \textbf{downward stable} on $V$ if $S$ has a unique fixed point $\bar v\in V$, and, in addition, if $v\in V, Sv\precsim v$, then $\bar v\precsim v$
+        \item \textbf{order stable} if $S$ is both upward stable and downward stable
+    \end{itemize}
+\end{definition}
+    
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{definition}
+Let $V$ be a poset and $S$ be a self-map on $V$. In this setting, we call $S$
+\begin{itemize}
+    \item \textbf{Strongly upward stable} on $V$ if $S$ has a unique fixed point $\bar v$, and, if $v\in V, v\precsim Sv$, then $S^nv\uparrow \bar v$
+    \item \textbf{Strongly downward stable} on $V$ if $S$ has a unique fixed point $\bar v$, and, if $v\in V, Sv\precsim v$, then $S^nv\downarrow \bar v$
+    \item \textbf{Strongly order stable} on $V$ if $S$ is both strongly upward stable and strongly downward stable.
+\end{itemize}
+\end{definition}
+\end{frame}
+\begin{frame}{Order continuity}
+
+    \begin{definition}
+    Let $V, W$ be posets. We call $S: V\to W$ \textbf{order continuous} if 
+    $$
+    v_n\uparrow v \implies Sv_n\uparrow Sv
+    $$
+    In other words, if $(v_n)\subset V$ with $v_n\uparrow v\in V$, then $\bigvee_n S v_n = Sv\in W$.
+     \end{definition}
+     \begin{lemma}
+         Every order continuous map is order preserving.
+     \end{lemma}
+     \begin{proof}
+         Apply to this sequence $\{v,v',v',\cdots\}$, where $v\precsim v'$
+     \end{proof}
+\end{frame}
+\begin{frame}{Importance of Order continuity}
+\textbf{Remark}: With only order preserving and order stability, we \textbf{cannot guarantee} an iterating bound monotone sequence converge to the unique fixed point.
+    
+\end{frame}

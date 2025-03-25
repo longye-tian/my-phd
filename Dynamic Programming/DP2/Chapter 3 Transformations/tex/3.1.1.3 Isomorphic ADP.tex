@@ -1,0 +1,74 @@
+\section{3.1.1.3 Isomorphic ADP}
+\begin{frame}{Isomorphic ADP}
+    In this section, we will see how one ADP can be transformed into another ADP (or ADPs are equivalent up to a transformation). \\
+    \\
+    Such transformation will result
+    \begin{itemize}
+        \item Simpler form of Bellman equation
+        \item Tailored to solve for some problems (Exponential BE)
+        \item etc. 
+    \end{itemize}
+\end{frame}
+\begin{frame}{Definitions}
+    \begin{definition}
+        Let $(V,\mathbb{T})$ and $(\hat V,\hat{\mathbb{T}})$ be ADPs with policy sets $\mathbb{T}:= \{T_\sigma:\sigma\in\Sigma\}$ and $\hat{\mathbb{T}}:= \{\hat T_\sigma :\sigma \in\Sigma\}$. We call these ADPs \textbf{isomorphic} under $F$ if
+        \begin{enumerate}
+            \item $F$ is an order isomorphism from $V$ to $\hat V$
+            \item these two ADPs have the same policy set $\Sigma$
+            \item $(V,T_\sigma)$ and $(V,\hat T_\sigma)$ are order conjugate under $F$ for all $\sigma\in\Sigma$.
+        \end{enumerate}
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Example 3.1.3. Fei et al. (2021) Exponential Bellman Equation}
+    Exponential risk-sensitive Q-factor Bellman equation (ADP: $((0,\infty)^G,\mathbb{M})$)
+    $$
+    M_\sigma h = \exp (\theta r + \beta\ln P_\sigma h), \quad P_\sigma h(x,a):= \sum_{x'} h(x',\sigma(x')) P(x,a,x')
+    $$
+    Risk-sensitive Q-factor policy operator (ADP: $(\mathbb{R}^G, \mathbb{T})$)
+    $$
+    T_\sigma f = r+\frac{\beta}{\theta} \ln \bigg[P_\sigma \exp(\theta f)\bigg],\quad P_\sigma\exp(\theta f)(x,a):= \sum_{x'} \exp(\theta f(x',\sigma(x')) P(x,a,x')
+    $$
+\end{frame}
+
+\begin{frame}{Example 3.1.3. Continue}
+Let $\theta>0$, and 
+$$
+Fh = \exp(\theta h)
+$$
+is an order isomorphism from $\mathbb{R}^G$ to $(0,\infty)^G$.\\
+\\
+For conjugacy, we have
+\begin{align*}
+  (F\circ T_\sigma)(h) &= \exp\left(\theta (r+\frac{\beta}{\theta})\ln \bigg[P_\sigma \textcolor{red}{\exp(\theta h)}\bigg] \right)\\
+  &= \exp\left(\theta r+\beta \ln P_\sigma (Fh) \right)\\
+  &= (M_\sigma \circ F) (h)
+\end{align*}
+Hence, $((0,\infty)^G,\mathbb{M})$ and $(\mathbb{R}^G, \mathbb{T})$ are isomorphic
+\end{frame}
+
+\begin{frame}{Example 3.1.4. RDP}
+Let $(\Gamma, V, B)$ and $(\Gamma, \hat V, \hat B)$ be two RDPs with identical state sapce $X$, action space $A$, and feasible correspondence $\Gamma$. Let $V = M^X,\hat V = \hat M^X$, where $M,\hat M\subset \mathbb{R}$. If there exists an order isomorphism $\varphi$ from $M$ to $\hat M$ such that
+$$
+B(x,a,v) = \varphi^{-1} [\hat B(x,a,\varphi\circ v)] \quad\text{for all $v\in V$ and $(x,a)\in G$}
+$$
+then $(V,\mathbb{T})$ and $(\hat V,\hat{\mathbb{T}})$ are isomorphic. From exercise 3.1.2, $F$ is an order isomorphism from $V$ to $\hat V$, and
+$$
+T_\sigma  = F^{-1} \circ \hat T_\sigma \circ F
+$$
+\end{frame}
+
+
+\begin{frame}{Lemma 3.1.4.}
+\begin{lemma}
+    Isomorphism between ADPs is an equivalence relation on the set of ADPs.
+\end{lemma}
+\begin{proof}
+    Let $\mathbb{A}$ be the set of ADPs. We denote $(V_1,\mathbb{T}_1)\cong(V_2, \mathbb{T}_2)$ if there are isomorphic. We need to prove that $\sim$ is reflexive, symmetric and transitive.
+    \begin{itemize}
+        \item (Reflexivity) Let $(V,\mathbb{T})\in \mathbb{A}$, as the ADP has the same policy set as itself and by Exercise 3.1.9, we get reflexivity.
+        \item (Symmetry) Let $(V_1,\mathbb{T}_1)\cong(V_2, \mathbb{T}_2)$, then they have the same policy set. We use Exercise 3.1.9 get symmetry
+        \item (Transitivity) Let $(V_1,\mathbb{T}_1)\cong(V_2, \mathbb{T}_2)$ and $(V_2,\mathbb{T}_2)\cong(V_3, \mathbb{T}_3)$, hence these three ADPs have the same policy set. We use Exercise 3.1.9. get transitivity.
+    \end{itemize}
+\end{proof}
+\end{frame}
