@@ -51,3 +51,54 @@ Let $V$ be a poset and $S$ be a self-map on $V$. In this setting, we call $S$
 \textbf{Remark}: With only order preserving and order stability, we \textbf{cannot guarantee} an iterating bound monotone sequence converge to the unique fixed point.
     
 \end{frame}
+\begin{frame}{Example: without continuity}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Dynamic Programming/DP2/Chapter 1/Section 1.2/figure/discontinuous.png}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Convergence}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Dynamic Programming/DP2/Chapter 1/Section 1.2/figure/convergence.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Order Completeness}
+\begin{definition}
+    A nonempty poset $V$ is called
+    \begin{itemize}
+        \item a \textbf{lattice} if every finite subset of $V$ has both a supremum and an infimum in $V$
+        \item a \textbf{complete lattice} if every subset of $V$ has a supremum and an infimum in $V$
+        \item \textbf{chain complete} if every chain in $V$ has a supremum and an infimum in $V$
+        \item \textbf{$\sigma$-chain complete} is every at most countable chain in $V$ has a supremum and an infimum in $V$
+    \end{itemize}
+\end{definition}
+\textbf{Remark:} Here  `finite' means nonempty finite, `at most countable' means empty, finite, or countable. 
+    
+\end{frame}
+
+\begin{frame}{Chain complete poset is order bounded}
+
+\begin{lemma}
+    Let $V$ be any poset. We have
+    \begin{itemize}
+        \item $b:= \bigvee \emptyset$ exists in $V$ if and only if $V$ has a least element and that least element is $b$
+        \item $u:= \bigwedge \emptyset$ exists in $V$ is and only if $V$ has a greatest element and that greatest element is $u$.
+    \end{itemize}
+\end{lemma}
+    \begin{proof}
+        Suppose $b=\bigvee\emptyset$ exists in $V$. By definition of empty set, we know that every subset of $V$ is an upper bound of $\emptyset$. In other words, every element of $V$ is in the upper bound of $\emptyset$. Hence, the least upper bound of the emptyset is the least element of $V$.\\
+        \\
+        Suppose $V$ has a least element and that least element is $b$. Following the above logic, the least upper bound of the emptyset should be the least element of $V$. Given its existence, we know that $b=\bigvee\emptyset$.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Chain complete poset is order bounded}
+\begin{lemma}
+    d
+\end{lemma}
+    
+\end{frame}
