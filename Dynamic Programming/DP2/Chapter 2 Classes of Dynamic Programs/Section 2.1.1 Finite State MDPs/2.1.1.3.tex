@@ -1,0 +1,32 @@
+\section{Properties}
+
+\begin{frame}{Properties}
+ADP $(\mathbb{R}^{\mathbf{X}}, \mathbb{T}_{MDP})$ is 
+\begin{itemize}
+    \item \textbf{well-posed}
+    \item \textbf{regular} by finiteness of $\mathbf{A}$ and nonemptyness of $\Gamma$
+    \item \textbf{globally stable} by $T_\sigma$ is contraction with modulus $\beta$
+    \item (also \textbf{order stable})
+\end{itemize}
+
+The metric $d_\infty(v,w) = \|v-w\|_\infty$ is \textbf{sup-nonexpansive}.
+
+Hence, the Bellman operator $T$ is also a contraction. 
+
+\end{frame}
+
+\begin{frame}{Exercise 2.1.5}
+Supply a more direct proof that $T$ is a contraction of modulus $\beta$ on $(\mathbb{R}^X, d_\infty)$ using the expression for $T$ in (2.5) and Lemma A.1.2.
+
+
+\begin{proof}
+    Let $v,w\in \mathbb{R}^{\mathbf{X}}$. We have
+
+\begin{align*}
+    \|Tv(x)-Tw(x)\| &= \left\|\max_{a\in\Gamma(x)} \left\{r(x,a)+\beta\sum_{x'} v(x') P(x,a,x')\right\}-\max_{a\in\Gamma(x)} \left\{r(x,a)+\beta\sum_{x'} w(x') P(x,a,x')\right\} \right\|\\
+    &\le \max_{a\in\Gamma(x)}\left\|\beta\sum_{x'} (v(x')-w(x')) P(x,a,x')\right\|\\
+    &\beta\|v-x\|
+\end{align*}
+\end{proof}
+\end{frame}
+

@@ -1,0 +1,373 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[margin=1in]{geometry} % Page margins
+\usepackage{xcolor} % For colors
+\usepackage{titlesec} % For title formatting
+\usepackage{titling} % For title page customization
+\usepackage{enumitem} % For list customization
+\usepackage{booktabs} % For better tables
+\usepackage{fancyhdr} % For headers and footers
+\usepackage{hyperref} % For hyperlinks
+\usepackage{tcolorbox} % For colored boxes
+\usepackage{graphicx} % For images
+\usepackage{lipsum} % For dummy text (remove in actual use)
+\usepackage{setspace} % For line spacing
+\usepackage{pifont} % For decorative symbols
+
+% Color definitions - Professional palette
+\definecolor{primary}{RGB}{0,60,105} % Deep blue
+\definecolor{secondary}{RGB}{240,240,245} % Light gray
+\definecolor{accent}{RGB}{180,95,6} % Warm orange
+\definecolor{textcolor}{RGB}{50,50,50} % Dark gray for text
+
+% Set line spacing
+\onehalfspacing
+
+% Title formatting with elegant styling
+\titleformat{\section}
+  {\Large\bfseries\color{primary}}
+  {\thesection}{1em}{}[\vspace{-0.5em}\rule{\textwidth}{0.8pt}\vspace{0.5em}]
+
+\titleformat{\subsection}
+  {\large\bfseries\color{primary}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{primary}}
+  {\thesubsubsection}{1em}{}
+
+% Header and footer setup
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primary}{\textit{\thetitle}}}
+\fancyhead[R]{\textcolor{primary}{\textit{\theauthor}}}
+\fancyfoot[C]{\textcolor{primary}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Custom tcolorbox environments
+\newtcolorbox{keyidea}{
+  colback=primary!10,
+  colframe=primary,
+  boxrule=1pt,
+  sharp corners,
+  title=Key Insight,
+  fonttitle=\bfseries,
+  coltitle=white,
+  colbacktitle=primary
+}
+
+\newtcolorbox{quotebox}{
+  colback=secondary,
+  colframe=accent,
+  boxrule=1pt,
+  sharp corners,
+  left=15pt
+}
+
+\newtcolorbox{notebox}{
+  colback=white,
+  colframe=primary!50,
+  boxrule=0.8pt,
+  sharp corners,
+  left=10pt,
+  right=10pt
+}
+
+% Format for lists with custom bullets
+\setlist[itemize]{label=$\bullet$, itemsep=0.5ex, parsep=0.25ex}
+\setlist[enumerate]{label=\arabic*., itemsep=0.5ex, parsep=0.25ex}
+
+% Hyperref setup
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  filecolor=primary,
+  urlcolor=accent,
+  citecolor=primary
+}
+
+% Title page customization
+\pretitle{\begin{center}\LARGE\bfseries\color{primary}}
+\posttitle{\end{center}\vspace{0.5em}\begin{center}\rule{0.5\textwidth}{1pt}\end{center}\vspace{1em}}
+\preauthor{\begin{center}\large}
+\postauthor{\end{center}}
+\predate{\begin{center}\small\color{textcolor}}
+\postdate{\end{center}}
+
+% Document info
+\title{Reading Notes: Unisured Idiosyncratic Risk and Aggregate Saving}
+\author{Longye Tian}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.85\textwidth}
+\begin{quotebox}
+\begin{center}
+\textit{``The reading of all good books is like a conversation with the finest minds of past centuries.''} \\[0.3cm]
+{\small— René Descartes}
+\end{center}
+\end{quotebox}
+\end{minipage}
+\end{center}
+
+\vspace{1cm}
+
+\section*{Document Information}
+\begin{center}
+\begin{tabular}{|@{}>{\bfseries\color{primary}} r  @{\hspace{1.5em}}|c@{}|} \hline 
+Title: & Uninsured Idiosyncratic Risk and Aggregate Saving\\ \hline 
+Author: & S. Rao Aiyagari\\ \hline 
+Publication: & Quarterly Journal of Economics\\ \hline 
+Year: & August 1994\\ \hline 
+Pages: & 26\\ \hline 
+Date Read: & March 29th 2025\\ \hline 
+Genre/Field: & Heterogenous Agent Model\\ \hline
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+\section*{Summary}
+[Provide a brief summary of the main points and arguments of the text in your own words. This should be concise but comprehensive enough to remind you of the overall content.]
+
+\vspace{0.8cm}
+\begin{keyidea}
+\textbf{Key Takeaway:} [The single most important insight or conclusion from the reading]
+\end{keyidea}
+
+\vspace{1cm}
+\section*{Main Arguments/Points}
+
+\begin{tcolorbox}[
+  colback=white,
+  colframe=primary!30,
+  title=Point 1: [Point 1 Title],
+  fonttitle=\bfseries\color{primary}
+]
+[Explanation of the first main point]
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{tcolorbox}[
+  colback=white,
+  colframe=primary!30,
+  title=Point 2: [Point 2 Title],
+  fonttitle=\bfseries\color{primary}
+]
+[Explanation of the second main point]
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{tcolorbox}[
+  colback=white,
+  colframe=primary!30,
+  title=Point 3: [Point 3 Title],
+  fonttitle=\bfseries\color{primary}
+]
+[Explanation of the third main point]
+\end{tcolorbox}
+
+\vspace{1cm}
+\section*{Important Quotes}
+\begin{quotebox}
+``[Direct quote from the text]'' (p. [page number])
+\end{quotebox}
+
+\vspace{0.7cm}
+\begin{quotebox}
+``[Another significant quote]'' (p. [page number])
+\end{quotebox}
+
+\newpage
+\section*{Methodology}
+\begin{tcolorbox}[
+  colback=secondary!50,
+  colframe=primary!30,
+  title=Research Approach,
+  fonttitle=\bfseries\color{primary}
+]
+[If applicable, describe the research methods, data collection, or analytical approaches used in the text]
+\end{tcolorbox}
+
+\vspace{1cm}
+\section*{Evidence and Examples}
+
+\begin{itemize}
+  \item \begin{tcolorbox}[
+    colback=white,
+    colframe=primary!20,
+    boxrule=0.5pt
+  ]
+  \textbf{\textcolor{primary}{Evidence 1:}} [Description of supporting evidence or examples]
+  \end{tcolorbox}
+  
+  \vspace{0.4cm}
+  \item \begin{tcolorbox}[
+    colback=white,
+    colframe=primary!20,
+    boxrule=0.5pt
+  ]
+  \textbf{\textcolor{primary}{Evidence 2:}} [Description of supporting evidence or examples]
+  \end{tcolorbox}
+  
+  \vspace{0.4cm}
+  \item \begin{tcolorbox}[
+    colback=white,
+    colframe=primary!20,
+    boxrule=0.5pt
+  ]
+  \textbf{\textcolor{primary}{Evidence 3:}} [Description of supporting evidence or examples]
+  \end{tcolorbox}
+\end{itemize}
+
+\vspace{1cm}
+\section*{Connections}
+
+\begin{minipage}{0.48\textwidth}
+\begin{tcolorbox}[
+  colback=primary!10,
+  colframe=primary!30,
+  title=Other Readings,
+  fonttitle=\bfseries\color{primary}
+]
+[Discuss how this text relates to other readings or materials you've encountered]
+\end{tcolorbox}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{tcolorbox}[
+  colback=primary!10,
+  colframe=primary!30,
+  title=Course Themes,
+  fonttitle=\bfseries\color{primary}
+]
+[If applicable, relate the reading to themes from your course or research]
+\end{tcolorbox}
+\end{minipage}
+
+\vspace{1cm}
+\section*{Critical Analysis}
+
+\begin{tcolorbox}[
+  colback=white,
+  colframe=primary!60,
+  title=Strengths,
+  fonttitle=\bfseries\color{white},
+  colbacktitle=primary
+]
+\begin{itemize}
+  \item [Strength 1]
+  \item [Strength 2]
+  \item [Strength 3]
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.7cm}
+\begin{tcolorbox}[
+  colback=white,
+  colframe=accent!60,
+  title=Limitations,
+  fonttitle=\bfseries\color{white},
+  colbacktitle=accent
+]
+\begin{itemize}
+  \item [Weakness 1]
+  \item [Weakness 2]
+  \item [Weakness 3]
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.7cm}
+\begin{notebox}
+\textbf{Questions Raised:}
+\begin{enumerate}
+  \item [Question 1 about the text or its implications]
+  \item [Question 2 about the text or its implications]
+  \item [Question 3 about the text or its implications]
+\end{enumerate}
+\end{notebox}
+
+\vspace{1cm}
+\hrule
+\vspace{0.5cm}
+
+\begin{tcolorbox}[
+  colback=secondary!10,
+  colframe=primary!30,
+  title=Personal Reflection,
+  fonttitle=\bfseries\color{primary}
+]
+[Your thoughts, reactions, and reflections on the reading. How has it changed your thinking or perspective?]
+\end{tcolorbox}
+
+\vspace{1cm}
+\section*{Vocabulary}
+\begin{center}
+\begin{tabular}{|>{\centering\bfseries\color{primary}}p{3cm}|>{\color{textcolor}}p{9cm}|}
+\hline
+\rowcolor{secondary!30} \multicolumn{1}{|c|}{\textbf{\textcolor{primary}{Term}}} & \multicolumn{1}{c|}{\textbf{\textcolor{primary}{Definition}}} \\
+\hline
+Term 1 & [Definition or explanation] \\
+\hline
+Term 2 & [Definition or explanation] \\
+\hline
+Term 3 & [Definition or explanation] \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+\section*{Action Items}
+\begin{tcolorbox}[
+  colback=white,
+  colframe=primary!40,
+  width=0.8\textwidth,
+  center
+]
+\begin{itemize}
+  \item [Something to research further based on this reading]
+  \item [A concept to apply in your own work]
+  \item [A follow-up reading or resource to check]
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{1cm}
+\hrule
+\vspace{0.5cm}
+\begin{center}
+\large\bfseries\color{primary} Rating \& Final Assessment
+\end{center}
+\vspace{0.5cm}
+\hrule
+
+\vspace{1cm}
+\begin{center}
+\begin{tcolorbox}[
+  colback=secondary!10,
+  colframe=primary!40,
+  width=0.6\textwidth
+]
+\begin{center}
+\textbf{\large\textcolor{primary}{Personal Rating}}\\[0.5cm]
+\ding{72} \ding{72} \ding{72} \ding{72} \ding{73} \\[0.5cm]
+[Brief explanation of your rating]
+\end{center}
+\end{tcolorbox}
+\end{center}
+
+\vspace{1cm}
+\begin{tcolorbox}[
+  colback=primary!10,
+  colframe=primary!40,
+  title=Final Thoughts,
+  fonttitle=\bfseries\color{primary}
+]
+[Your final assessment of the reading's value, importance, or relevance to your work/studies.]
+\end{tcolorbox}
+
+\end{document}
