@@ -1,0 +1,160 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+
+
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Title information
+\title[DP2]{Dynamic Programming}
+\subtitle{Thomas J. Sargent and John Stachurski}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{March 7th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+\section{Primitives and Values}
+\begin{frame}{Primitives and Values}
+\begin{itemize}
+    \item \textbf{discount rate} $\delta>0$
+    \item \textbf{Intensity kernel} $Q: G\times \mathbf{X}\to \mathbb{R}$ satisfiying
+    $$
+    \sum_{x'} Q(x,a,x') = 0 \,\,\text{for all $(x,a)\in G$, and $Q(x,a,x')\ge 0$ when $x\neq x'$}
+    $$
+    \item for any $\sigma\in\Sigma$, we obtain the intensity operator or \textbf{infinitesimal generator}
+    $$
+    Q_\sigma(x,x'):= Q(x,\sigma(x),x')
+    $$
+    that determines a continuous time Markov chain $(X_t)_{t\ge 0}$ with transition probabilities give by 
+    $$
+    P^\sigma_t:= e^{tQ_\sigma}  \quad \text{for all $x\in\mathbf{X}$}
+    $$
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Primitives and Values}
+We have
+$$
+\mathbb{E}_x h(X_t) = (P_t^\sigma h)(x) \quad\text{for any $h\in\mathbb{R}^{\mathbf{X}}$}
+$$
+Hence, the lifetime value of following $\sigma$ starting from state $x$ is
+$$
+v_\sigma(x) = \mathbb{E}_x\int_0^\infty e^{-\delta t} r_\sigma(X_t) \, dt = \int_0^\infty e^{-\delta t}(P^\sigma_t r_\sigma)(x)\, dt
+$$
+Using $\delta>0$, we can write $v_\sigma$ as
+$$
+v_\sigma  = \int_0^\infty e^{t(Q_\sigma -\delta I)}r_\sigma\, dt = (\delta I -Q_\sigma)^{-1} r_\sigma
+$$
+    
+\end{frame}
+\begin{frame}{ADP Reformulation}
+Define
+$$
+P(x,a,x') :=\mathbf{1}\{x=x'\} + \frac{Q(x,a,x')}{m},\quad \text{where $m:=\max_{x\in\mathbf{X}, a\in\mathbf{A}} |Q(x,a,x)|$}
+$$
+In addition, we set
+$$
+\beta:= \frac{m}{m+\delta}\quad \text{and} \quad \hat{r}_\sigma := \frac{r_\sigma}{m+\delta}
+$$
+\end{frame}
+
+\begin{frame}{Exercise 2.1.9}
+Prove that with the above definitions,
+\begin{itemize}
+    \item $P_\sigma$ is a stochastic matrix
+    \item $\sigma$-value function $v_\sigma$ obeys
+    $$
+    v_\sigma = (I-\beta P_\sigma)^{-1} \hat{r}_\sigma 
+    $$
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{ADP Formulation}
+We see that $v_\sigma$ is the unique fixed point in $V:=\mathbb{R}^{\mathbf{X}}$ of the policy operator
+$$
+T_\sigma v = \hat{r}_\sigma +\beta P_\sigma v
+$$
+
+Letting $\mathbb{T}_{CTMDP}:=\{T_\sigma:\sigma \in\Sigma\}$, we study the ADP $(\mathbb{R}^{\mathbf{X}}, \mathbb{T}_{CTMDP})$
+\end{frame}
+
+
+\begin{frame}{Optimality}
+We can directly apply the discrete time MDP theory to get all the optimality result.
+\end{frame}
+\end{document}
