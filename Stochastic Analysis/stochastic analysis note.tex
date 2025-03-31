@@ -1,0 +1,2417 @@
+\documentclass[12pt,a4paper]{article}
+
+% Basic math and AMS packages
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+
+% For probability theory
+\usepackage{bbm}
+\usepackage{mathrsfs}
+
+% For better looking fractions in display mode
+\usepackage{xfrac}
+
+% For nicer looking sets
+\usepackage{dsfont}
+
+% For commutative diagrams
+\usepackage{tikz-cd}
+
+% For customizing lists
+\usepackage{enumitem}
+
+% For page layout
+\usepackage{geometry}
+\usepackage{titlesec}
+
+% For more symbols
+\usepackage{stmaryrd}
+
+% For hyperlinks and cross-referencing
+\usepackage[colorlinks=true,linkcolor=blue]{hyperref}
+\usepackage{cleveref}
+
+% For boxed theorems
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=1in}
+
+% Custom command for the horizontal line
+\DeclareMathOperator*{\supess}{sup\,ess}
+\newcommand{\headerline}{
+    \noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
+}
+
+% Some useful math commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+\renewenvironment{proof}
+    {\begin{trivlist}\item[\hskip\labelsep\color{blue}\bfseries Proof:]}
+    {\qed\end{trivlist}}
+% Boxed theorem environments
+\newtcbtheorem[number within=section]{theorem}{Theorem}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=blue!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=blue!75!black,
+    colframe=blue!75!black,
+  },
+  label separator={}
+}{thm}
+
+
+\newtcbtheorem[use counter from=theorem]{lemma}{Lemma}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=green!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=green!75!black,
+    colframe=green!75!black,
+  }
+}{lem}
+
+\newtcbtheorem[use counter from=theorem]{proposition}{Proposition}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=red!75!black,
+    colframe=red!75!black,
+  }
+}{prop}
+
+\newtcbtheorem[use counter from=theorem]{corollary}{Corollary}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=orange!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=orange!75!black,
+    colframe=orange!75!black,
+  }
+}{cor}
+
+\newtcbtheorem[use counter from=theorem]{definition}{Definition}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=purple!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=purple!75!black,
+    colframe=purple!75!black,
+  }
+}{def}
+
+\newtcbtheorem[use counter from=theorem]{remark}{Remark}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=gray!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=gray!75!black,
+    colframe=gray!75!black,
+  }
+}{rem}
+
+\newtcbtheorem[use counter from=theorem]{example}{Example}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=yellow!75!black,
+  fonttitle=\bfseries,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=yellow!75!black,
+    colframe=yellow!75!black,
+  }
+}{example}
+
+
+
+
+\newtcbtheorem[no counter]{solution}{Solution}{
+  enhanced,
+  sharp corners,
+  attach boxed title to top left={yshifttext=-1mm},
+  colback=white,
+  colframe=green!25,
+  fonttitle=\bfseries,
+  coltitle=black,
+  boxed title style={
+    sharp corners,
+    size=small,
+    colback=green!25,
+    colframe=green!25,
+  }
+}{sol}
+
+% Define autoref names
+\def\theoremautorefname{Theorem}
+\def\lemmaautorefname{Lemma}
+\def\propositionautorefname{Proposition}
+\def\corollaryautorefname{Corollary}
+\def\definitionautorefname{Definition}
+\def\remarkautorefname{Remark}
+\def\exampleautorefname{Example}
+
+\begin{document}
+
+\begin{center}
+\text{THE UNIVERSITY OF SYDNEY} \\
+\text{SCHOOL OF ECONOMICS} \\
+\text{LONGYE TIAN} \\
+\end{center}
+\headerline
+\pagebreak
+\section{Week 3}
+\subsection{Lecture 1}
+\subsubsection{Brownian Motion as the limit of a symmetric Random Walk}
+Need a good example
+\pagebreak
+\subsubsection{Poisson Process}
+\begin{definition}{Poisson Process}{}
+    We say $N_t$ is a Poisson process with parameter $\lambda>0$ if
+    \begin{enumerate}
+        \item[1)] Starting at zero: $N_0= 0$
+        \item[2)] Independent increment: $N_t-N_s\indep \mathscr{F}_s$ for all $s<t$
+        \item[3)] Poisson increment: for $s<t$, $N_t-N_s\sim Poiss(\lambda(t-s))$, i.e.,
+        $$
+        \mathbbm{P}(N_t-N_s= n) = \frac{(\lambda(t-s))^n e^{-\lambda(t-s)}}{n!}\qquad n\ge 0
+        $$
+        \item[4)]Cadlag path: $(N_t)$ has cadlag path, i.e., right continuous with left limits
+    \end{enumerate}
+\end{definition}
+\begin{remark}{}{}
+    Brownian motion and Poisson process are two examples of Levy process
+\end{remark}
+\begin{remark}{Mean, variance, martingale}{}
+    By the property of Poisson distribution, we have, mean and variance of the increments are $\lambda(t-s)$, i.e.,
+    $$
+    \E(N_t-N_s) = \lambda(t-s) = \E((N_t-N-s-\lambda(t-s))^2)
+    $$
+    This implies, we have when $\lambda=1$, 
+    $$
+    N_t-t \text{ is a martingale and also $(N_t-t)^2-t$ is a martingale}
+    $$
+\end{remark}
+\begin{definition}{Levy Process}{}
+    We say $X_t$ is a Levy Process if
+    \begin{enumerate}
+        \item[1)] starting at zero: $X_0=0$
+        \item[2)] Independent increment: $X$ has independent increment
+        \item[3)] Stationary increment: for $s<t$, $n>0$, $X_{t+n}-X_{s+n}\sim X_t-X_s$
+        \item[4)] Cadlag path: $X$ has cadlag path
+    \end{enumerate}
+\end{definition}
+\pagebreak
+\subsubsection{Stopping Time}
+\begin{definition}{Stopping Time}{}
+A random variable with values in $\mathbbm{T}\cup\{\infty\}$ is called an $(\mathscr{F}_t)_{t\in \mathbbm{T}}$-stopping time if 
+$$
+\{\tau\le t\}\in\mathscr{F}_t\qquad\text{for each $t\in \mathbbm{T}$}
+$$
+\end{definition}
+\begin{proposition}{}{}
+    If $\mathscr{F}_t = \mathscr{F}_{t+}$ for all $t$, then $\tau$ is a stopping time if and only if 
+    $$
+    \{\tau<t\}\in\mathscr{F}_t\qquad \forall t
+    $$
+\end{proposition}
+\begin{proof}
+    Note that 
+    $$
+    \{\tau\le t\} = \bigcap_{n}\{\tau<t+1/n\}\in\mathscr{F}_{t+}=\mathscr{F}_t
+    $$
+    and
+    $$
+    \{\tau<t\} = \bigcup_{n} \{t\le t-1/n\} \in \mathscr{F_t} = \mathscr{F}_{t+}
+    $$
+\end{proof}
+\begin{proposition}{}{}
+    Let $(X_t)$ be an $(\mathscr{F}_t)$-adapted continuous process and $A$ be a closed set. Then,
+    $$
+    \tau_A = \inf\{t\in\mathbbm{T}: X_t\in A\}
+    $$
+    is an $(\mathscr{F}_t)$-stopping time.
+\end{proposition}
+\begin{proof}
+    Let $\mathbbm{T}_0\subset\mathbbm{T}$ be a dense subset such that $\inf \mathbbm{T}\in\mathbbm{T}_0$.\\
+    \\
+    Since $A$ is closed and $X$ is continuous, for each $t\in \mathbbm{T}$, we have,
+    $$
+    \{\tau_A\le t\} = \{\exists s\le t, X_s\in A\} = \bigcap_{n=1}^\infty \bigcup_{s\ge t, s\in\mathbbm{T}_0} \{X_s\in A_{1/n}\}\in \mathscr{F}_t
+    $$
+    where $A_\varepsilon = \{x: d(x,A)<\varepsilon\}$.
+\end{proof}
+\begin{remark}{}{}
+    If $A$ is open, then $\tau_A$ may not be an $(\mathscr{F}_t)$-stopping time but it is an $(\mathscr{F}_{t+})$-stopping time. 
+\end{remark}
+\begin{example}{}{}
+    Let $(W_t)$ be a Brownian motion, and $a\in\R$. Let
+    $$
+    \tau = \inf\{t\ge 0: W_t=a\}
+    $$
+    Then,
+    $$
+    \{\tau\le t\} = \{\exists s\le t: W_s=a\}\in\mathscr{F}_t
+    $$
+\end{example}
+\begin{definition}{$\sigma$-field of events observable at time $\tau$}{}
+    Let $\tau$ be an $(\mathscr{F}_t)$-stopping time. Define $\sigma$-field of events observable at time $\tau$ by 
+    $$
+    \mathscr{F}_\tau = \left\{A\in\mathscr{F}_\infty = \sigma\left(\bigcup_{t\in \mathbbm{T}}\mathscr{F}_t\right): A\cap\{\tau\le t\}\in \mathscr{F}_t\,\forall t\right\}
+    $$
+\end{definition}
+\begin{proposition}{}{}
+    \begin{enumerate}
+        \item[1)] $\mathscr{F}_\tau$ is a $\sigma$-field
+        \item[2)] If $\tau\le \sigma$, then $\mathscr{F}_\tau\subset \mathscr{F}_\sigma$
+        \item[3)] Random variable $\tau$ is $\mathscr{F}_\tau$-measurable.
+    \end{enumerate}
+\end{proposition}
+\begin{proposition}{}{}
+    Let $\tau$,$\sigma$ be stopping times. Then $\mathscr{F}_{\tau\wedge \sigma} = \mathscr{F}_\tau \cap\mathscr{F}_\sigma$ and events $\{\tau<\sigma\}, \{\sigma<\tau\},\{\tau\le \sigma\},\{\sigma\le \tau\},\{\sigma=\tau\}$ are elements of $\mathscr{F}_{\tau\wedge\sigma}$.
+\end{proposition}
+\pagebreak
+\subsubsection{Progressive measurability}
+\begin{definition}{Progressively measurable process}{}
+    Process $(X_t)_{t\in\mathbbm{T}}$ is progressively measurable with respect to $(\mathscr{F}_t)_{t\in\mathbbm{T}}$ if for each $t\in\mathbbm{T}$, the mapping $(s,\omega)\mapsto X_s(\omega)$ from $(-\infty,t]\cap\mathbbm{T}\times \Omega$ to $\R$ is measurable with respect to $\mathscr{B}((-\infty,t]\cap\mathbbm{T})\otimes \mathscr{F}_t$, i.e., $\forall t\in\mathbbm{T}, \forall A\in\mathscr{B}(\R)$
+    $$
+    \{(s,\omega)\in\mathbbm{T}\times\Omega:s\le t, X_s(\omega)\in A\}\in \mathscr{B}((-\infty,t]\cap\mathbbm{T})\otimes\mathscr{F}_t
+    $$
+\end{definition}
+\begin{proposition}{}{}
+    \begin{enumerate}
+        \item[1)] If $(X_t)$ is progressively measurable with respect to $(\mathscr{F}_t)$ then $(X_t)$ is $(\mathscr{F}_t)$-adapted
+        \item[2)] If $(X_t)$ is $(\mathscr{F}_t)$-adapted and has right continuous paths (or left continuous path) a.s., then it is progressively measurable.
+    \end{enumerate}
+\end{proposition}
+\begin{definition}{Stopped Process}{}
+    If $\tau$ is a stopping time, $(X_t)_{t\in \mathbbm{T}}$ is a stochastic process, then $(X_t^\tau)_{t\in\mathbbm{T}}$ is a process stopped at $\tau$ by $X_t^\tau = X_{\tau\wedge t}$.
+\end{definition}
+\begin{theorem}{}{}
+    Let $(X_t)$ be a $(\mathscr{F}_t)$-progressively measurable process and $\tau$ be a stopping time.\\
+    \\
+    Then the random variable $X_\tau\mathbbm{1}_{\{\tau<\infty\}}$ is $\mathscr{F}_\tau$-measurable.\\
+    \\
+    Moreover, the stopped process $X^\tau$ is progressively measurable.
+\end{theorem}
+\pagebreak
+\subsubsection{Martingale: Maximal inequalities}
+\begin{lemma}{Doob's optional sampling for discrete tiem martingale}{}
+    Let $(X_n, \mathscr{F}_n)_{0\le n\le N}$ be a martingale (resp. super-, sub-) and $0\le \tau\le \sigma\le N$ be two stopping times. Then,
+    $$
+    \E(X_\sigma|\mathscr{F}_\tau) = X_\tau \qquad (resp. \le, \ge)
+    $$
+\end{lemma}
+\begin{proof}
+    We need to show that for all $A\in \mathscr{F}_\tau$
+    $$
+    \E(X_\tau \mathbbm{1}_A) = \E(X_\sigma \mathbbm{1}_A)
+    $$
+    First, let $A_k = A\cap\{\tau =k\}$ for $k=0,1,2,\cdots,N$. We obtain
+    \begin{align*}
+        (X_\sigma - X_\tau)\mathbbm{1}_{A_k} &=(X_\sigma -X_k)\mathbbm{1}_{A_k}\\
+        &= \sum_{i=k}^{\sigma-1} (X_{i+1}-X_i)\mathbbm{1}_{A_k}\\
+        &= \sum_{i=k}^{N} (X_{i+1}-X_i)\mathbbm{1}_{A_k\cap \{\sigma >i\}}
+    \end{align*}
+    and thus,
+    $$
+    \E((X_\sigma-X\tau)\mathbbm{1}_{A_k}) = \sum_{i=k}^N\E[(X_{i+1}-X_i)\mathbbm{1}_{A_k\cap\{\sigma>i\}}]=0
+    $$
+    since $A_k\cap\{\sigma>i\}=\{\tau=k\}\cap\{\sigma>i\}\in\mathscr{F}_i$.\\
+    \\
+    Finally, we have,
+    $$
+    \E[(X_\sigma-X_\tau)\mathbbm{1}_A] = \sum_{k=0}^N \E[(X_\sigma-X_\tau)\mathbbm{1}_{A_k}]=0
+    $$
+\end{proof}
+\begin{remark}{}{}
+    Above lemma is true for bounded stopping times.\\
+    \\
+    Take $X_n = \sum_{k=1}^n \varepsilon_k$, and $\varepsilon_k$ is iid with $\mathbbm{P}(\varepsilon_n = \pm 1) =\frac{1}{2}$.\\
+    \\
+    Take $\mathscr{F}_n = \sigma(\varepsilon_1,\cdots, \varepsilon_n)$, $\tau=0$, $\sigma=\inf\{n: X_n=1\}$. Then, $\E(X_\tau)=0\neq 1=\E(X_\sigma)$
+\end{remark}
+\begin{lemma}{}{}
+    Let $(X_n,\mathscr{F}_n)_{0\le n\le N}$ be a supermartingale. Then, for $\lambda\ge 0$ we have,
+    \begin{enumerate}
+        \item[1)]
+        $$
+        \lambda\mathbbm{P}\left(\max_{0\le n\le N}X_n\ge \lambda\right)\le \E\left[X_N \mathbbm{1}_{\{\max_{n}X_n\ge \lambda\}}\right]\le \E X_N^+
+        $$
+        \item[2)]
+        $$
+        \lambda\mathbbm{P}\left(\min_{0\le n\le N}X_n\ge -\lambda\right)\le \E\left[X_N\mathbbm{1}_{\{\min_{n} X_n>-\lambda\}}\right]-\E X_0 \le \E X_N^+-\E X_0
+        $$
+    \end{enumerate}
+\end{lemma}
+\begin{corollary}{}{}
+    Let $(X_n,\mathscr{F}_n)_{0\le n\le N}$ be a martingale or non-negative submartingale. Then,
+    \begin{enumerate}
+        \item[1)]
+        $$
+        \forall p\ge 1, \forall\lambda\ge 0, \lambda^p \mathbbm{P}\left(\max_n |X_n|\ge \lambda\right)\le \E|X_N|^p
+        $$
+        \item[2)]
+        $$
+        \forall p>1, \E|X_N|^P \le \E \max_n |X_n|^p \le \left(\frac{p}{p-1}\right)^p\E|X_N|^p
+        $$
+    \end{enumerate}
+\end{corollary}
+\begin{theorem}{}{}
+    Suppose $(X_t,\mathscr{F}_t)_{t\in\mathbbm{T}}$ is a cadlag martingale or a non-negative submartingale. Then
+    \begin{enumerate}
+        \item[1)] $\forall p\ge 1$, $\forall \lambda\ge 0$, $\lambda^p \mathbbm{P}(\sup_t |X_t|\ge \lambda)\le \sup_t \E |X_t|^p$
+        \item[2)] $\forall p>1$, $\sup_t\E|X_t|^p \le \E\sup_t |X_t|^p\le \left(\frac{p}{1-p}\right)^p \sup_t \E|X_t|^p$
+    \end{enumerate}
+\end{theorem}
+\begin{remark}{}{}
+    If $t_{max}\in \mathbbm{T}$, then
+    $$
+    \sup_{t\in\mathbbm{T}}\E|X_t|^p  = \E|X_{t_{max}}|^p
+    $$
+\end{remark}
+\begin{corollary}{}{}
+    For $u,s>0$ and Brownian motion $(W_t)$ the following inequality holds,
+    $$
+    \mathbbm{P}\left(\sup_{0\le t\le s} W_t\ge u\right)\le e^{-\frac{u^2}{2s}}
+    $$
+\end{corollary}
+\pagebreak
+\subsubsection{Martingale Convergence Theorem}
+\begin{definition}{Downcrossings}{}
+    Suppose that $I\subset \R$, $f:I\to \R$ and $\alpha<\beta$. If $I$ is finite, then we define
+    $$
+    \tau_1 = \inf\{t\in I: f(t)\ge \beta\}
+    $$
+    $$
+    \sigma_1 = \inf\{t\in I: t>\tau_1, f(t)\le \alpha\}
+    $$
+    Then by induction for $i=1,2,\cdots$
+    $$
+    \tau_{i+1} = \inf\{t\in I: t>\sigma_i, f(t)\ge \beta\}
+    $$
+    $$
+    \sigma_{i+1} = \inf\{t\in I: t>\tau_{i+1}, f(t)\le \alpha\}
+    $$
+    The number of downcrossings of $f$ across the interval $[\alpha,\beta]$ is given by 
+    $$
+    D_I(f,[\alpha,\beta]):= \sup \{j:\sigma_j<\infty\}\wedge 0
+    $$
+    If $I$ is infinite, we put
+    $$
+    D_I(f,[\alpha,\beta]) = \sup\{D_F(f,[\alpha,\beta]): F\subset I, finite\}
+    $$
+\end{definition}
+\begin{lemma}{Finite Downcrossing characterization of convergence}{}
+    A sequence $(x_n)$ converges to a limit in $\overline\R = \R\cup\{\pm \infty\}$ if and only if $D_\mathbbm{N}((x_n),[\alpha,\beta])$ is finite for all $\alpha<\beta$, $\alpha,\beta\in\R$.
+\end{lemma}
+\begin{lemma}{Finite downcrossing implies limit exitsts for right continuous function}{}
+    If $f:[a,b)\to \R$, $b\le \infty$ is right continuous such that for all $\alpha<\beta$, $\alpha,\beta\in\R$,
+    $$
+    D_{[a,b]\cap \Q} (f,[\alpha,\beta])<\infty
+    $$
+    then $\lim_{t\to b}f(t)$ exists (not necessarily finite).
+\end{lemma}
+\begin{lemma}{}{}
+    Let $(X_t)_{t\in\mathbbm{T}}$ be an $(\mathscr{F}_t)$-submartingale, and $F$ be a countable subset of $\mathbbm{T}$. Then
+    $$
+    \E(D_F(X,[\alpha,\beta]))\le \sup_{t\in F}\frac{\E(X_t-\beta)^+}{\beta-\alpha}
+    $$
+\end{lemma}
+\pagebreak
+\section{Week 5}
+\subsection{Lecture 2}
+\begin{lemma}{}{}
+    For $0\le t\le u\le T$, and $\E\left[\int_0^T X_t^2\,dt\right]<\infty$, then,
+    \begin{enumerate}
+        \item[1)]
+        $$
+        \int_0^u X_s\, dW_s = \int_0^t X_s\,dW_s + \int_t^u X_s\, dWs
+        $$
+        \item[2)]
+        $$
+        \int_o^t X_s\,dW_s = \int_0^T \mathbbm{1}_{[0,t]}(s) X_s\,dW_s
+        $$
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    The mapping
+    $$
+    (s,\omega)\mapsto \mathbbm{1}_{[0,t]}(s)
+    $$
+    is deterministic hence progressively measurable. Hence $\mathbbm{1}_{[0,t]}(s)X_s$ is progressively measurable. Hence, $\mathbbm{1}_{[0,t]}(s)X_s\in \mathcal{L}_T^2$.\\
+    \\
+    Suppose that $X\in \mathcal{E}_T$, that is,
+    $$
+    X = X_0\mathbbm{1}_{\{0\}} + \sum_{i=1}^n X_{i-1}\mathbbm{1}_{(t_{i-1},t_i]}
+    $$
+    with $t_n=T$ and so the process $\mathbbm{1}_{[0,t]}(s)X_s$ is also an element of $\mathcal{E}_T$ and $\mathcal{E}_t$ as
+    $$
+    X\mathbbm{1}_{[0,t]} = X_0\mathbbm{1}_{\{0\}} + \sum_k X_{i-1}\mathbbm{1}_{(t_{i-1}\wedge t, t_i\wedge t]}
+    $$
+    with $t_n\wedge t = t$. Hence $X\mathbbm{1}_{[0,t]}\in\mathcal{E}_T, \mathcal{E}_t$. Therefore, we have,
+    \begin{align*}
+        \int_0^T \mathbbm{1}_{[0,t]}(s)X_s\,dW_s = \sum_{k} X_{i-1}(W_{t_i\wedge t\wedge T}- W_{t_{i-1}\wedge t\wedge T}) = \int_0^t X_s\, dW_s
+    \end{align*}
+    For $X\in\mathcal{L}_T^2$, take $X^n\in\mathscr{E}_T$ such that $X^n\xrightarrow{\mathcal{L}^2} X$. Then $X^n\mathbbm{1}_{[0,t]}\xrightarrow{\mathcal{L}^2}X\mathbbm{1}_{[0,t]}$ Hence,
+    $$
+    \int_0^T X_s\mathbbm{1}_{[0,t]}\,dW_s = \lim_{n\to\infty} \int_0^T X^n_s\mathbbm{1}_{[0,t]}\,dW_s = \lim_{n\to\infty} \int_0^t X^n_s\,dW_s = \int_0^t X_s\,dW_s
+    $$
+\end{proof}
+\pagebreak
+\begin{theorem}{Stochastic Integral Martingale}{thm:stoch_integral_martingale}
+Let $X\in\mathcal{L}^2(0,T)$. Then $(I_t(X))_{t\le T}$ is a \underline{square integrable martingale}.
+\end{theorem}
+\begin{proof}
+    $I_t(X)$ is square integrable since
+    $$
+    \E[I_t(X)^2] = \|\mathbbm{1}_{[0,t]}X\|^2_{\mathcal{L}^2(0,T)} \le \|X\|^2_{\mathcal{L}^2(0,T)}<\infty
+    $$
+    for each $t\le T$.\\
+    \\
+    $I_t(X)$ is a martingale. First, for $X\in\mathcal{E}_T$, 
+    $$
+    X_t = X_0\mathbbm{1}_{\{0\}}(t) + \sum_k X_{k-1}\mathbbm{1}_{(t_{k-1},t_k]}(t)
+    $$
+    Suppose $\tilde k$ is such that $t_{\tilde k}\le t\le t_{\tilde k+1}$, then 
+    $$
+    I_t(X) = X_0(W_{t_1}-W_{t_0})+ X_{1}(W_{t_2}-W_{t_1})+\cdots + X_{\tilde k}(W_{t}-W_{t_{\tilde k}})
+    $$
+    And we compute for $s\le t$
+    \begin{align*}
+        \E(I_t(X)|\mathscr{F}_s) &= \sum_{k=1}^n \E(X_{k-1}\mathbbm{1}_{[0,t]}(W_{t_k}-W_{t_{k-1}})|\mathscr{F}_s)\\
+        &= \underbrace{\sum_{t_{k-1}<s} X_{t_{k-1}}\mathbbm{1}_{[0,t]} (W_{t_k\wedge s}-W_{t_{k-1}})}_{=I_s(X)} + \underbrace{\sum_{s\ge t_{k-1}}\E[X_{t_{k-1}}\mathbbm{1}_{[0,t]}(W_{t_k}-W_{t_{k-1}})|\mathscr{F}_s]}_{=0}\\
+        &= I_s(X)
+    \end{align*}
+    For $X\in \mathcal{L}^2(0,T)$. We want to show that 
+    $$
+    \E\left(\int_0^t X_r\, dW_r |\mathscr{F}_s\right) = \int_0^s X_r\, dW_r
+    $$
+    We know there exists $X^n\xrightarrow{\mathcal{L}^2}X$ and
+    $$
+    \E\left(\int_0^t X_r\, dW_r|\mathscr{F}_s\right) = \lim_{n\to\infty} \E\left(\int_0^t X^n_r\, dW_r|\mathscr{F}_s\right) = \lim_{n\to\infty}\int_0^s X^n_r\,dW_r = \int_0^s X_r\,dW_r
+    $$
+\end{proof}
+\pagebreak
+\begin{lemma}{}{}
+    Let $Y,Y_1, Y_2,\cdots$ be square integrable such that $Y_n\xrightarrow{\mathcal{L}^2} Y$. Then,
+    $$
+    \E(Y_n|\mathscr{G})\xrightarrow{\mathcal{L}^2}\E(Y|\mathscr{G})
+    $$
+\end{lemma}
+\begin{proof}
+    By Jensen's inequality, we have,
+    $$
+    (\E(Y_n|\mathscr{G})-\E(Y|\mathscr{G}))^2 = (\E(Y_n-Y|\mathscr{G}))^2\le \E((Y_n-Y)^2|\mathscr{G})
+    $$
+    This implies
+    $$
+    \E( (\E(Y_n|\mathscr{G})-\E(Y|\mathscr{G}))^2)\le \E(\E((Y_n-Y)^2|\mathscr{G}))\le \E((Y_n-Y)^2)\to 0
+    $$
+    Hence, $\E(Y_n|\mathscr{G})\xrightarrow{\mathcal{L}^2}\E(Y|\mathscr{G})$.
+\end{proof}
+\begin{definition}{}{}
+    Let $\mathcal{M}^{2,c}_T$ be the \underline{continuous square integrable martingales on $[0,T]$}.
+\end{definition}
+\begin{remark}{}{}
+    Square integrability of $M\in\mathcal{M}^{2,c}_T$ means that
+    $$
+    \sup_{t\le T}\E M_t^2<\infty
+    $$
+    Since $M$ is a martingale, Doob's inequality implies that
+    $$
+    \sup_{t\le T}\E M_t^2 \le \E\sup_{t\le T}M_t^2 \le 4\E M_T^2
+    $$
+    So \underline{square integrability is equivalent to $\E M_T^2<\infty$}.
+\end{remark}
+\begin{theorem}{}{}
+    $\mathcal{M}^{2,c}_T$ is a Hilbert space with the inner product 
+    $$
+    (M,N) = \E(M_TN_T)
+    $$
+    and the norm induced by the inner product
+    $$
+    \|M\| = \sqrt{\E(M_T^2)} = \|M_T\|_{L^2}
+    $$
+\end{theorem}
+\begin{remark}{}{}
+    The Ito integral for $X\in\mathcal{L}^2(0,T)$ can be seen as an element of $\mathcal{M}^{2,c}_T\ni (I_t(X))_{t\le T}$.\\
+    \\
+    Note that continuity of $I_t(X)$ for $X\in\mathcal{E}_T$ follows from the definition. More generally, it holds that
+    $$
+    \mathcal{E}_T\to L^2(\Omega\times[0,T], \mathscr{P}, \mathbb{P}\otimes\lambda)=:\mathcal{L}^2(0,T) \xrightarrow{\text{Ito Isometry}} \mathcal{M}^{2,c}_T
+    $$
+\end{remark}
+\pagebreak
+\begin{theorem}{}{thm:stopping_stochastic_integral}
+    Let $X\in \mathcal{L}^2(0,T)$ and $\tau$ be a stopping time. Then
+    $$
+    \mathbbm{1}_{\llbracket 0,\tau \rrbracket} X\in\mathcal{L}^2(0,T)
+    $$
+    and
+    $$
+    \int_0^t \mathbbm{1}_{\llbracket 0,\tau \rrbracket} X_s \,dW_s = \int_0^{t\wedge \tau} X_s\,dW_s\qquad\forall 0\le t\le T
+    $$
+\end{theorem}
+\pagebreak
+\begin{corollary}{}{cor:doob-meyer}
+    For $X\in\mathcal{L}^2(0,T)$, the process $(M_t)$ given by
+    $$
+    \boxed{M_t = \left(\int_0^t X_s\, dW_s\right)^2 - \int_0^t X_s^2\, ds}
+    $$
+    is a martingale.
+\end{corollary}
+\begin{proof}
+    We know that $(I_t(X))_{t\le T}\in \mathcal{M}^{2,c}_T$ so $M$ is continuous, integrable and $M_0=0$.\\
+    \\
+    Suppose $\tau\le T$, \autoref{thm:stopping_stochastic_integral} implies that 
+    \begin{align*}
+        \E\left(\int_0^\tau X_s\, dW_s\right)^2 &= \E\left(\int_0^T \mathbbm{1}_{\llbracket 0, \tau \rrbracket} (s)X_s\,dW_s\right)^2\\
+        &= \E\left(\int_0^T \mathbbm{1}_{\llbracket 0, \tau \rrbracket} (s)X_s^2\,ds\right)\\
+        &=\E\left(\int_0^\tau X_s^2\,ds\right)
+    \end{align*}
+    And so 
+    $$
+    \E(M_\tau) = \E\left[\left(\int_0^\tau X_s\, dW_s\right)^2 - \int_0^\tau X_s^2 \,ds\right]=0=\E(M_0)
+    $$
+    and from Tutorial 4 Exercise 5, we know that
+    $$
+    \text{$M$ is a martingale $\iff$ $\E(M_\tau) = \E(M_0)$ for any } \tau = \begin{cases}
+        s &\text{if $\omega\in A$}\\
+        t & \text{if $\omega\in A^c$},\qquad A\in\mathscr{F}_{s\wedge t}
+    \end{cases}
+    $$
+\end{proof}
+\pagebreak
+\section{Week 6}
+\subsection{Lecture 1}
+\begin{definition}{}{}
+    Let $T\le \infty$. We define the space of progressively measurable, locally square integrable processes by
+    $$
+    \mathcal{L}^2_{loc}(0,T) = \left\{(X_t)_{t<T}: \text{$X$ is progressively measurable, } \int_0^t X_s^2\,ds<\infty \quad a.s.\text{ for $t<T$}\right\}
+    $$
+\end{definition}
+\begin{lemma}{}{lem:stl}
+For $X\in\mathcal{L}_{loc}^2(0,T)$, we define
+$$
+\tau_n:= \inf\left\{t\ge 0: \int_0^t X_s^2\,ds\ge n\right\}\wedge T\wedge n\qquad n=1,2,\ldots
+$$
+Then $(\tau_n)$ is an increasing sequence of stopping times, $\tau_n\uparrow T$ a.s., and $\forall n$, $\mathbbm{1}_{\llbracket 0, \tau_n \rrbracket}X\in\mathcal{L}_{loc}^2(0,T)$.    
+\end{lemma}
+\begin{proof}
+    $\tau_n$ is a stopping time as it is an entry time of continuous adapted process $\int_0^t X_s^2\, ds$ into a closed set $[n,\infty)$.\\
+    \\
+    Since $\int_0^t X_s^2\,ds<\infty$ a.s. for all $t<T$, we get that $\tau_n\uparrow T$ a.s.\\
+    \\
+    Process $\mathbbm{1}_{\llbracket 0, \tau_n \rrbracket}X$ is progressively measurable as a product of two progressively measurable processes.\\
+    \\
+    Moreover, we have,
+    $$
+    \E\left[\int_0^T \left(\mathbbm{1}_{\llbracket 0, \tau_n \rrbracket}(s)X_s\right)^2\,ds\right] = \E\left[\int_0^{\tau_n} X_s^2\,ds\right]\le n<\infty
+    $$
+    Hence $\mathbbm{1}_{\llbracket 0, \tau_n \rrbracket}X\in\mathcal{L}_{loc}^2(0,T)$.
+\end{proof}
+\pagebreak
+Suppose that $\tau_n\uparrow T$ a.s. and $\mathbbm{1}_{\llbracket 0, \tau_n \rrbracket}X\in\mathcal{L}^2(0,T)$ for all $n$. Then define
+$$
+\boxed{M_n(t):=\int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} X_s\, dW_s}
+$$
+\begin{lemma}{}{lem:stopping_integral_indistinguishable}
+    For $m\ge n$, the processes $M_m^{\tau_n}$ and $M_n$ are \underline{indistinguishable}, that is,
+    $$
+    \mathbb{P}(\forall t\le T: M_m(t\wedge \tau_n)=M_n(t))=1
+    $$
+\end{lemma}
+\begin{proof}
+    From the \autoref{thm:stopping_stochastic_integral}, for $t\le T$,
+    \begin{align*}
+         M_m(\tau_n\wedge t) &= \int_0^{\tau_n\wedge t} \mathbbm{1}_{\llbracket 0,\tau_m\rrbracket}(s) X_s\,dW_s\\
+         &= \int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}(s)\mathbbm{1}_{\llbracket 0,\tau_m\rrbracket}(s) X_s\, dW_s\\
+         &= \int_0^t \mathbbm{1}_{\llbracket 0,\tau_n \rrbracket} (s) X_s\,dW_s & (m\ge n)\\
+         &= M_n(t)
+    \end{align*}
+    So $M_m^{\tau_n}$ is a modification of $M_n$, and we get that they are indistinguishable from continuity of $M_m^{\tau_n}$ and $M_n$.
+\end{proof}
+\begin{remark}{}{}
+    There is a theorem about two continuous processes are modification implies they are indistinguishable.
+\end{remark}
+\pagebreak
+\begin{definition}{Stochastic Integral for local processes}{siflp}
+    Let $X\in \mathcal{L}^2_{loc}(0,T)$ and $\tau_n\uparrow T$ such that $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} X\in\mathcal{L}^2(0,T)$ for all $n$.\\
+    \\
+    Then the stochastic integral $I(X) = \int X\, dW$ for $X\in \mathcal{L}^2_{loc}(0,T)$ is the process 
+    $$
+    (M_t)_{t<T} = \left(\int_0^t X_s\, dW_s\right)_{t<T}
+    $$
+    such that
+    $$
+    M_t^{\tau_n} = \int_0^{t\wedge\tau_n} X_s\, dW_s = \int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} (s)X_s\, dW_s
+    $$
+\end{definition}
+\begin{proposition}{}{}
+    The process $M$ in \autoref{def:siflp} is \underline{continuous and unique}.
+\end{proposition}
+\begin{proof}
+    By \autoref{lem:stopping_integral_indistinguishable}, for each $m\ge n$, there exists a null set $N_{n,m}$ such that $\mathbbm{P}(N_{n,m})=0$ and $\forall \omega \not\in N_{n,w}$, we have
+    $$
+    M_n(t,\omega) = M_m(t\wedge \tau_n(\omega),\omega),\qquad \forall t<T
+    $$
+    Let $N = \bigcup_{m>n} N_{n,m}$ Then $\mathbbm{P}(N) = 0$ and $\forall \omega\not\in N$, $t\le \tau_n(\omega)$, the sequence $(M_m(t,\omega))_{m\ge n}$ is constant.\\
+    \\
+    So we put (and it is well-defined)
+    $$
+    M(t,\omega):=M_n(t,\omega) \qquad\text{for $t\le \tau_n(\omega)$}
+    $$
+\end{proof}
+\begin{proposition}{}{}
+    \autoref{def:siflp} for $\int X\,dW$ does not depend on $(\tau_n)$, that is for $(\tau_n), (\tilde \tau_n)$ such that $\tau_n\uparrow T$, $\tilde\tau_n\uparrow T$ and $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}X\in\mathcal{L}^2(0,T), \mathbbm{1}_{\llbracket 0, \tilde\tau_n\rrbracket} X\in\mathcal{L}^2(0,T)$ and $M$ and $\tilde M$ are such as in \autoref{def:siflp}, then $M,\tilde M$ are indistinguishable.
+\end{proposition}
+\pagebreak
+\begin{theorem}{}{}
+    If $X\in\mathcal{L}^2_{loc}(0,T)$, then for any stopping time $\tau$, $\mathbbm{1}_{\llbracket 0,\tau\rrbracket} X\in\mathcal{L}^2_{loc}(0,T)$ and
+    $$
+    \int_0^{t\wedge \tau} X\, dW = \int_0^t \mathbbm{1}_{\llbracket 0,\tau \rrbracket} X\, dW
+    $$
+\end{theorem}
+\begin{proof}
+The process $\mathbbm{1}_{\llbracket 0,\tau \rrbracket} X$ is progressively measurable and 
+$$
+\int_0^t (\mathbbm{1}_{\llbracket 0,\tau\rrbracket}X_s)^2\,ds \le \int_0^t X_s^2\, ds<\infty
+$$
+This implies $\mathbbm{1}_{\llbracket 0,\tau\rrbracket}X \in\mathcal{L}^2_{loc}(0,T)$.\\
+\\
+Since $X\in \mathcal{L}^2_{loc}(0,T)$, there exists $\tau_n\uparrow T$ such that $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}X\in\mathcal{L}^2(0,T)$. This implies $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\mathbbm{1}_{\llbracket 0,\tau \rrbracket}X\in\mathcal{L}^2(0,T)$. Define
+$$
+M:= \int X\, dW,\qquad N:= \int \mathbbm{1}_{\llbracket 0,\tau\rrbracket} X\, dW
+$$
+and note that
+$$
+M_{t\wedge \tau_n} = \int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}X_s\, dW_s,\qquad N_{t\wedge \tau_n}=\int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\mathbbm{1}_{\llbracket 0,\tau\rrbracket}X_s\,dW_s
+$$
+Hence, we have,
+$$
+M_{t\wedge \tau_n\wedge \tau} = \int_0^t \mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\mathbbm{1}_{\llbracket 0,\tau \rrbracket}X_s\, dW_s = N_{t\wedge\tau_n}
+$$
+Taking $n\to\infty$, we get
+$$
+M_t^\tau = M_{t\wedge \tau}  =N_t
+$$
+\end{proof}
+\pagebreak
+\begin{definition}{Local Martingale}{def:local_martingale}
+If for an adapted process $M=(M_t)_{t<T}$, there exists a sequence of stopping time $(\tau_n)$ such that $\tau_n\uparrow T$ and $M^{\tau_n}$ is a martingale for all $n$.\\
+\\
+Then $M$ is called a \underline{local martingale}.\\
+\\
+If moreover, $M^\tau_n \in \mathcal{M}^{2,c}_T$, then we say that $M$ is continuous, square integrable local martingale.\\
+\\
+The class of such processes is denoted by $\mathcal{M}^{2,c}_{T,loc}$.
+\end{definition}
+\begin{proposition}{}{}
+    Show that $M\in\mathcal{M}_{T,loc}^c\iff M\in\mathcal{M}^{2,c}_{T,loc}$, where $\mathcal{M}^c_{T,loc}$ is the family of continuous local martingale.
+\end{proposition}
+\begin{proposition}{}{}
+    Let $M = \int X\, dW$ for $X\in\mathcal{L}_{loc}^2(0,T)$. Then
+    \begin{enumerate}
+        \item[1)] $M$ is continuous and $M_0=0$
+        \item[2)] $M\in \mathcal{M}^{2,c}_{T,loc}$
+        \item[3)] $X\mapsto \int X\, dW$ is linear
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    write own proof for part 1 and 2.\\
+    \\
+    Part 3:\\
+    \\
+    Take $X,Y\in\mathcal{L}^2_{loc}(0,T)$ and $\tau_n \uparrow T,\overline \tau_n\uparrow T$ such that $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}X\in\mathcal{L}^2(0,T)$ and $\mathbbm{1}_{\llbracket 0,\overline\tau_n\rrbracket} Y\in\mathcal{L}^2(0,T)$ for all $n$.\\
+    \\
+    Taking $\sigma_n:= \tau_n\wedge \overline\tau_n\uparrow T$, we obtain $\mathbbm{1}_{\llbracket 0,\sigma_n \rrbracket}X, \mathbbm{1}_{\llbracket 0,\sigma_n\rrbracket} Y\in\mathcal{L}^2(0,T)$.\\
+    \\
+    By linearity of $\mathcal{L}^2(0,T)$, we have
+    $$
+    \mathbbm{1}_{\llbracket 0,\sigma_n \rrbracket} (aX+bY) \in\mathcal{L}^2(0,T),\qquad a,b\in \R
+    $$
+    Hence, we have,
+    \begin{align*}
+    \int_0^t aX+bY \, dW &= \lim_{n\to\infty}\int_0^{t\wedge \sigma_n} aX+bY\,dW\\
+    &= \lim_{n\to\infty} a\int_0^{t\wedge\sigma_n} X\,dW + \lim_{n\to\infty}b\int_0^{t\wedge \sigma_n}Y\,dW\\
+    &= a\int_0^t X\, dW + b\int_0^t Y\,dW
+    \end{align*}
+\end{proof}
+\pagebreak
+\begin{theorem}{Doob's inequality}{thm:Doob's inequality for local stochastic integral}
+    For $X\in\mathcal{L}^2_{loc}(0,T)$ and stopping time $\tau\le T$, we have,
+    $$
+    \E\left[\sup_{t<\tau}\left(\int_0^t X\,dW\right)^2\right]\le 4\E\left[\int_0^\tau X_s^2\,ds\right]
+    $$
+\end{theorem}
+\pagebreak
+\begin{proposition}{Properties of Local Martingales}{polm} Local martingale have the following properties:
+    \begin{enumerate}
+        \item[1)] Each bounded local martingale is a martingale.
+        \item[2)] Each non-negative local martingale is a submartingale.
+    \end{enumerate}
+\end{proposition}
+\pagebreak
+\begin{theorem}{Doob-Meyer Decomposition}{thm:doob-meyer}
+For $M\in\mathcal{M}^{2,c}_T$, there exists process $Y = (Y_t)_{t\le T}$ which has continuous, non-decreasing paths such that $Y_0=0$ and $M_t^2-Y_t$ is a continuous martingale.\\
+\\
+Moreover $Y$ is unique.
+\end{theorem}
+\begin{proof}[Uniqueness] Suppose $Y, Z$ are two continuous, non-decreasing processes such that $M_t^2-Y_t, M_t^2-Z_t$ are continuous martingales.\\
+\\
+Note that $Y_t-Z_t\in BV(0,T)$ and $Y_t-Z_t = (M_t^2-Z_t)-(M_t^2-Y_t)$ is a continuous martingale.\\
+\\
+This implies $Y_t-Z_t$ is constant, hence $Y=Z$.
+\end{proof}
+\begin{remark}{}{}There are three remarks:
+\begin{enumerate}
+    \item[1)] Process $Y$ from \hyperref[thm:doob-meyer]{Doob-Meyer's decomposition} is the \underline{quadratic variation of $M$} denoted by 
+    $$
+    \langle M\rangle = (\langle M\rangle_t)_{t\ge 0}
+    $$
+    \item[2)] For Brownian motion, the decomposition is $W_t^2-t$ and $\langle W\rangle_t =t$
+    \item[3)] From \autoref{cor:doob-meyer}, for $X\in \mathcal{L}^2(0,T)$,
+    $$
+    \left(\int_0^t X_s\,dW_s\right)^2 - \int_0^t X_s^2 \,ds
+    $$
+    is a martingale, and, from \autoref{thm:stoch_integral_martingale}
+    $$
+    \left\langle\int_0^t X_s\,dW_s\right\rangle_t = \int_0^t X_s^2\,ds
+    $$
+    \item[4)] For $M\in\mathcal{M}^{2,c}_T$, we have $t\mapsto \langle M\rangle_t(\omega)$ for all $\omega$ is non-decreasing, hence $\langle M\rangle_t\in BV(0,T)$.\\
+    \\
+    This implies $d\langle M\rangle_t(\omega)$ defines a finite measure on $[0,T]$ and $d\langle M\rangle_t(\omega)$ is atomless since $M$ is continuous.
+\end{enumerate}
+\end{remark}
+\pagebreak
+\begin{definition}{}{}
+    For an elementary process $X\in\mathcal{E}_T$,
+    $$
+    X = \xi_0\mathbbm{1}_{\{0\}} + \sum_{k=1}^n \xi_{k-1}\mathbbm{1}_{(t_{k-1},t_k]}
+    $$
+    where $0=t_0\le t_1\le\cdots\le t_n=T$, $\xi_k$ is bounded and $\mathscr{F}_k$-measurable.\\
+    \\
+    For $M\in\mathcal{M}^{2,c}_T$, we define
+    $$
+    \int_0^t X\,dM:= \sum_{k=1}^n\xi_{k-1}(M_{t_k\wedge t}-M_{t_{k-1}\wedge t}),\qquad t\le T
+    $$
+\end{definition}
+\begin{definition}{}{}
+    We define
+    $$
+    \mathcal{L}^2_T(M) := \left\{X=(X_{t})_{t<T} \text{ is progressively measurable such that } \E\left[\int_0^T X_s^2\,d\langle M\rangle_s\right]<\infty\right\}
+    $$
+\end{definition}
+\begin{remark}{}{}
+    Instead of $L^2(\Omega\times[0,T], \mathscr{P}, \mathbbm{P}\otimes\lambda)$, we take
+    $$
+    L^2(\Omega\times[0,T], \mathscr{P}, \nu)
+    $$
+    where $\nu$ is given by
+    $$
+    \nu(A\times(a,b]) = \E\left[\int_0^T\mathbbm{1}_A\mathbbm{1}_{(a,b]}(s)\, d\langle M\rangle_s\right] = \E(\mathbbm{1}_A(\langle M\rangle_b-\langle M\rangle_a))
+    $$
+    for $a,b\in[0,T], a<b, A\in\mathscr{F}_a$. We may see $\nu$ as `` $\mathbbm{P}\otimes d\langle M\rangle_t$"
+\end{remark}
+\pagebreak
+\begin{proposition}{}{}
+    Let $M\in\mathcal{M}_T^{2,c}$ and $X\in \mathcal{E}_T$. Then
+    $$
+    I^M(X) = \int X\,dM \in \mathcal{M}^{2,c}_T, \qquad I^M_0(X)=0
+    $$
+    and
+    $$
+    \|I^M(X)\|^2_{\mathcal{M}^{2,c}_T} = \E\left(\int_0^T X_s\, dM_s\right)^2 = \E\int_0^T X_s^2\,d\langle M\rangle_s = \|X\|_{\mathcal{L}^2_T(M)}
+    $$
+\end{proposition}
+\begin{proof}
+    For $t_j\le t\le t_{j+1}$, we have
+    $$
+    I_t(X) = \xi_0(M_{t_1}-M_{t_0})+\cdots+\xi_{j}(M_{t}-M_{t_j}) 
+    $$
+    For $t_j\le t\le u\le t_{j+1}$, we have
+    $$
+    \E(I_u(X)|\mathscr{F}_t)-I_t(X) = \E[\xi_j(M_u-M_t)|\mathscr{F}_t] = \xi_j\E(M_u-M_t|\mathscr{F}_t)=0
+    $$
+    Hence, $I^M(X)$ is a martingale.\\
+    \\
+    Moreover,
+    $$
+    \E(I_T(X))^2 = \underbrace{\sum_{k=1}^n\E(\xi_{k-1}^2(M_{t_k}-M_{t_{k-1}})^2)}_{=:I_1}+2\underbrace{\sum_{j<k}\E[\xi_{k-1}\xi_{j-1}(M_{t_k}-M_{t_{k-1}})(M_{t_j}-M_{t_{j-1}})]}_{=:I_2}
+    $$
+\begin{equation*}
+\boxed{
+\begin{aligned}
+\text{For }s\le t:\\[1ex]
+\E[(M_t-M_s)^2|\mathscr{F}_s]&= \E(M_t^2|\mathscr{F}_s) -2M_s\E(M_t|\mathscr{F}_s) + M_s^2\\
+&= \E(M_t^2-\langle M\rangle_t|\mathscr{F}_s) +\E(\langle M\rangle_t|\mathscr{F}_s)-2M_s\E(M_t|\mathscr{F}_s) + M_s^2\\
+&= M_s^2-\langle M\rangle_s +\E(\langle M\rangle_t|\mathscr{F}_s)-2M_s^2 +M_s^2\\
+&=\E(\langle M\rangle_t-\langle M\rangle_s|\mathscr{F}_s)
+\end{aligned}
+}
+\end{equation*}
+Hence, 
+\begin{align*}
+    I_1 &= \sum_k \E(\xi_{k-1}^2\E[(M_{t_k}-M_{t_{k-1}})^2|\mathscr{F}_{k-1}])\\
+    &= \sum_k \E(\xi_{k-1}^2\E[\langle M\rangle_{t_k}-\langle M\rangle_{t_{k-1}}|\mathscr{F}_{k-1}])\\
+    &= \E\left[\sum_k \xi_{k-1}^2 \left(\langle M\rangle_{t_k}-\langle M\rangle_{t_{k-1}}\right)\right]\\
+    &= \E\int_0^T X_s^2\, d\langle M\rangle_s
+\end{align*}
+and
+$$
+I_2=2\sum_{j<k}\E[\xi_{k-1}\xi_{j-1}(M_{t_j}-M_{t_{j-1}}\underbrace{\E((M_{t_k}-M_{t_{k-1}})|\mathscr{F}_{k-1})}_{=0})]=0
+$$
+\end{proof}
+\pagebreak
+\subsection{Lecture 2}
+\begin{proposition}{}{}
+    Let $M\in\mathcal{M}^{2,c}_T$. Then
+    \begin{enumerate}
+        \item[1)] For $X\in\mathcal{L}^2_T(M)$, the process $\int X\, dM\in \mathcal{M}^{2,c}_T$ and
+        $$
+        \left\|\int X\,dM\right\|^2_{\mathcal{M}^{2,c}_T} = \E\left(\int_0^T X_s\, dM_s\right)^2 = \E\int_0^T X_s^2\, d\langle M\rangle_s = \|X\|_{\mathcal{L}^2_T(M)}
+        $$
+        \item[2)] If $X,Y\in\mathcal{L}_T^2(M)$, then $aX+bY\in \mathcal{L}^2_T(M)$ for all $a,b\in\R$ and
+        $$
+        \int aX+bY \, dM = a\int X\,dM + b\int Y\, dM
+        $$
+    \end{enumerate}
+\end{proposition}
+\begin{proposition}{}{}
+    Let $M\in\mathcal{M}^{2,c}_T$ and $\tau$ be a stopping time, then $M^\tau\in\mathcal{M}^{2,c}_T$ and $\langle M^\tau\rangle = \langle M\rangle^\tau$
+\end{proposition}
+\begin{corollary}{}{}
+    Let $M\in \mathcal{M}^c_{loc}$. Then there exists unique process $\langle M\rangle$ with continuous non-decreasing paths, such that $\langle M\rangle_0 = 0$ and $M^2 - \langle M\rangle \in \mathcal{M}^c_{loc}$
+\end{corollary}
+\begin{definition}{}{}
+    For $T\le \infty$, $M\in\mathcal{M}^c_{loc}$, we define
+    $$
+    \mathcal{L}^2_{T,loc} (M):= \left\{(X_t)_{t<T}: \text{$X$ is progressively measurable, } \int_0^t X_s^2\,d\langle M\rangle_s<\infty\, a.s., \forall t<T\right\}
+    $$
+\end{definition}
+\begin{remark}{}{}
+    We shall often suppose that $M_0=0$ since
+    $$
+    \int X\, dM = \int X\, d(M-M_0)
+    $$
+    and $\langle M-M_0\rangle =\langle M\rangle$.
+\end{remark}
+\begin{definition}{}{}
+    Let $M\in\mathcal{M}_{loc}^c$, $M_0=0$, $X\in\mathcal{L}^2_{T,loc}(M)$ and $(\tau_n)$ be a localising sequence for $M$, i.e., $\tau_n\uparrow T$ nad $M^{\tau_n}\in \mathcal{M}^{2,c}_T$ and $\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} X\in \mathcal{L}^2_T(M^{\tau_n})$ for all n.\\
+    \\
+    We call a stochastic integral $\int X\, dM$ such process
+    $$
+    (N_t)_{t<T} = \left(\int_0^t X\, dM\right)_{t<T}
+    $$
+    where
+    $$
+    N^{\tau_n}_t = \int_0^t \mathbbm{1}_{\llbracket 0, \tau_n\rrbracket} X\, dM^{\tau_n}
+    $$
+    for $n=1,2,\cdots$
+\end{definition}
+\pagebreak
+\begin{proposition}{}{}
+    Let $M,N\in\mathcal{M}_{loc}^c$. Then
+    \begin{enumerate}
+        \item[1)] For $X\in\mathcal{L}^2_{T,loc}(M)$ then $\int X\, dM\in \mathcal{M}^c_{loc}$
+        \item[2)] For $X,Y\in \mathcal{L}^2_{T,loc}(M)$, then $aX+bY\in\mathcal{L}^2_{T,loc}(M)$ for all $a,b\in\R$ and
+        $$
+        \int aX+bY \,dM = a\int X\,dM + b\int Y\, dM
+        $$
+        \item[3)] For $X\in\mathcal{L}^c_{T,loc}(M)\cap \mathcal{L}^2_{T,loc}(N)$, $a,b\in\R$, then $X\in\mathcal{L}^2_{T,loc}(aM+bN)$ and 
+        $$
+        \int X\,d(aM+bN) = a\int X\,dM + b\int X\, dN
+        $$
+    \end{enumerate}
+\end{proposition}
+\begin{theorem}{}{}
+    Let $M\in\mathcal{M}^c_{loc}, X\in \mathcal{L}^2_T(M)$, $\tau$ be a stopping time. Then
+    $$
+    \mathbbm{1}_{\llbracket 0,\tau\rrbracket}X\in\mathcal{L}^2_T(M), \quad X\in\mathcal{L}^2_T(M^{\tau})
+    $$
+    and 
+    $$
+    \int_0^t \mathbbm{1}_{\llbracket 0,\tau\rrbracket}(s)X_s\,dM_s = \int_0^{t\wedge\tau} X_s\,dM_s = \int_0^t X_s\,dM^\tau_s \qquad\forall t<T
+    $$
+\end{theorem}
+\pagebreak
+\subsection{Quadratic Variation}
+By \autoref{thm:doob-meyer}, for $M\in\mathcal{M}^{2,c}_T$, there exists $\langle M\rangle$ continuous, non-decreasing process such that
+$$
+M^2_t-\langle M\rangle_t
+$$
+is a martingale. Recall the quadratic variation for $M$ is
+$$
+V^{2}_{\pi,t}(M) = \sum_{i=1}^k (M_{t_i}-M_{t_{i-1}})^2
+$$
+with $\pi = \{0\le t_0\le t_1\le\cdots\le t_k=t\}$
+\begin{theorem}{}{}
+    Let $M$ be a continuous bounded martingale. Then 
+    $$
+    V_{\pi,t}^2(M)\xrightarrow[|\pi|\to 0]{L^2} \langle M\rangle
+    $$
+\end{theorem}
+\begin{proof}
+    Let $\pi_n = \{0=t_0^{(n)}\le t_1^{(n)}\le \cdots\le t_{k_n}^{(n)}=t\}$ such that $|\pi_n|\to 0$, and put $C =\sup_{s\le t}|M_s|$. Then,
+    \begin{align*}
+        M_t^2 &= \left(\sum_{k=1}^{k_n}\left(M_{t_k}^{(n)}-M_{t_{k-1}}^{(n)}\right)\right)^2\\
+        &= \sum_k\left(M_{t_k^{(n)}}-M_{t_{k-1}^{(n)}}\right)^2 + 2\sum_{k<j}\left(M_{t_k^{(n)}}-M_{t_{k-1}^{(n)}}\right)\left(M_{t_j^{(n)}}-M_{t_{j-1}^{(n)}}\right)\\
+        &= V_{\pi_n,t}^2(M) + 2\sum_{j}M_{t_{j-1}^{(n)}}\left(M_{t_j^{(n)}}-M_{t_{j-1}^{(n)}}\right)\\
+        &= V_{\pi_n,t}^2(M)+2N_n(t)
+    \end{align*}
+    Let $X_n(s) = \sum_{j=1}^{k_n}M_{t_{j-1}^{(n)}}\mathbbm{1}_{\left(t_{j-1}^{(n)},t_{j}^{(n)}\right]}\in \mathcal{E}_T$. Then
+    $$
+    N_n(t) = \int_0^t X_n(s)\, dM_s
+    $$
+    From continuity of $M$, we have $X_n(s)\to M_s$ for all $s\le t$.\\
+    \\
+    Since $|X_n|\le C$, $|X_n-M|^2\le 4C^2$ and by DCT,
+    $$
+    \E\int_0^T |X_n-M|^2\, d\langle M\rangle_s \to 0\implies X_n\xrightarrow{\mathcal{L}_t^2(M)}M
+    $$
+    and so 
+    $$
+    N_n\xrightarrow{\mathcal{M}_T^{2,c}}\int M\,dM\implies N_n(t)\xrightarrow{L^2}\int_0^t M_s\, dM_s
+    $$
+    and
+    $$
+    V_{\pi_n,t}^2(M) = M_t^2-2N_n(t)\xrightarrow{L^2} M_t^2-2\int_0^t M\, dM
+    $$
+    Note that the process $Y=M^2-2\int M\,dM$ is continuous and $M^2-Y =2\int M\, dM$ is a martingale.
+    $$
+    Y_s\xleftarrow{L^2}V_{\pi_n,s}^2(M)\le_{s\le t} V_{\pi_n,t}^2 (M)\xrightarrow{L^2}Y_t
+    $$
+\end{proof}
+\begin{remark}{Decomposition of Bounded Martingale}{dobm}
+    $M$ is a bounded martingale then,
+    $$
+    M^2 = 2\int M\, dM + \langle M\rangle
+    $$
+\end{remark}
+\begin{theorem}{}{}
+    We have
+    \begin{enumerate}
+        \item[1)] $M\in\mathcal{M}_T^{2,c}\implies V_{\pi,t}^2(M)\xrightarrow[|\pi|\to 0]{L^1}\langle M\rangle_t$ for $t<T$
+        \item[2)] $M\in\mathcal{M}^2_{loc}\implies V_{\pi,t}^2(M)\xrightarrow[|\pi|\to 0]{\mathbbm{P}}\langle M\rangle_t$ for $t<T$
+    \end{enumerate}
+\end{theorem}
+\begin{definition}{}{}
+    Let $M,N\in\mathcal{M}_{loc}^c$. The process $\langle M,N\rangle$ is defined as 
+    $$
+    \langle M,N\rangle = \frac{1}{4}\left[\langle M+N\rangle -\langle M-N\rangle\right]
+    $$
+\end{definition}
+\begin{proposition}{}{}
+    We have
+    \begin{enumerate}
+        \item[1)] $M,N\in\mathcal{M}^{2,c}_T$, then $\langle M, N\rangle$ is a unique \underline{continuous} finite variation on $[0,T]$ process such that $\langle M, N\rangle_0=0$ and 
+        $MN-\langle M, N \rangle$ is a martingale on $[0,T]$
+        \item[2)] $M,N\in\mathcal{M}^2_{loc}$ then $\langle M, N\rangle$ is a unique finite variation on $[0,T]$ process such that $\langle M, N\rangle_0=0$ and $MN-\langle M,N\rangle$ is a \underline{local martingale} on $[0,T)$.
+    \end{enumerate}
+\end{proposition}
+\pagebreak
+\section{Week 7}
+\subsection{Lecture 1: Predictable Brackets}
+\begin{proposition}{}{}
+    Let $\pi_n=(t_0^{(n)},\ldots, t_{k_n}^{(n)})$ be a sequence of paritions of $[0,t]$ such that $0=t_0^{(n)}\le t_1^{(n)}\le\cdots\le t_{k_n}^{(n)}=t$ and $|\pi_n|\to 0$. Then,
+    \begin{enumerate}
+        \item[1)] For $M,N\in\mathcal{M}^{2,c}_T$ and $t<T$
+        $$
+        \sum_{k=1}^{k_n} \left(M_{t_{k}^{(n)}}-M_{t_{k-1}^{(n)}}\right)\left(N_{t_{k}^{(n)}}-N_{t_{k-1}^{(n)}}\right)\xrightarrow{L^1} \langle M, N\rangle_t
+        $$
+        \item[2)] For $M,N\in\mathcal{M}^{2,c}_{T,loc}$ and $t<T$
+        $$
+        \sum_{k=1}^{k_n} \left(M_{t_{k}^{(n)}}-M_{t_{k-1}^{(n)}}\right)\left(N_{t_{k}^{(n)}}-N_{t_{k-1}^{(n)}}\right)\xrightarrow{\mathbbm{P}} \langle M, N\rangle_t
+        $$
+    \end{enumerate}
+\end{proposition}
+\begin{proposition}{Six Properties of Covariation}{}
+    For $M,N\in \mathcal{M}^c_{loc}$
+    \begin{enumerate}
+        \item[1)]is itself: $\langle M,M\rangle = \langle M\rangle = \langle -M\rangle$
+        \item[2)]Symmetry: $\langle M, N\rangle = \langle N, M\rangle$
+        \item[3)]independet of initial condition: 
+        $$
+        \langle M,N\rangle = \langle M-M_0,N\rangle = \langle M, N-N_0\rangle = \langle M-M_0,N-N_0\rangle
+        $$
+        \item[4)] Bilinearity:
+        \begin{align*}
+            \langle M_1+M_2, N_1+N_2\rangle &= \langle M_1 + M_2, N_1 \rangle + \langle M_1 + M_2, N_2 \rangle\\
+            &= \langle M_1, N_1\rangle + \langle M_2, N_1\rangle + \langle M_1, N_2\rangle +\langle M_2, N_2\rangle
+        \end{align*}
+        \item[5)]Stopping:
+        $$
+        \langle M^\tau, N^\tau\rangle = \langle M^\tau, N\rangle = \langle M, N^\tau\rangle = \langle M, N\rangle^\tau
+        $$
+        \item[6)]Integral: for $X\in\mathcal{L}^2_{T,loc}(M), Y\in\mathcal{L}^2_{T,loc}(N)$, we have
+        $$
+        \left\langle\int X\, dM, \int Y\, dN\right\rangle = \int XY\, d\langle M,N\rangle
+        $$
+    \end{enumerate}
+\end{proposition}
+\pagebreak
+\begin{theorem}{Stochastic Dominated Convergence Theorem}{}
+    Suppose $M\in\mathcal{M}^{2,c}_{loc}$, $X_n$ are progressively measurable such that
+    $$
+    \lim_{n\to\infty} X_{n,t}(\omega) = X_t(\omega)\qquad\forall t<T, \omega\in\Omega
+    $$
+    If $\forall t<T, \omega\in\omega$, $|X_{n,t}(\omega)|\le Y_t(\omega)$ where $Y\in\mathcal{L}^2_{T,loc}(M)$, then $X_n,X\in\mathcal{L}^2_{T,loc}(M)$ and
+    $$
+    \int_0^t X_n\, dM\xrightarrow{\mathbbm{P}} \int_0^t X\, dM
+    $$
+\end{theorem}
+\begin{definition}{Locally bounded process}{}
+    $X$ is locally bounded if there exist a sequence of stopping times $(\tau_n)$ such that $\tau_n\uparrow T$ and $X^{\tau_n}-X_0$ is bounded for all $n$.
+\end{definition}
+\begin{proposition}{Continuity implies local boundedness}{}
+    Continuity implies local boundedness.
+\end{proposition}
+\begin{proof}
+    
+\end{proof}
+\pagebreak
+\begin{theorem}{Change of Integrator}{}
+    \begin{enumerate}
+        \item[1)] $N\in\mathcal{M}_{T}^{2,c}, X\in\mathcal{L}^2_T(N)$, $Y$ is progressively measurable and bounded, 
+        $$M = \int X\,dN$$
+        Then $Y\in\mathcal{L}^2_T(M)$, $XY\in\mathcal{L}^2_T(N)$ and 
+        $$\int Y\,dM = \int YX\, dN$$
+        \item[2)] $N\in\mathcal{M}^2_{loc}, X\in\mathcal{L}^2_{T,loc}(N)$, $Y$ is progressively measurable, locally bounded,
+        $$
+        M = \int X\,dN
+        $$
+        Then, $Y\in\mathcal{L}^2_{T,loc}(M)$, $XY\in\mathcal{L}^2_{T,loc}(N)$ and
+        $$
+        \int Y\, dM = \int YX\, dN
+        $$
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Part(a):\\
+    Suppose that $Y\in\mathcal{E}_T$, i.e.,
+    $$
+    Y = \xi_0 \mathbbm{1}_{\{0\}} + \sum_{k=1}^{n-1} \xi_k \mathbbm{1}_{(t_k, t_{k+1}]}
+    $$
+    with $0=t_0 < t_1 <\ldots< t_k <T$, $\xi_k$ is bounded, $\mathscr{F}_{t_k}$-measurable. Then,
+    \begin{align*}
+        \int_0^t Y \, dM &= \sum_k \xi_k \left(M_{t_{k+1}\wedge t}-M_{t_{k}\wedge t}\right)\\
+        &= \sum_k \xi_k \left(\int_0^t \mathbbm{1}_{[0, t_{k+1}]} X\, dN-\int_0^t \mathbbm{1}_{[0, t_{k}]} X\, dN\right)\\
+        &= \sum_k \xi_k \int_0^t \mathbbm{1}_{[t_{k},t_{k+1}]} X\, dN \\
+        &= \int_0^t \sum_k \xi_k \mathbbm{1}_{[t_k,t_{k+1}]}X\, dN\\
+        &= \int_0^t YX\, dN
+    \end{align*}
+    If $Y$ is bounded progressively measurable, then
+    \begin{align*}
+        \E \int_0^T Y_s^2\, d\langle M\rangle_s &\le \|Y\|^2_\infty \E \int_0^T \,d\langle M\rangle_s\\
+        &= \|Y\|_\infty^2 \E\langle M\rangle_T\\
+        &=\|Y\|_\infty^2 \E M_T^2\\
+        &<\infty
+    \end{align*}
+    hence $Y\in\mathcal{L}^2_T(M)$.\\
+    \\
+    There are $Y_n\in\mathcal{E}_T$ such that $Y_n\xrightarrow{\mathcal{L}^2_T(M)} Y$ and we may suppose that $\|Y_n\|_\infty\le \|Y\|_\infty$. Note that
+    \begin{align*}
+        \|XY-XY_n\|^2_{\mathcal{L}^2_T(N)}&= \E \int_0^T (XY-XY_n)^2\, d\langle N\rangle\\
+        &= \E\int_0^T (Y-Y_n)^2 X^2\, d\langle N\rangle\\
+        &=\E\int_0^T (Y-Y_n)^2 \, d\langle M\rangle\\
+        &= \|Y-Y_n\|^2_{\mathcal{L}^2_T(M)}\to 0
+    \end{align*}
+    So $Y_nX \xrightarrow{\mathcal{L}^2_T(N)}YX$, hence
+    $$
+    \int_0^t XY\, dN \xleftarrow{L^2}\int_0^t XY_n\, dN = \int_0^t Y_n\, dM \xrightarrow{L^2}\int_0^t Y\, dM
+    $$
+    $$
+    \implies  \int_0^t YX\, dN = \int_0^t Y\, dM
+    $$
+    Part(b):\\
+    Since 
+    $$
+    \int_0^t Y_0\, dM = Y_0M_t = Y_0\int_0^t X\, dN = \int_0^t Y_0X\, dN
+    $$
+    So it is enough to consider $Y-Y_0$ instead of $Y$, we ay assume that $Y_0=0$.\\
+    \\
+    Let $\tau_n\uparrow T$ such that $Y^{\tau_n}$ is bounded, $N^{\tau_n} \in\mathcal{M}^{2,c}_T$ and $X\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\in \mathcal{L}^2_T(N^\tau_n)$, and note that 
+    $$
+    M^{\tau_n} = \left(\int X\,dN\right)^{\tau_n} = \int X\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} \,dN^{\tau_n}
+    $$
+    So by Part (a), we have
+    \begin{align*}
+        \left(\int Y\, dM\right)^{\tau_n} &= \int Y\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\, dM^{\tau_n}\\
+        &= \int Y\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} X\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\,dN^\tau_n\\
+        &= \int YX\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket}\, dN^{\tau_n}\\
+        &=\left(\int YX\, dN\right)^{\tau_n}
+    \end{align*}
+    We get the claim by taking $n\to\infty$. Since $\forall t<T$, $\forall \omega\in\overline \Omega$ with $\mathbbm{P}(\overline\Omega)=1$, there exists $N(\omega)$ such that $\forall n\ge N(\omega)$ we have $\tau^n(\omega)>t$ and so
+    $$
+    \left(\int_0^t Y\,dM\right)(\omega) = \left(\int_0^t Y\, dM\right)^{\tau^n(\omega)}(\omega) = \left(\int_0^t YX\, dN\right)^{\tau^n(\omega)}(\omega) = \left(\int_0^t YX\, dN\right)(\omega)
+    $$
+\end{proof}
+\pagebreak
+\subsection{Integration by Parts}
+\begin{theorem}{Decomposition of product of local martingale}{}
+    For $M,N\in\mathcal{M}^c_{loc}$,
+    $$
+    M_tN_t = M_0N_0 + \int_0^t M_s\, dN_s + \int_0^t N_s\,dM_s + \langle M, N\rangle_t
+    $$
+\end{theorem}
+\begin{proof}
+    The integrals $\int M\, dN, \int N\, dM$ are well-defined since $M,N$ are continuous hence locally bounded.\\
+    \\
+    We can assume that $M_0=N_0=0$ since we have,
+    \begin{itemize}
+        \item $\langle M, N\rangle = \langle M-M_0, N-N_0\rangle$
+        \item $\int M\, dN = \int M\, d(N-N_0) = \int M-M_0\, d(N-N_0)+M_0(N-N_0)$
+        \item $\int N\, dM = \int N\, d(M-M_0) = \int N-N_0\, d(M-M_0)+N_0(M-M_0)$
+    \end{itemize}
+    So we have
+    \begin{align*}
+        0&= M_0N_0 + \int_0^t M_s\, dN_s + \int_0^t N_s\, dM_s + \langle M, N\rangle_t -M_tN_t\\
+        &= M_0N_0 -M_tN_t + \int M_s-M_0\, d(N_s-N_0)+M_0(N_t-N_0)\\
+        &+ \int N_s-N_0\, d(M_s-M_0)+N_0(M_t-M_0) + \langle M-M_0, N-N_0\rangle_t\\
+        &= \int_0^t (M_s-M_0)\, d(N_s-N_0) + \int_0^t (N_s-N_0)\, d(M_s-M_0)+ \langle M-M_0, N-N_0\rangle_t\\
+        &- (M_t-M_0)(N_t-N_0)
+    \end{align*}
+    So it is enough to show the claim for $M=N$ with $M_0=0$, i.e.,
+    $$
+    M_t^2 = 2\int_0^t M_s\, dM_s + \langle M\rangle_t
+    $$
+    since, if this is satisfied, then we can apply it to $M+N$ and $M-N$ and by subtracting and dividing by 4 we the original claim.\\
+    \\
+    We already show this for bounded martingale in \autoref{rem:dobm}\\
+    \\
+    In general case, we put
+    $$
+    \tau_n = \inf\{t>0: |M_t|\ge n\}\wedge T
+    $$
+    then $\tau_n\uparrow T$ and $M^{\tau_n}$ is bounded local martingale hence a bounded martingale by \autoref{prop:polm}.\\
+    \\
+    And we have the following:
+    \begin{align*}
+        (M^2)^{\tau_n} &= (M^{\tau_n})^2\\
+        &= 2\int M^{\tau_n}\,dM^{\tau_n} + \langle M^{\tau_n}\rangle\\
+        &= 2\int M^{\tau_n}\mathbbm{1}_{\llbracket 0,\tau_n\rrbracket} \,dM + \langle M\rangle^{\tau_n}\\
+        &= \left(2\int M\, dM + \langle M\rangle \right)^{\tau_n}
+    \end{align*}
+    Taking $n\to\infty$, we obtain the claim.
+\end{proof}
+\begin{corollary}{}{}
+    For $M\in\mathcal{M}^c_{loc}$
+    $$
+    \int_0^t M_s\, dM_s = \frac{1}{2}(M_t^2-M_0^2)-\frac{1}{2}\langle M\rangle_t
+    $$
+\end{corollary}
+\begin{corollary}{}{}
+    For $X,Y\in\mathcal{L}^2_{T,loc}(W)$, $M = \int X\,dW, N = \int Y\, dW$, then,
+    \begin{align*}
+        M_tN_t &= \int_0^t M_s\, dM_s + \int_0^t N_s\, dM_s + \langle M,N\rangle_t\\
+        &= \int_0^t M_s Y_s\, dW_s + \int_0^t N_sX_s\, dW_s + \int_0^t X_s Y_s\,ds
+    \end{align*}
+\end{corollary}
+\pagebreak
+\begin{definition}{Continuous adapted process with bounded variation path}{}
+    Denote $\mathcal{V}^c$ as the space of continuous adapted process with paths in $BV[0,t]$ for all $t<T$.
+\end{definition}
+\begin{proposition}{}{}
+    For $M\in\mathcal{M}^{c}_{loc}, A\in \mathcal{V}^c$. Then
+    $$
+    M_tA_t = M_0A_0 + \int_0^t A_s\, dM_s + \int_0^t M_s\, dA_s
+    $$
+\end{proposition}
+\begin{proof}
+    We can suppose that $M_0=A_0=0$.\\
+    \\
+    Assume for now that $M,A$ are bounded. We have the following telescope sum:
+    \begin{align*}
+        M_tA_t &= \sum_{j=1}^n \left(M_{tj/n}-M_{t(j-1)/n}\right)\sum_{k=1}^n\left(A_{tk/n}- A_{t(k-1)/n}\right)\\
+        &= \underbrace{\sum_{j=1}^n \left(M_{tj/n}-M_{t(j-1)/n}\right)\left(A_{tk/n}- A_{t(k-1)/n}\right)}_{:= a_n}\\
+        &+ \underbrace{\sum_{j=1}^n M_{t(j-1)/n}\left(A_{tk/n}- A_{t(k-1)/n}\right)}_{:=b_n}\\
+        &+\underbrace{\sum_{j=1}^n A_{t(j-1)/n}\left(M_{tj/n}-M_{t(j-1)/n}\right)}_{:=c_n}
+    \end{align*}
+    For $b_n$, it tends to $\int_0^t M_s\, dA_s$ a.s. by the definition of Riemann-Stieltjes integral.\\
+    \\
+    Note let 
+    $$
+    A_n = \sum_{j=1}^n A_{t(j-1)/n}\mathbbm{1}_{(t(j-1)/n, tj/n]} \in \mathcal{E}_T
+    $$
+    and we have $A_n\xrightarrow{\mathcal{L}^2_{T}(M)}A$ so $c_n\xrightarrow{L^2} \int A\,dM$.\\
+    \\
+    For $a_n$, we have
+    \begin{align*}
+        |a_n^2| &\le \sum_{j=1}^n \left(M_{tj/n}-M_{t(j-1)/n}\right)^2\sum_{k=1}^n \left(A_{tk/n}- A_{t(k-1)/n}\right)^2\\
+        &\le \underbrace{\sum_{j=1}^n \left(M_{tj/n}-M_{t(j-1)/n}\right)^2}_{\xrightarrow{\mathbbm{P}}\langle M\rangle_t}\underbrace{\sup_{1\le k\le n}|A_{tk/n}- A_{t(k-1)/n}|}_{\xrightarrow{a.s.} 0 \text{ by continuity}}\underbrace{\sum_{k=1}^n |A_{tk/n}- A_{t(k-1)/n}|}_{\le V^{(1)}_{[0,t]}(A)<\infty}
+    \end{align*}
+    Hence $|a_n|^2\xrightarrow{\mathbbm{P}} 0$, $a_n\xrightarrow{\mathbbm{P}}0$. Hence, we have,
+    $$
+    M_tA_t = a_n + b_n + c_n \xrightarrow{\mathbbm{P}} \int_0^t M_s\, dA_s + \int_0^t A_s\,dM_s
+    $$
+    If $M,A$ are not bounded, we define
+    $$
+    \tau_n = \inf\{t>0: |M_t|\ge n\}\wedge \inf\{t>0: |A_t|\ge n\}\wedge T
+    $$
+    So $|M^{\tau_n}|\le n, |A^{\tau_n}|\le n$ and combining with the bounded case, we have,
+    $$
+    (MA)^{\tau_n} = \int A^{\tau_n} \,dM^{\tau_n} + \int M^{\tau_n}\, dA^{\tau_n} = \left(\int A\, dM + \int M\, dA\right)^{\tau_n}
+    $$
+    taking $n\to\infty$, we conclude the proof.
+\end{proof}
+\begin{proposition}{}{}
+    For $A,B\in \mathcal{V}^c$. Then
+    $$
+    A_tB_t = A_0B_0 +\int_0^t A_s\, dB_s + \int_0^t B_s\, dA_s
+    $$
+\end{proposition}
+\pagebreak
+\subsection{Continuous semimartingale}
+\begin{definition}{Continuous Semimartingale}{}
+    Process $Z = (Z_t)_{t<T}$ is called a continuous semimartingale if it can be decomposed as 
+    $$
+    Z = Z_0 + M + A
+    $$
+    where $Z_0$ is $\mathscr{F}_0$-measurable random variable, $M\in\mathcal{M}^{2,c}_{loc}$, $A\in\mathcal{V}^c$, and $M_0=A_0=0$.
+\end{definition}
+\begin{remark}{}{}
+    Semimartingale decomposition is unique. As $V\in\mathcal{M}^c_{loc}\cap BV\iff V$ is constant hence zero.
+\end{remark}
+\begin{example}{Ito Process}{}
+    Ito process, i.e., process of the form
+    $$
+    Z = Z_0 + \int X\, dW + \int Y\, ds
+    $$
+    where $X\in\mathcal{L}^2_{T,loc}$, $Y$ is progressively measurable such that $\int_0^t |Y_s|\, ds<\infty$ a.s. for all $t<T$.\\
+    \\
+    Ito process is a semimartingale.
+\end{example}
+\begin{example}{$M^2$}{}
+    From Doob-Meyer decomposition of $M^2$, i.e.,
+    $$
+    M^2 = 2\int M\, dM + \langle M\rangle
+    $$
+    is a semimartingale.
+\end{example}
+\begin{definition}{Integral w.r.t. continuous semimartingale}{}
+    If $Z = Z_0 + M + A$ is a continuous semimartingale, then
+    $$
+    \int X\, dZ:= \underbrace{\int X\, dM}_{\text{stochastic integral}} + \underbrace{\int X\, dA}_{\text{Stieltjes Integral}}
+    $$
+\end{definition}
+\pagebreak
+\begin{theorem}{Integration by Parts}{}
+    If $Z= Z_0 + M +A$ and $Z' = Z_0' + M' + A'$ are continuous semimartingales, then $ZZ'$ is a continuous semimartingale and
+    $$
+    ZZ' = Z_0Z_0' + \int Z\, dZ' + \int Z'\, dZ + \langle M, M'\rangle
+    $$
+\end{theorem}
+\begin{definition}{Predictable Brackets for Continuous Semimartingale}{}
+    For $Z= Z_0 + M + A, Z' = Z_0' + M'+A'$ are continuous semimartingales, then
+    $$
+    \langle Z,Z'\rangle = \langle M,M'\rangle
+    $$
+\end{definition}
+\begin{remark}{}{}
+     If $Z= Z_0 + M +A$ and $Z' = Z_0' + M' + A'$ are continuous semimartingales, then we have,
+     $$
+     ZZ' = Z_0 Z_0' + \underbrace{\int Z\,dM' + \int Z'\,dM}_{\text{local martingale}} + \underbrace{\int Z\,dA' + \int Z'\, dA + \langle M,M'\rangle}_{\text{finite variation}}
+     $$
+     Hence, $ZZ'$ is also a continuous semimartingale.
+\end{remark}
+\pagebreak
+\subsection{Lecture 2}
+\subsubsection{Ito's fomula; Ito's lemma}
+\begin{theorem}{Ito's formula; Ito's lemma}{}
+    Suppose $Z = Z_0 + M+A$ is a continuous semimartingale, $f\in C^2(\R)$. Then $f(Z)$ is a semimartingale and
+    \begin{equation*}
+        f(Z_t) = f(Z_0) + \int_0^t f'(Z_s)\, dZ_s + \frac{1}{2}\int_0^t f''(Z_s)\,d\langle M\rangle_s \tag{$*$}
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    
+\end{proof}
+\begin{corollary}{Ito's formula on Brownian Motion}{}
+    For $f\in C^2(\R)$, we have
+    $$
+    f(W_t) = f(0) + \int_0^t f'(W_s)\, dW_s+ \frac{1}{2}\int_0^t f''(W_s)\, ds
+    $$
+\end{corollary}
+\begin{theorem}{d-dim Ito's formula}
+    Suppose $f\in C^2(\R^d,\R)$ and $Z = \left(Z^{(1)},\ldots, Z^{(d)}\right)$ where $Z^{(i)} = Z_0^{(i)} + M^{(i)} + A^{(i)}$ are continuous semimartingale. Then $f(Z)$ is a semimartingale and
+    $$
+    f(Z_t) = f(Z_0)+\sum_{i=1}^d \int_0^t \frac{\partial f}{\partial x_i}(Z_s)\,dZ_s^{(i)}+\frac{1}{2}\sum_{i=1}^d\sum_{j=1}^d \int_0^t \frac{\partial^2 f}{\partial x_i\partial x_j} (Z_s)\,d\langle M^{(i)},M^{(j)}\rangle_s
+    $$
+\end{theorem}
+\pagebreak
+\subsubsection{Levy's Characterization of Brownian Motion}
+\begin{theorem}{Levy's Characterization of Brownian Motion}{}
+    Suppose that $M\in\mathcal{M}^c_{loc}$ such that $M_0=0$ and $M_t^2-t\in \mathcal{M}^c_{loc}$. Then $M$ is a Brownian Motion.
+\end{theorem}
+\begin{remark}{Importance of continuity}{}
+    Assumption that $M$ is continuous is fundamental. Otherwise take $M_t = N_t-t$, $N_t$ is a Poisson process with $\lambda=1$. Then, $M_t$ and $M_t^2-t$ are martingale. But $M_t$ is not a BM.
+\end{remark}
+\begin{theorem}{d-dim Levy Characterization}{}
+    Suppose $M^{(1)}, \ldots, M^{(d)}\in\mathcal{M}^c_loc$ such that $M_0^{(i)}=0$ and
+    $$
+    M_t^{(i)}M_{t}^{(j)}-\delta_{i,j}t\in \mathcal{M}^c_{loc}
+    $$
+    for $0\le i,j\le d$. Then $M= (M^{(1)},\ldots, M^{(d)})$ is d-dim BM.
+\end{theorem}
+\pagebreak
+\section{Week 8}
+\subsection{Lecture 1}
+\subsubsection{Exponential martingale characterization of Brownian Motion}
+\begin{theorem}{Exponential Martingale Characterization of BM}{}
+    Suppose that $M$ is continuous, adapted and $M_0=0$. Then $M$ is a Brownian motion if and only if $\forall \lambda\in \R$, $\exp\left(\lambda M_t -\dfrac{\lambda^2 t}{2}\right)$ is a local martingale.
+\end{theorem}
+\begin{proof}
+    $(\implies)$\\
+    This direction is already been proved.\\
+    \\
+    $(\impliedby)$\\
+    We show that $\exp\left(\lambda M_t -\dfrac{\lambda^2 t}{2}\right)$ implies $M\in \mathcal{M}^{2}_{loc}$ and $M^2-t \in\mathcal{M}^2_{loc}$. Then, we use Levy's Characterization of Brownian motion to finish the proof.\\
+    \\
+    First, we define
+    $$
+    \tau_n = \inf\{t>0: |M_t|\ge n\}\wedge n
+    $$
+    Then, $\tau_n\uparrow \infty$ and $\forall \lambda$, the process
+    $$
+    X_t(\lambda) = \exp\left(\lambda M_{t\wedge \tau_n} + \frac{\lambda^2 (t\wedge \tau_n)}{2}\right)
+    $$
+    is a bounded local martingale. Hence, $X_t(\lambda)$ is a bounded martingale such that $0\le X_t(\lambda) \le e^{|\lambda|n}$. Hence, by the martingale property (conditional expectation), we have,
+    $$
+    \E(X_t(\lambda) \mathbbm{1}_{A}) = \E(X_s(\lambda)\mathbbm{1}_A) \qquad\forall s<t, \forall A\in\mathscr{F}_s
+    $$
+    \\
+    Note that $X_t(0)=1$ and let $|\lambda|\le \lambda_0$, then
+    $$
+    \left|\frac{d X_t(\lambda)}{d\lambda}\right| = \left|X_t(\lambda) (M_{t\wedge\tau_n}-\lambda t\wedge \tau_n)\right| \le e^{\lambda_0 n} (n + \lambda_0 n)
+    $$
+    Then, use the definition of derivative and by DCT, we get for $s<t$, $A\in\mathscr{F}_s$,
+    \begin{align*}
+        \E[X_t(\lambda) (M_{t\wedge\tau_n}-\lambda t\wedge \tau_n)] &= \lim_{h\to 0} \E\left[\frac{1}{h} \left(X_t(\lambda+h)-X_t(\lambda)\right)\mathbbm{1}_A\right]\\
+        &= \lim_{h\to 0} \E\left[\frac{1}{h} \left(X_s(\lambda+h)-X_s(\lambda)\right)\mathbbm{1}_A\right]\\
+        &= \E[X_s(\lambda) (M_{s\wedge\tau_n}-\lambda s\wedge \tau_n)]
+    \end{align*}
+    For $\lambda = 0$, we have
+    $$
+    \E (M_{t\wedge\tau_n}) = \E(M_{s\wedge \tau_n})
+    $$
+    Hence, $M\in\mathcal{M}^c_{loc}$.\\
+    \\
+    Also note that for the second-order derivative, we have,
+    $$
+    \left|\frac{d^2 X_t(\lambda)}{d \lambda^2}\right| = \left|X_t(\lambda)\left[M_{t\wedge \tau_n} - t\wedge\tau_n\right]^2-t\wedge \tau_n\right|\le e^{\lambda_0 n }\left[(n+\lambda_0)^2+n\right]
+    $$
+    Similarly, using the definition of derivative and DCT, we have,
+    \begin{align*}
+        \E\left[\left(X_t(\lambda)\left[M_{t\wedge \tau_n} - t\wedge\tau_n\right]^2-t\wedge \tau_n\right) \mathbbm{1}_A\right] &= \E\left[\left(X_s(\lambda)\left[M_{s\wedge \tau_n} - s\wedge\tau_n\right]^2-t\wedge \tau_n\right) \mathbbm{1}_A\right]
+    \end{align*}
+    and taking $\lambda=0$, we have $\left(M^2_{t\wedge \tau_n}-t\wedge \tau_n\right)_{t\ge 0}$ is a martingale, hence $M^2-t\in\mathcal{M}^{c}_{loc}$.\\
+    \\
+    The claim follows by Levy's theorem.
+\end{proof}
+\pagebreak
+\subsubsection{It\^{o}-Tanaka Formula}
+It\^{o}'s formula for $f\in C^2$, e.g.,
+$$
+f(W_t) = f(W_0) + \int_0^t f'(W_s)\, dW_s + \frac{1}{2} \int_0^t f''(W_s)\, ds
+$$
+
+For $f$ is convex function, e.g., $f(x) = |x|$, this implies
+$$
+|W_t| = \underbrace{\int_0^t sgn(W_s)\, dW_s}_{B_t}+ \underbrace{L_t}_{\text{local time}},\qquad\text{where } sgn(W_s) = \begin{cases}
+    1 & W_s>0\\
+    -1 & W_s\le 0
+\end{cases} 
+$$
+Since we have $\langle B\rangle_t = t$, hence $B_t$ is a Brownian Motion.
+\begin{remark}{Left derivative}{}
+    We have
+    $$
+    f'_{\ell}(x) = \lim_{h\to 0,h\ge 0} \frac{f(x)-f(x-h)}{h}
+    $$
+    For $f(x) = |x|$, we have,
+    $$
+    f'_{\ell}(x) = sgn(x)=  \begin{cases}
+      1 & x>0 \\
+      -1 & x\le 0
+    \end{cases}
+    $$
+\end{remark}
+\begin{theorem}{Second derivative of Convex function is a measure}{}
+    If $f:\R\to \R$ is convex, then $f'_{\ell}(x)$ exists for every $x\in \R$.\\
+    \\
+    The second derivative of a convex function is a positive measure $\mu$ given by
+    $$
+    \int_\R \varphi(x) \mu(dx) = -\int_\R \varphi'(x) f'_{\ell}(x)\, dx\qquad\forall \varphi\in C^{\infty}_0(\R)
+    $$
+\end{theorem}
+Suppose $f\in C^2, \varphi\in C_0^\infty(\R)$, where
+$$
+C_0^\infty(\R) = \{\varphi: \R\to\R: \varphi{(n)} \text{ is continuous $\forall n$, $\varphi$ vanishes outside a bounded interval}\}
+$$
+Using integration by parts, we have
+\begin{align*}
+    \int_{-\infty}^\infty f''(x)\varphi(x)\, dx &= f'(x)\varphi(x)\bigg|_{-\infty}^\infty - \int_{-\infty}^{\infty} f'(x)\varphi'(x)\, dx\\
+    &= -\int_{-\infty}^{\infty} f'(x)\varphi'(x)\, dx
+\end{align*}
+So for more general $f$, we could identify $f''$ with measure $\mu$ such that
+$$
+\int_\R \varphi(x) \mu(dx) = -\int_\R \varphi'(x)f'_{\ell}(x)\, dx
+$$
+i.e., 
+$$
+\mu(dx) = f''(x)dx
+$$
+\pagebreak
+\begin{example}{Absolute value function}{}
+    For $f(x) = |x|$, we have
+    \begin{align*}
+        \int_\R \varphi(x) \mu(dx) &= -\int_\R \varphi'(x) f_{\ell}'(x)\,dx\\
+        &= -\int_{-\infty}^0 -1\cdot \varphi'(x)\, dx - \int_0^\infty 1\cdot \varphi'(x)\, dx\\
+        &= \int_{-\infty}^0 \varphi'(x)\, dx - \int_0^\infty \varphi'(x)\, dx\\
+        &= \varphi(x)\bigg|_{-\infty}^0 - \varphi(x)\bigg|_{0}^{\infty}\\
+        &= \varphi(0) + \varphi(0)\\
+        &= 2\varphi(0)\\
+        &= \int_\R \varphi(x)2\delta_0(dx)\\
+    \end{align*}
+    where 
+    $$
+    \delta_0(A) = \begin{cases}
+        1 & 0\in A\\
+        0 & 0\notin A
+    \end{cases}
+    $$
+    This implies $f'' = 2\delta_0$
+\end{example}
+\pagebreak
+\begin{definition}{Local Time}{}
+    $(X_t)$ is a continuous semimartingale. Then the local time at $a$ of $X$ at time $t$ is
+    $$
+    L_t^a(X) = \lim_{\varepsilon\to 0}\frac{1}{2\varepsilon} \int_0^t \mathbbm{1}_{\{|X_s-a|\le \varepsilon\}}\, d\langle X\rangle_s
+    $$
+\end{definition}
+\begin{example}{Local time of Constant}{}
+    Let $X_t = 0$, then we have $L_t^0(X) = \langle X\rangle_t = 0$ and
+    $$
+    supp\{dL_t^a(X)\} = \{X_t=a\}
+    $$
+\end{example}
+\pagebreak
+\begin{theorem}{It\^{o}-Tanaka Formula}{}
+    Let $f$ be a difference of two convex functions and $(X_t)$ is a continuous seminartingale.\\
+    \\
+    Then $f(X_t)$ is a semimartingale and
+    $$
+    f(X_t) = f(X_0)+\int_0^t f'_{\ell} (X_s)\, dX_s + \frac{1}{2}\int_\R L_t^a(X) \, \mu(da)
+    $$
+    where $\mu (dx)$ is a second derivative of $f$ in distribution sense.
+\end{theorem}
+\begin{example}{Absolute value function}{}
+    Let $f(x) = |x|$ then,
+    $$
+    \int_\R L_t^a(X) \mu(da) = \int_\R L_t^a(X) 2\delta_0(da) = 2L_t^0(X)
+    $$
+    Then
+    $$
+    |X_t| = |X_0| + \int_0^t sgn(X_s)\, dX_s + L_t^0(X)
+    $$
+    We have $t\mapsto L_t^a(X)$ increasing a.s. and $(L_t^a)\in BV(0,T)$.
+\end{example}
+\pagebreak
+\begin{theorem}{Measure from Local Time}{}
+    Measure $dL_t^a(X)$ is a.s. carried by the set $\{t: X_t=a\}$
+\end{theorem}
+\begin{proof}
+    From $(X_t-a)^2 = (|X_t-a|)^2$, we have from the left-hand side
+    $$
+    (X_t-a)^2 = (X_0-a)^2  + 2\int_0^t (X_s-a)\, dX_s + \langle X\rangle_t
+    $$
+    From the right-hand side
+    $$
+    (|X_t-a|)^2 = (X_0-a)^2 + 2\int_0^t |X_s-a|\, d|X_s-a|  +\frac{1}{2}\int_0^t 2\, d\langle|X-a|\rangle_s
+    $$
+    Using It\^{o}-Tanaka's formula, we have
+    \begin{align*}
+        d|X_s-a| = sgn(X_s-a)\, dX_s + dL_s^a(X)
+    \end{align*}
+    Moreover, we have
+    $$
+    \langle |X_s-a|\rangle = \left\langle \int_0^t sgn(X_s-a)\, dX_s\right\rangle = sgn(X_s-a)^2 \langle X\rangle_s
+    $$
+    Hence, we have,
+    \begin{align*}
+        (|X_t-a|)^2 &= (X_0-a)^2 + 2\int_0^t |X_s-a|\,sgn(X_s-a)\, dX_s + 2\int_0^t  |X_s-a|\, dL_s^a(X) \\
+        &+ \int_0^t sgn(X_s-a)^2\, d\langle X\rangle_s
+    \end{align*}
+    Combining both sides, we get
+    $$
+    \int_0^t |X_s-a|\, dL_t^a(X) = 0\qquad\forall t
+    $$
+    Hence, we get the claim of the theorem i.e.,
+    $$
+    L_t^a(X) = \int_0^t \mathbbm{1}_{\{X_s=a\}} \, dL_s^a(X)
+    $$
+\end{proof}
+\begin{theorem}{Occupation Time Formula}{}
+For a Borel function $\varphi$:
+    $$
+    \int_0^t \varphi(X_s)\, d\langle X\rangle_s = \int_\R \varphi(a) L_t^a(X)\, da
+    $$
+\end{theorem}
+\pagebreak
+\subsubsection{Stochastic Differential Equation}
+\begin{remark}{Motivation}{}
+    For an ODE, we have
+    $$
+    \frac{dx(t)}{dt} = x'(t) = \mu(x(t),t), \qquad x(0)=x_0
+    $$
+    We want to combine ODE with a white noise
+    $$
+    \xi = \frac{dB_t}{dt}  = B'_t
+    $$
+    but Brownian motion is nowhere differentiable. We let $\sigma(x,t)$ be the intensity of noise at state $x$ and time $t$, i.e.,
+    $$
+        \int_0^T \sigma(X_t,t)\xi_t\, dt = \int_0^T \sigma(X_t,t)B_t'\, dt = \underbrace{\int_0^ T\sigma(X_t,t)\, dB_t}_{\text{It\^{o}'s integral}}
+    $$
+\end{remark}
+ \begin{example}{Black-Scholes-Merton Model}{}
+        Let $X_t$ be the value of $\$1$ after $t$ invested in a saving account. We have the ODE
+        $$
+        \dot X_t = rX_t
+        $$
+        where $r$ is constant and deterministic growth rate of return.\\
+        \\
+        For SDE, we want to have uncertain rate, i.e.,
+        $$
+        \frac{dX_t}{dt} = (r+ \sigma \xi_t)X_t 
+        $$
+        meaning
+        $$
+        dX_t = rX_t\,dt + \sigma X_t\, dB_t,\qquad X_0=1
+        $$
+        and
+        $$
+        X_t = 1  + r\int_0^t X_s\, ds + \sigma\int_0^t X_s\, dB_s
+        $$
+        We call $X_t$ is a geometric Brownian Motion with
+        $$
+        X_t  = \exp\left(\left(r-\frac{\sigma^2}{2}\right)t + \sigma B_t\right)
+        $$
+    \end{example}
+    \begin{example}{Population growth}{}
+        Let $X_t$ be the population density with ODE
+        $$
+        \frac{dX_t}{dt} = aX_t (1-X_t)
+        $$
+        We let there be random perturbation of the birth rate, it will result in
+        $$
+        \frac{dX_t}{dt} = (a+\sigma\xi_t) X_t(1-X_t)
+        $$
+        In terms of SDE, we have
+        $$
+        dX_t = aX_t(1-X_t)\, dt+ \sigma X_t(1-X_t)\, dB_t
+        $$
+    \end{example}
+    \pagebreak
+    \begin{definition}{Homogenous SDE}{}
+        Suppose that $b,\sigma: \R\to\R$ are continuous, $\eta$ is $\mathscr{F}_s$-measurable random variable. We say that a process $(X_t)_{t\in[s,t)}$ solves the homogenous SDE
+        $$
+        dX_t = b(X_t)\, dt + \sigma(X_t)\, dW_t\, \qquad X_s=\eta
+        $$
+        if 
+        $$
+        X_t = \eta + \int_s^t b(X_r)\,dr + \int_s^t \sigma(X_r)\, dW_r\qquad t\in[s,T)
+        $$
+    \end{definition}
+    \begin{remark}{}{}
+        \begin{enumerate}
+            \item[1)] We suppose here that $b,\sigma$ are continuous but it can be extended
+            \item[2)] For $\tilde X_t = X_{t+s}$ and $t\in[0,T-s]$ and $\tilde F_t = F_{t+s}$, $\tilde X_0=\eta$, we can transform time to start at $0$
+        \end{enumerate}
+    \end{remark}
+    \begin{definition}{Diffusion Process}{}
+        Process $X$ that solves the above homogenous SDE is called diffusion starting from $\eta$.\\
+        \\
+        Function $\sigma$ is called diffusion coefficient and function $b$ is called drift coefficient.
+    \end{definition}
+    \begin{definition}{Lipschitz function}{}
+        Function $f:\R\to \R$ is Lipschitz with constant $L$ if
+        $$
+        |f(x)-f(y)|\le L|x-y|\, \qquad\forall x,y
+        $$
+        Lipschitz property implies that
+        $$
+        |f(x)|\le |f(0)| + L|x|\le \tilde L\sqrt{1+x^2}
+        $$
+        where $\tilde L = 2\max\{|f(0)|, L\}$
+    \end{definition}
+    \pagebreak
+    \begin{theorem}{Uniqueness}{}
+        Suppose that $b$ and $\sigma$ are Lipschitz, then the homogenous SDE 
+        $$
+        dX_t = b(X_t)\,d_t + \sigma(X_t)\, dW_t\,\qquad X_s=\eta
+        $$
+        has at most one solution. 
+    \end{theorem}
+    \begin{theorem}{Existence and Uniqueness}{}
+        Suppose that $b$ and $\sigma$ are Lipschitz on $\R$ and $\E\eta^2<\infty$. Then the SDE
+        $$
+        dX_t = b(X_t)\, dt + \sigma(X_t)\, dW_t\,\qquad X_s=\eta
+        $$
+        has exactly one solution $X = (X_t)_{t\ge s}$.\\
+        \\
+        Moreover, $\E X_t^2 <\infty$ and $t\mapsto \E X_t^2$ is bounded on $[0,t)$ for all $t$.
+    \end{theorem}
+    \begin{example}{}{}
+        For the following SDE,
+        $$
+        dX_t = bX_t\, dt + \sigma\, dW_t\qquad X_0 =\eta
+        $$
+        where $b(x) =x$ and $\sigma(x)=\sigma$ are Lipschitz.\\
+        \\
+        It has a unique solution
+        $$
+        X_t = e^{bt}\eta + \sigma\int_0^t e^{b(t-s)}\, dW_s
+        $$
+    \end{example}
+    \begin{example}{}{}
+        For the following SDE
+        $$
+        dX_t = \lambda X_t\, dW_t\qquad X_0=\eta
+        $$
+        where $b(x)=0$ and $\sigma(x) = \lambda x$ are Lipschitz.\\
+        \\
+        It has a unique solution
+        $$
+        X_t = \eta \exp\left(\lambda W_t -\frac{\lambda^2}{2}t\right)
+        $$
+    \end{example}
+    \pagebreak
+    \begin{definition}{Non-homogenous SDE}{}
+        Suppose $b,\sigma:\R^2\to \R$ are continuous, $\eta$ is $\mathscr{F}_s$-measurable.\\
+        \\
+        We say that $X = (X_t)_{t\in[s,T)}$ solves the non-homogenous SDE
+        $$
+        dX_t = b(t,X_t)\, dt + \sigma(t,X_t)\, dW_t\qquad X_s=\eta
+        $$
+        if
+        $$
+        X_t  = \eta + \int_s^t b(r,X_r) \, dr + \int_s^t \sigma(r,X_r)\, dW_r\qquad t\in [s,T)
+        $$
+    \end{definition}
+    \begin{theorem}{Existence and Uniqueness of Non-homogenous SDE}{}
+        Suppose that $b$ and $\sigma$ satisfy the Lipschitz condition as follows:
+        $$
+        |b(t,x)-b(t,y)|\le L(x-y), \quad |b(t,x)|\le \tilde L\sqrt{1+x^2}
+        $$
+        $$
+        |\sigma(t,x)-\sigma(t,y)|\le L(x-y), \quad |\sigma(t,x)|\le \tilde L\sqrt{1+x^2}
+        $$
+        then, for $\eta$ is $\mathscr{F}_s$-measurable such that $\E\eta^2<\infty$, there exists exactly one solution to 
+        $$
+        dX_t = b(t,X_t)\, dt + \sigma(t,X_t)\, dW_t\qquad X_0=\eta
+        $$
+    \end{theorem}
+    \begin{example}{}{}
+        The SDE
+        $$
+        dX_t = \sigma(t)X_t\, dW_t, \qquad X_0=\xi
+        $$
+        satisfies the assumptions of the above theorem if
+        $$
+        \sup_t |\sigma(t)|<\infty
+        $$
+    \end{example}
+    \pagebreak
+    \section{Week 9}
+    \subsection{Lecture 1}
+    \subsubsection{Stochastic Exponential and Logarithm}
+    \begin{proposition}{Stochastic Exponential}{}
+        Suppose that $M\in\mathcal{M}^c_{loc}$ and $Z_0$ is $\mathscr{F}_0$-measurable. Then the process 
+        $$
+        Z_t = Z_0\exp\left(M_t -\frac{1}{2}\langle M\rangle_t\right)
+        $$
+        is a local martingale such that
+        $$
+        dZ_t = Z_t\, dM_t
+        $$
+        i.e., 
+        $$
+        Z_t = Z_0 + \int_0^t Z_s\, dM_s
+        $$
+        Such $Z$ is called \textbf{stochastic exponential} of $M$ with initial condition $Z_0$ or the Doleans-Dade exponential of $M$. We use the notation
+        $$
+        Z = Z_0 \mathcal{E}(M)
+        $$
+    \end{proposition}
+    \begin{proof}
+        For the following semimartingale
+        $$
+        X_t = M_t - \frac{1}{2}\langle M\rangle_t
+        $$
+        we use Ito's formula to obtain that 
+        \begin{align*}
+            dZ_t = d(Z_0 e^{X_t}) &= Z_0 e^{X_t}\, dX_t + \frac{1}{2}Z_0e^{X_t}\, d\langle M\rangle_t \\
+            &= Z_t\, dM_t -\frac{1}{2}Z_t\, d\langle M\rangle_t + \frac{1}{2}\langle M\rangle_t\\
+            &=Z_t\, dM_t
+        \end{align*}
+        By construction of stochastic integral, $Z$ is a continuous local martingale.
+    \end{proof}
+    \pagebreak
+    \begin{example}{Stochastic exponential}{}
+        Consider the SDE
+        $$
+        dX_t = b(t)X_t\, dt + \sigma(t) X_t \, dW_t, \qquad X_0=\xi
+        $$
+        Note that $b(t,x) = b(t)x$, $\sigma(t,x) = \sigma(t)x$ satisfies the Lipschitz conditions if $\sup_t|b(t)|<\infty$, $\sup_t|\sigma(t)|<\infty$.\\
+        \\
+        We suppose that $X_t = g(t)Y_t$ where
+        $$
+        dY_t = \sigma(t) Y_t\, dW_t, \qquad Y_0 = \xi
+        $$
+        We know from previous example that
+        $$
+        Y_t = \xi \exp\left(\int_0^t \sigma(s)\, dW_s -\frac{1}{2}\int_0^t \sigma^2(s)\, ds\right)
+        $$
+        Then,
+        \begin{align*}
+            dX_t & = Y_tg'(t)\, dt + g(t)\, dY_t\\
+            &= g'(t)Y_t\, dt+\sigma(t)X_t\, dW_t\\
+        \end{align*}
+        It is enough to find solution to the ODE
+        $$
+        g'(t) = b(t)g(t),\qquad g(0)=1
+        $$
+        We find that
+        $$
+        X_t = Y_t g(t) = \xi\exp\left(\int_0^t \sigma(s)\, dW_s -\frac{1}{2}\int_0^t \sigma(s)^2\, ds + \int_0^t b(s)\,ds\right)
+        $$
+    \end{example}
+    \pagebreak
+    \begin{definition}{Stochastic Logarithm}{}
+        If $U=\mathcal{E}(X)$, $X$ is called \textbf{stochastic logarithm} of $U$, denoted by $\mathcal{L}(U)$.
+    \end{definition}
+    \begin{theorem}{Stochastic Logarithm}{}
+        $U\neq 0$. Then $\mathcal{L}(U)$ satisfies SDE
+        $$
+        dX_t = \frac{1}{U_t}\, dU_t,\qquad X_0=0
+        $$
+        and 
+        $$X_t = \mathcal{L}(U)_t = \ln \left(\frac{U_t}{U_0}\right) +\int_0^t \frac{1}{2U_t^2}\, d\langle U\rangle_t$$
+    \end{theorem}
+    \begin{example}{Stochastic Logarithm}{}
+        Let $u_t = e^{W_t}$. Find $\mathcal{L}(U)$.
+    \end{example}
+    \pagebreak
+    \subsubsection{Multi-dimensional SDE}
+    \begin{definition}{Multi-dimensional Process}{}
+    Let $W = (W^{(1)},\cdots,W^{(d)})$ be a  $d$-dimensional BM.\\
+    \\
+    For $X = [X^{(i,j)}]_{1\le i\le m, 1\le j\le d}$ be a $m\times d$-matrices, consisting of processes in $\mathcal{L}^2_{T,loc}$, i.e., $(X^{(i,j)}\in \mathcal{L}^2_{T,loc})$, we define $m$-dimensional process,
+    $$
+    M_t = (M_t^{(1)},\cdots, M_{t}^{(m)}) = \int_0^t X_s\, dW_s,\qquad 0\le t<T
+    $$
+    given
+    $$
+    M_t^{(i)} = \sum_{j=1}^d \int_0^t X_s^{(i,j)} dW_s^{(j)},\qquad 1\le i\le m
+    $$
+    \end{definition}
+    \begin{definition}{Multi-dimensional SDE}{}
+        We suppose that $b: \R^m\to\R^m$, $\sigma: \R^m \to \R^{m\times d}$ are continuous functions, $W$ is $d$-dimensional BM, $\xi = (\xi_1,\cdots, \xi_m)$ be $m$-dimensional $\mathcal{F}_s$-measurable random vector. We say that $X = (X_t^{(1)},\cdots, X_{t}^{(m)})_{t\in[s,T)}$ solves the homogenous multi-dimensional SDE
+        $$
+        dX_t = b(X_t)\,dt + \sigma(X_t)\, dW_t,\qquad X_s = \xi
+        $$
+        if
+        $$
+        X_t = \xi  + \int_s^t b(X_u)\,du + \int_s^t \sigma(X_u)\, dW_u
+        $$
+    \end{definition}
+    \begin{theorem}{Existence and Uniqueness}{}
+        Suppose that $\xi$ is $m$-dimensional $\mathcal{F}_s$-measurable random vector such that $\E \xi_k^2<\infty$ for $k\in\{1,\cdots, m\}$, and $b:\R^m\to\R^m$, $\sigma:\R^m\to\R^{d\times m}$ are Lipschitz and $W$ is $d$-dimensional BM. Then,
+        $$
+        dX_t = b(X_t)\, dt + \sigma(X_t)\, dW_t,\qquad X_s = \xi
+        $$
+        has the unique solution $X = (X_t^{(1)},\cdots,X_t^{(m)})_{t\ge s}$.\\
+        \\
+        Moreover
+        $$
+        \E\sup_{s\le t\le u} \E|X_t^{(i)}|<\infty ,\qquad \forall u<\infty
+        $$
+    \end{theorem}
+    \pagebreak
+    \subsubsection{Girsanov Theorem}
+    When we change the probability measure, we have
+    $$
+    (\Omega,\mathcal{F}, \mathbbm{P})\to (\Omega, \mathcal{F}, \Q)
+    $$
+    We let the Radon-Nikodym density be $Z$, i.e.,
+    $$
+    \frac{d\mathbbm{P}}{d\Q} = Z,\qquad \Q(A) = \int_A Z\, d\mathbbm{P} = \E_{\mathbbm{P}}(\mathbbm{1}_A Z)
+    $$
+    Hence,
+    $$
+    \E_{\Q}(\mathbbm{1}_A) = \E_{\mathbbm{P}}(\mathbbm{1}_AZ)
+    $$
+    Basically, we want to show that if $W$ is a $\mathbbm{P}$-BM, then $\tilde W = W-xxx$ is $\Q$-BM and we need to figure out what is $xxx$.
+    \begin{example}{Motivating Discrete Example}{}
+        Suppose that random variables $Z_1,Z_2,\cdots, Z_n$ are i.i.d. with $\mathcal{N}(0,1)$. We introduce a new measure $\Q$ on $(\Omega,\mathcal{F})$ by
+        $$
+        d\Q = \exp\left(\sum_{i=1}^n \mu_i Z_i - \frac{1}{2}\sum_{i=1}^n \mu_i^2\right)\, d\mathbbm{P}
+        $$
+        i.e.,
+        $$
+        \Q(A) = \int_A \exp\left(\sum_{i=1}^n \mu_i Z_i(\omega) - \frac{1}{2}\sum_{i=1}^n \mu_i^2\right)\, d\mathbbm{P}(\omega),\qquad\forall A\in\mathcal{F}
+        $$
+        $\Q$ is a probability measure since it is non-negative and
+        $$
+        \Q(\Omega) = \E\exp\left(\sum_{i=1}^n \mu_i Z_i(\omega) - \frac{1}{2}\sum_{i=1}^n \mu_i^2\right) = \prod_{i=1}^n\E \exp\left((\mu_iZ_i-\frac{1}{2}\mu_i^2\right)  =1
+        $$
+        Now, let's take $\Gamma = \mathcal{B}(\R^n)$,  we have,
+        \begin{align*}
+            \Q((z_1,\cdots,z_n)\in\Gamma) &= \E\exp\left(\sum_{i=1}^n \mu_iz_i - \frac{1}{2}\sum_{i=1}^n \mu_i^2\right)\mathbbm{1}_{\{(z_1,\cdots,z_n)\in\Gamma\}}\\
+            &= \frac{1}{(2\pi)^{n/2}}\int_\Gamma \exp\left(\sum \mu_iz_i - \frac{1}{2}\sum\mu_i^2\right)\exp\left(-\frac{1}{2}\sum z_i^2\right)\,dz_1\cdots dz_n\\
+            &= \frac{1}{(2\pi)^{n/2}} \int_\Gamma \exp\left(-\frac{1}{2}\sum_{i=1}^n(z_i-\mu_i)^2\right)dz_1\cdots dz_n
+        \end{align*}
+        This implies
+        $$
+        Z_i\sum \mathcal{N}(\mu_i,1)
+        $$
+        and $Z_i$ are independent. This implies $Z_i-\mu_i\sim \mathcal{N}(0,1)$ i.i.d.\\
+        \\
+        We can define $S_k = Z_1 + \cdots + Z_k$, then $(S_k)_{k\le n}$ has the same law under $\mathbbm{P}$ as
+        $$
+        (S_k - \sum_{i=1}^k\mu_i)_{k\le n}
+        $$
+        has under $\Q$. In the next considerations, we will replace $S_k$ by $BM$, and $\sum_{i=1}^n \mu_i$ as $\int_0^t Y_s\, ds$.
+    \end{example}
+    \pagebreak
+    \begin{theorem}{Girsanov Theorem For BM}{}
+        For $T<\infty$, the process $(Y_t)_{t<T}$ is progressively measurable and $\int_0^T Y_t^2\, dt<\infty$ a.s., i.e., $Y\in\mathcal{L}^2_{T,loc}$.\\
+        \\
+        Let $M_t = \int_0^t Y_s\, dW_s \in \mathcal{M}^c_{loc}$ on $[0,T] $ and $\langle M\rangle_t = \int_0^t Y_s^2\, ds$. Then
+        \begin{align*}
+            Z_t &= \mathcal{E}(M_t) = \exp\left(M_t - \frac{1}{2}\langle M\rangle_t\right)\\
+            &= \exp\left(\int_0^t Y_s\, dM_s- \frac{1}{2} \int_0^t Y_s^2\, ds\right)
+        \end{align*}
+        is local martingale on $[0,T]$
+    \end{theorem}
+    \begin{lemma}{Martingale and Stochastic Exponential}{}
+        If $M\in\mathcal{M}^c_{loc}$ on $[0,T]$, then $Z = \mathcal{E}(M)$ is a martingale on $[0,T]$ if and only if $\E Z_T =1$
+    \end{lemma}
+    \begin{proof}
+        $(\implies)$\\
+        Obvious, since $\E(Z_T) = \E(Z_0)=1$ by martingale property\\
+        $(\impliedby)$\\
+        We know $Z>0$ and $Z\in\mathcal{M}^c_{loc}$, hence $Z$ is a supermartingale for $t\le T$, i.e., $Z_t\ge \E(Z_T|\mathcal{F}_t)$ a.s. Moreover,
+        $$
+        1 = \E(Z_0) \ge \E(Z_t) \ge \E(Z_T) = 1
+        $$
+        Hence, we have $\E(Z_t)=1$. Therefore, we have
+        $$
+        \E(\underbrace{Z_t - \E(Z_T|\mathcal{F}_t)}_{\ge 0}) = \E(Z_t) - \E(Z_T) = 0
+        $$
+        Hence $Z_t  = \E(Z_T|\mathcal{F}_t)$ a.s.
+    \end{proof}
+    \pagebreak
+    \begin{theorem}{Change of Measure}{}
+        For $T<\infty$, $Y\in\mathcal{L}^2_{T,loc}$, $Z = \mathcal{E}\left(\int_0^\cdot Y_s\,dW_s\right)_{\cdot}$. Then if $\E Z_T=1$ so $Z_t$ is a martingale, then the process
+        $$
+        V_t = W_t - \int_0^t Y_s\, ds,\qquad t\in[0,T]
+        $$
+        is a BM on $(\Omega,\mathscr{F},\Q_T)$, where
+        $$
+        \frac{d\Q_T}{d\mathbbm{P}} = Z_T\text{ i.e., } \Q_T(A) = \int_A Z_T\,d\mathbbm{P}\,\forall A\in\mathscr{F} 
+        $$
+    \end{theorem}
+    We may want to have a measure with respect to which $W_t - \int_0^t Y_s\, ds$ is BM on $[0,\infty)$.
+    \begin{theorem}{}{}
+        Suppose $Y\in\mathcal{L}^2_{T,loc}$, $Z = \mathcal{E}(\int_0^\cdot Y\, dW)$, and $\frac{d\Q}{d\mathbbm{P}} = Z_T$. \\
+        \\
+        If $\E Z_t = 1$ for all $t$  ($Z$ is a constant on $[0,\infty)$), then there exists unique $\Q$ on $(\Omega,\mathscr{F}_\infty^W)$ such that $\Q(A) = \Q_T(A)$ for all $A\in\mathscr{F}_T^W$, $T<\infty$.\\
+        \\
+        Process $V = W-\int Y\,ds$ is $\Q$- BM on $[0,\infty)$
+    \end{theorem}
+    \begin{remark}{}{}
+        Even though $\Q_T<<\mathbbm{P}$ $(\mathbbm{P}(A) = 0 \implies \Q_T(A)=0)$, the measure $Q$from the last theorem is not necessarily absolutely continuous with respect to $\mathbbm{P}$.\\
+        \\
+        For example, when $Y_t = \mu\neq 0$ so $V_t = W_t -\mu t$. Let 
+        $$
+        A = \left\{\omega: \limsup \frac{1}{t}W_t(\omega) = 0\right\}
+        $$
+        and
+        $$
+        B = \left\{\omega: \limsup \frac{1}{t}V_t(\omega) = 0\right\} = \left\{\omega: \limsup \frac{1}{t}W_t(\omega) = \mu\right\}
+        $$
+        From LLN for BM, we have $\mathbbm{P}(A) = 1$ and $\mathbbm{P}(B)=0$. On the other hand, we have $\Q(B)=1$. Hence, $\mathbbm{P}$ and $\Q$ are singular on $\mathscr{F}_\infty^W$ despite that $\Q|_{\mathscr{F}_T^W} = \Q_T|_{\mathscr{F}_T^W}<<\mathbbm{P}|_{\mathscr{F}_T^W}$.\\
+        \\
+        This is linked to uniform integrability of $Z$. If $Z$ is uniform integrable, then 
+        $$
+        Z_t = \E(Z_\infty|\mathscr{F}_t)
+        $$
+        and we would simplify $d\Q = Z_\infty d\mathbbm{P}$
+    \end{remark}
+    \pagebreak
+    \begin{theorem}{Novikov Criterion}{}
+        If $Y$ is progressively measurable such that 
+        $$
+        \E\left(\exp\left(\frac{1}{2}\int_0^T Y_s^2\, ds\right)\right)<\infty
+        $$
+        then $Z = \mathcal{E}(\int_0^\cdot Y_s\, dW_s)$ is a martingale on $[0,T]$.
+    \end{theorem}
+    Here is a more general version:
+    \begin{theorem}{General Novikov Criterion}{}
+        For $M\in\mathcal{M}^c_{loc}$ such that for all $t$, we have
+        $$
+        \E\exp\left(\frac{1}{2}\langle M\rangle_t\right)<\infty
+        $$
+        Then, $Z= \mathcal{E}(M)$ is a martingale i.e., $\E Z_t=1$ for all $t$.
+    \end{theorem}
+    \begin{theorem}{Girsanov theorem for d-dim BM}{}
+        Suppose $Y = (Y^{(1)},\cdots, Y^{(d)})$ is $d$-dimensional such that $Y^{(k)}\in\mathcal{L}^2_{T,loc}$ and $T<\infty$. Let $W$ be $d$-dimensional BM and
+        $$
+        Z_t = \exp\left(\sum_{i=1}^d \int_0^t Y_s^{(i)}\, dW_s^{(i)}-\frac{1}{2}\int_0^t |Y_s|^2\, ds\right)
+        $$
+        Then, if $\E Z_T=1$, we have,
+        $$
+        V_t = W_t - \int_0^t Y_s\, ds = (W_t^{(1)}-\int_0^t Y_s^{(1)}\, ds,\cdots, W_t^{(d)}-\int_0^t Y_s^{(d)}\, ds)
+        $$
+        is a BM on $[0,T]$ with respect to $\Q_T$ given by $\dfrac{d\Q_T}{d\mathbbm{P}}= Z_T$.
+    \end{theorem}
+    \begin{theorem}{d-dim Novikov Criterion}{}
+        If $Y$ is as in the previous theorem, then if
+        $$
+        \E\exp\left(\frac{1}{2}\int_0^t |Y_s|^2\, ds\right)<\infty
+        $$
+        then,
+        $$
+        Z = \mathcal{E}(\int Y\, dW)
+        $$
+        is a martingale.
+    \end{theorem}
+    \pagebreak
+    \subsection{Lecture 2}
+    \begin{remark}{}{}
+        If $Z = \mathcal{E}(\int_0^\cdot Y \, dW)$ then $\mathcal{L}(Z) = \int_0^\cdot Y\, dW = U$ satisfies $\langle U,W\rangle = \int Y_s\, ds$ and $dU_t = d\mathcal{L}(Z)_t = \frac{1}{Z_t}\, dZ_t$, $U_0=0$.\\
+        \\
+        Moreover,
+        $$
+        V = W - \int_0^\cdot Y_s\, ds = W - \langle \mathcal{L}(Z), W\rangle = W-\langle U,W\rangle
+        $$
+        is a BM under $\Q$ given by $\dfrac{d\Q}{d\mathbbm{P}}|_{\mathscr{F}_T} = Z_T$.
+    \end{remark}
+    \begin{theorem}{Girsanov with Semimartingale}{}
+        Let $X$ be a continuous semimartingale under $\mathbbm{P}$ with decomposition $X = X_0 + M+A$ and $\Q_T$ be given by $d\Q = Z_T\, d\mathbbm{P}$ for a martingale $Z = \mathcal{E}(U)$.\\
+        \\
+        Then $X$ is also a $\Q_T$-semimartingale with decomposition given by $X = X_0+N+B$, where
+        $$
+        N = M-F, B = A+F
+        $$
+        and 
+        $$
+        F_t = \int_0^t \frac{1}{Z_s}\,d\langle Z,M\rangle_s = \langle U, M\rangle_t
+        $$
+    \end{theorem}
+    \begin{example}{}{}
+        $B$ is $\mathbbm{P}-BM$. Then $B = \tilde B + \langle U, B\rangle$, where $\tilde B$ is $\Q_T$-BM and $\langle U,B\rangle = \int Y_s\, ds$ and $U = \int Y \, dB$
+    \end{example}
+    \pagebreak
+    \subsubsection{Martingale Representation Property}
+    \begin{proposition}{}{}
+        Let $W$ be BM, $(\mathscr{F}_t)_{t\in[0,\infty)}$ be the Brownian natural filtration and $\mathscr{F}_\infty = \sigma(\mathscr{F}_t:t\ge 0)$. For $X\in L^2(\mathscr{F}_\infty)$ there exists a unique progressively measurable process $(H_t)$ such that $\E\left(\int_0^\infty H_u^2 \, du\right)<\infty$, i.e.,$H\in\mathcal{L}^2_\infty$ and
+        $$
+        X = \E(X) + \int_0^\infty H_u\,dW_u
+        $$
+        \begin{lemma}{}{}
+            Let $I$ be the collection of $f:[0,\infty)\to \R$ such that $f(t) = \sum_{k=1}^n\lambda_k\mathbbm{1}_{(t_{k-1},t_k]}(t)$, $u\in\N$, $\lambda_k\in \R$, $t_{k-1}<t_k$.\\
+            \\
+            Then the set $E = \{\mathcal{E}(\int_0^\cdot f(u)\, dW_u)_\infty: f\in I\}$ is total in $L^2(\mathscr{F}_\infty)$ i.e., its linear hull
+            $$
+            \{\sum_{k=1}^n\alpha_k X_k: n\in\N, \alpha_1,\cdots,\alpha_N\in\R, X_1,\cdots,X_n\in E\}
+            $$
+            is dense in $L^2(\mathscr{F}_\infty)$
+        \end{lemma}
+    \end{proposition}
+    \begin{corollary}{}{}
+        Let $M$ be $L^2$-bounded continuous martingale. Then there exists $H\in\mathcal{L}^2_\infty$ such that
+        $$
+        M_t = M_0 + \int_0^t H_u\, dW_u,\qquad \forall t\ge 0
+        $$
+    \end{corollary}
+    \begin{theorem}{Martingale Representation Property}{}
+        Let $W$ be a BM and $(\mathscr{F}_t)$ be its natural filtration.\\
+        \\
+        For all $(\mathscr{F}_t)$-local martingale $M$, there exists $H\in\mathcal{L}^2_{\infty,loc}$ such that
+        $$
+        M_t = M_0 + \int_0^t H_u\, dW_u,\qquad \forall t
+        $$
+    \end{theorem}
+    \pagebreak
+    \subsection{Summary of SDE}
+    \subsubsection{Ornstein-Uhlenbeck Process}
+    Find a semimartingale $(X_t)$ such that
+    $$
+    dX_t = aX_t\, dt + \sigma\,dW_t\qquad X_0=X
+    $$
+    \subsubsection{Black-Scholes-Merton}
+    \pagebreak
+    \section{Week 12}
+    \subsection{Lecture 1}
+    \subsubsection{Feynman-Kac Formula}
+    For a diffusion SDE, 
+    \begin{align*}
+        dX_t &= F(t,X_t) \, dt + G(t,X_t)\, dW_t\\
+        X_s &= x,\qquad 0\le s\le t\le T
+    \end{align*}
+    The diffusion generator $L(t)$ is as follows:
+    \begin{equation*}
+        L(t)u(t,x) = \mu(t, x) \frac{\partial u}{\partial x}(t,x) + \frac{1}{2}\sigma(t,x)\frac{\partial^2 u}{\partial x^2}(t,x)
+    \end{equation*}
+    \begin{theorem}{}{}
+        Let $u(t,x)$ solve the following backward equation with $L(t)$ be the diffusion generator,
+        \begin{align*}
+             &L(t)u(t,x) + \frac{\partial u}{\partial t} (t,x) = 0\\
+             \text{with } & u(T,x) = \varphi(x)
+        \end{align*}
+        Then, the solution is
+        \begin{equation*}
+            u(t,x) = \E[\varphi(X_T)|X_t=x]
+        \end{equation*}
+    \end{theorem}
+    \begin{theorem}{}{}
+        Let $u(t,x)$ be the solution to the following backward equation with $L(t)$ being the diffusion generator,
+        \begin{align*}
+             &L(t)u(t,x) + \frac{\partial u}{\partial t} (t,x) = -\psi(x)\\
+             \text{with } & u(T,x) = \varphi(x)
+        \end{align*}
+        Then, the solution is
+        \begin{equation*}
+            u(t,x) = \E\left[\varphi(X_T)+\int_t^T \psi(X_s)\, ds\bigg|X_t=x\right]
+        \end{equation*}
+    \end{theorem}
+    \begin{example}{Probabilistic Representation}{}
+        We would call the quantity
+        $$
+        f(t,W_t) = \E(W_T^3|\mathscr{F}_t)
+        $$
+        the \textbf{probabilistic representation} of the solution $f(t,x)$ to the following backward equation:
+        \begin{align*}
+             &\frac{1}{2}\frac{\partial^2 f}{\partial x}(t,x) + \frac{\partial f}{\partial t} (t,x) =0\\
+             \text{with } & f(T,x) = x^3
+        \end{align*}
+        As the diffusion generator $L(t)$ is
+        $$
+        L(t)f(t,x) = \frac{1}{2}\frac{\partial^2 f}{\partial x}(t,x)
+        $$
+        This implies, the drift coefficient $\mu(t,x)=0$ and the diffusion coefficient $\sigma(t,x) = 1$, i.e., the diffusion SDE is
+        $$
+        dX_t = dW_t
+        $$
+        Hence, this gives, $f(X_T) = W_T^3$ and then follows the previous theorem.
+    \end{example}
+    \pagebreak
+    \begin{theorem}{Feynman-Kac Formula}{}
+        For a bounded $r(t,x)$ and $\varphi(x)$. Let
+        $$
+        c(t,x) = \E\left[\exp\left(-\int_t^T r(u,X_u)\, du\right)\varphi(X_T)\bigg|X_t=x\right]
+        $$
+        Assume that the following backward equation has a solution,
+        \begin{align*}
+            & L(t)f(t,x) + \frac{\partial f(t,x)}{\partial t} = r(t,x)f(t,x)\\
+            \text{with } & f(T,x) = \varphi(x)
+        \end{align*}
+        Then the solution is unique and it is $c(t,x)$.
+    \end{theorem}
+    \begin{remark}{Constant discounting}{}
+        Let $r(t,x)=r$ be a constant. Then the expression
+        $$
+        \E\left[\exp\left(-r(T-t)\right)\varphi(X_T) \bigg|X_t=t\right]
+        $$
+        occurs in finance, in which 
+        \begin{itemize}
+            \item $r$ stands for the risk-free interest rate
+            \item $\varphi(X_T)$ is the random payoff in the future
+            \item $\exp\left(-r(T-t)\right)$ is the continuous discouting factor from $t$ to $T$
+            \item $\E\left[\exp\left(-r(T-t)\right)\varphi(X_T) \bigg|X_t=t\right]$ is the expected discounted payoff.
+        \end{itemize}
+    \end{remark}
+    \pagebreak
+    \subsubsection{Time Change}
+    \begin{definition}{Time Change}{}
+        A stochastic process $(\tau_s)_{s\in[0,\infty)}$ with paths which are
+        \begin{itemize}
+            \item cadlag
+            \item non-decreasing
+            \item have values in $[0,\infty)$ and starting from $0$ at $0$
+        \end{itemize}
+        is called a \textbf{time change} or \textbf{change of time} if the random variable $\tau_s$ is a stopping time for all $s\ge 0$.\\
+        \\
+        (Note that $(\tau_s)_{s\in[0,\infty)}$ might not be an adapted process).
+    \end{definition}
+    \begin{definition}{Time change of process, time change filtration}{}
+        Given a filtration $(\mathscr{F}_t)_{t\ge 0}$ and a process $(X_t)_{t\ge 0}$,
+        \begin{itemize}
+            \item a stochastic process $(X_{\tau_s})_{s\ge 0}$ is called \textbf{time change} of $(X_t)_{t\ge 0}$ by $(\tau_s)_{s\ge 0}$
+            \item a filtration $(\mathscr{G}_s)_{s\ge 0}$ with $\mathscr{G}_s = \mathscr{F}_{\tau_s}$ is called \textbf{time-changed filtration}.
+        \end{itemize}
+    \end{definition}
+    \begin{proposition}{Properties of time-changed process and filtration}{}
+        We have that,
+        \begin{enumerate}
+            \item $(\mathscr{G}_s)$ is right-continuous if $(\mathscr{F}_t)$ is right-continuous
+            \item the time-changed process $(X_{\tau_s})$ is $(\mathscr{G}_s)$-adapted if $(X_t)$ is $(\mathscr{F}_t)$-adapted
+            \item the time-changed process $(X_{\tau_s})$ is cadlag if the process $(X_t)$ is cadlag
+            \item the random variable $\tau_\sigma$ is $(\mathscr{F}_t)$-stopping time, if $\sigma$ is $\mathscr{G}_s$-stopping time.
+        \end{enumerate}
+    \end{proposition}
+    \begin{definition}{$\tau$-continuous}{}
+        Let $(\tau_s)_{s\ge 0}$ be a time change. A process $(X_t)_{t\ge 0}$ is said to be \textbf{$\tau$-continuous} if it is continuous and $X$ is constant on $[\tau_{s-},\tau_s]$ for all $s\ge 0$.\\
+        \\
+        Clearly, $(X_{\tau_s})_{s\ge 0}$ is continuous if $(\tau_s)_{s\ge 0}$ is a time change and $(X_t)_{t\ge 0}$ is $\tau$-continuous process.
+    \end{definition}
+    \begin{proposition}{}{}
+        Let $(\tau_s)_{s\ge 0}$ be a time change, $M$ be a $\tau$-continuous local martingale. Then the time-changed process $(M_{\tau_s})_{s\ge 0}$ is a continuous local martingale with respect to the time-changed filtration $(\mathscr{G}_s)_{s\ge 0} = (\mathscr{F}_{\tau_s})_{s\ge 0}$.
+    \end{proposition}
+    \begin{theorem}{Dambis-Dubins-Schwarz Theorem}{}
+    Let $M$ be a continuous local martingale on $(\Omega, \mathscr{F}, (\mathscr{F}_t)_{t\ge 0}, \mathbbm{P})$ with $M_0=0$ and $\langle M\rangle_\infty = \infty$.\\
+    \\
+    Define
+    $$
+    \tau_s = \inf\{t: \langle M\rangle_t>s\}
+    $$
+    and $\mathscr{G}_s = \mathscr{F}_{\tau_s}$ for $s\ge 0$. Then, the time-changed process $(B_s)$ given by 
+    $$
+    B_s = M_{\tau_s}\qquad s\ge 0
+    $$
+    is a $(\mathscr{G}_s)$-Brownian motion and the local martingale $M$ is a time-change of $B$, i.e.,
+    $$
+    M_t = B_{\langle M\rangle_t},\qquad t\ge 0
+    $$
+    \end{theorem}
+    \begin{remark}{Enlargement}{}
+        In the above theorem, the hypothesis $\langle M\rangle_\infty = \infty$ can be relaxed, but we need to work on the enlarged space which supports a Brownian motion.\\
+        \\
+        Let $(\Omega', \mathscr{F}', (\mathscr{F}'_t)_{t\ge 0}, \mathbbm{P})$ be a probability space with a Brownian motion $\beta$, and set 
+        \begin{itemize}
+            \item $\widetilde{\Omega} = \Omega\times\Omega'$
+            \item $\widetilde{\mathscr{F}_s} = \mathscr{F}_{\tau_s} \otimes \mathscr{F}_s'$
+            \item $\widetilde{\mathbbm{P}} = \mathbbm{P}\otimes\mathbbm{P}'$
+            \item $\widetilde{\beta}_s(\omega,\omega') = \beta_s (\omega')$
+        \end{itemize}
+        We can view a continuous local martingale $M$ as a process on $(\widetilde{\Omega},\widetilde{\mathscr{F}}, (\widetilde{\mathscr{F}}_s), \widetilde{\mathbbm{P}})$ by defining $M(\omega,\omega') = M(\omega)$.\\
+        \\
+        Then, the process $\widetilde{\beta}$ is independent of $M$ and we may write
+        $$
+        B_s = M_{\tau_s}+\int_0^s \mathbbm{1}_{\{u>\langle M\rangle_\infty\}} \, d\widetilde{\beta}_u
+        $$
+        which is a Brownian motion on $(\widetilde{\Omega},\widetilde{\mathscr{F}}, (\widetilde{\mathscr{F}}_s), \widetilde{\mathbbm{P}})$.
+    \end{remark}
+    \pagebreak
+    \subsubsection{Time-homogenous diffusion}
+    For a time-homogenous diffusion, we have,
+    \begin{equation*}
+        dX_t = \mu(X_t)\, dt + \sigma(X_t)\, dW_t\tag{$*$}
+    \end{equation*}
+    If $(X,W)$ is a unique weak solution to $(*)$ then
+    \begin{align*}
+        P_{s,t}(x,y) & = \mathbbm{P}(X_t\le y|X_s=x)\\
+        &= P_{0,t-s}(x,y)\\
+        &=\mathbbm{P}(X_{t-s}\le y|X_0=x)
+    \end{align*}
+    The diffusion generator $L$ of time-homogenous diffusion is given by
+    $$
+    Lf(x) = \frac{1}{2}\sigma(x)^2f''(x) + \mu(x)f'(x)
+    $$
+    The diffusion generator satisfies
+    $$
+    Lf(x) = \lim_{t\to 0}\frac{\E(f(X_t)|X_0=x)-f(x)}{t}
+    $$
+    \begin{definition}{Exit time from an interval}{}
+        Define the exit time of $(X_t)_{t\ge 0}$ from an interval $(a,b)$ be
+        $$
+        \tau = T_{a,b} = \inf\{t>0: X_t\not\in (a,b)\}
+        $$
+        If $(X_t)_{t\ge 0}$ is continuous, then $X_\tau \in \{a,b\}$.
+    \end{definition}
+    \begin{theorem}{Dynkin's formula}{}
+        Let $(X_t)$ be a diffusion with continuous $\sigma(x)>0$ on $[a,b]$ and $X_0=x$, $a<x<b$. For $f\in C^2(\R)$, we have,
+        $$
+        f(X_{t\wedge\tau}) -\int_0^{t\wedge\tau} Lf(X_s)\, ds
+        $$
+        is a martingale.\\
+        \\
+        Consequently,
+        $$
+        \E_x\left(f(X_{t\wedge\tau}-\int_0^{t\wedge\tau}Lf(X_s)\, ds)\right) = f(x)
+        $$
+    \end{theorem}
+    \begin{proof}
+        Write it later.
+    \end{proof}
+    \begin{theorem}{}{}
+        Let $(X_t)$ be a time-homogenous diffusion with generator $L$ and continuous $\sigma(x)>0$ on $[a,b]$, $X_0=x$, $a<x<b$. Then, $\E_x(\tau) =v(x)$ satisfies the following ODE
+        $$
+        Lv=-1
+        $$
+        with $v(a)=v(b)=0$
+    \end{theorem}
+    \pagebreak
+    \subsection{Lecture 2}
+    For the exiting time of $(X_t)$ from an interval $(a,b)$, we have,
+    $$
+    \tau = T_{a,b} = \inf\{t>0: X_t\not\in(a,b)\} = T_a\wedge T_b
+    $$
+    where $T_y = \inf\{t>0: X_t=y\}$. Now, we will focus on finding probabilities 
+    $$
+    \mathbbm{P}_x(T_a<T_b)\text{ and } \mathbbm{P}_x(T_b<T_a)
+    $$
+    To this end, we will deal with a scale function $s(x)$ which is a solution to
+    $$
+    Ls=0\iff \frac{1}{2}\sigma^2(x)s''(x) + \mu(x)s'(x) = 0
+    $$
+    Hence,
+    $$
+    \frac{s''(x)}{s'(x)} = -\frac{2\mu(x)}{\sigma^2(x)}
+    $$
+    This gives the solution as follows
+    $$
+    s(\xi ) = \int_\xi^y \exp\left(-2\int_\xi^z \frac{\mu(u)}{\sigma^2(u)}\, du\right)\, dz
+    $$
+    with
+    $$
+    s(\xi) = s'(\xi) = 0
+    $$
+    This implies we have the following expression of the first and second order derivatives
+    $$
+    s'(y) = \exp\left(-2\int_\xi^y \frac{\mu(u)}{\sigma^2(u)}\, du\right)
+    $$
+    and
+    $$
+    s''(y) = -2\frac{\mu(y)}{\sigma^2(y)}\exp\left(-2\int_\xi^y \frac{\mu(u)}{\sigma^2(u)}\, du\right)
+    $$
+    Moreover, if $s$ is a scale function,  then any linear transformation is also a scale function, i.e., for any $c_1,c_2\in\R$, we let $\bar s(y) = c_1 s(y)+c_2$. Then
+    $$
+    L\bar s(y)= \frac{1}{2}\sigma^2(y)\bar s''(y) + \mu(x)\bar s'(y) = c_1\left( \frac{1}{2}\sigma^2(y) s''(y) + \mu(x)s'(y)\right) = c_1Ls(y)=0
+    $$
+    Moreover, note that $s(X_t)$ is a local martingale. Applying Ito's formula, we have
+    \begin{align*}
+        s(X_t) & = s(X_0) + \int_0^t s'(X_u)\, dX_u + \frac{1}{2}\int_0^t s''(X_u)\,d\langle X\rangle_u\\
+        &= s(x) + \int_0^t s'(X_u)\mu(X_u)\, du + \int_0^t s'(X_u)\sigma(X_u)\,dW_u + \int_0^t \frac{1}{2}s''(X_u)\sigma^2(X_u)\, du\\
+        &= s(x) + \int_0^t \underbrace{\mu(X_u)s'(X_u) +\frac{1}{2}\sigma^2(X_u)s''(X_u)}_{=Ls}\, du + \int_0^t s'(X_u)\sigma(X_u)\, dW_u\\
+        &= s(x) + \int_0^t s'(X_u)\sigma(X_u)\, dW_u
+    \end{align*}
+    Hence, we have $s(X_t)$ is a continuous local martingale.\\
+    \\
+    By Dambis-Dubins-Schwarz Theorem, we have
+    $$
+    M_t:= s(X_t) = B_{\langle M\rangle_t}
+    $$
+    Hence, it is enough to study the time-changed Brownian motion starting at $s(x)$ in the interval $(s(a), s(b))$.
+    \begin{theorem}{Scale function}{}
+        Let $(X_t)$ be a diffusion with generator $L$ with continuous $\sigma(x)>0$ on $[a,b]$, and $X_0=x\in(a,b)$. Then
+        $$
+        \mathbbm{P}_x(T_b<T_a) = \frac{s(x)-s(a)}{s(b)-s(a)}
+        $$
+        where $s(x)$ is a scale function.
+    \end{theorem}
+    \begin{remark}{}{}
+        \begin{enumerate}
+            \item $(X_t)$ is a diffusion with $\mu(x)=0$ on $(a,b)$ then $\mathbbm{P}_x(T_b<T_a) = \frac{x-a}{b-a}$ e.g., a Brownian motion
+            \item For OU process
+            \item If $s$ and $\bar s$ are two scale functions for $(X_t)$, i.e., $\bar s(y) = c_1s(y)+c_2$, then
+            $$
+            \frac{\bar s(x)-\bar s(a)}{\bar s(b)-\bar s(a)} = \frac{c_1(s(x)-s(a))}{c_1(s(b)-s(a))}=\frac{s(x)-s(a)}{s(b)-s(a)}
+            $$
+        \end{enumerate}
+    \end{remark}
+    \pagebreak
+    \subsubsection{Representation of solution fo DEs}
+    \begin{theorem}{}{}
+        Let $(X_t)$ be a diffusion with generator $L$ and continuous $\sigma(x)>0$ on $[a,b]$. With $X_0=x\in(a,b)$. For $f\in C^2((a,b))$, $f\in C([a,b])$ and $f$ solves
+        $$
+        Lf=-\varphi
+        $$
+        in $(a,b)$ and $f(a)=g(a), f(b)=g(b)$ for some bounded function $g,\varphi$.\\
+        \\
+        Then $f$ has the following representation
+        $$
+        f(x) = \E_x(g(X_\tau)) + \E_x\left(\int_0^\tau \varphi(X_s)\, ds\right)
+        $$
+        where $\tau$ is the exit time from $(a,b)$.\\
+        \\
+        In particular, if $\varphi\equiv 0$, the representation is given by
+        $$
+        f(x) = \E_x(g(X_\tau))
+        $$
+    \end{theorem}
+    \pagebreak
+    \subsubsection{Explosion}
+    \begin{definition}{Explosion}{}
+        Let $D_u = (-u,u)$ for $u=1,2,\cdots$, then
+        $$
+        \tau_u = \tau_{D_u} = \inf\{t\ge 0: |X_t|=u\}
+        $$
+        Since $(X_t)$ is continuous, $\tau_u<\tau_{u+1}$ and $\tau_\infty = \lim_{u\to\infty} \tau_u$.\\
+        \\
+        Diffusion starting from $x$ explodes if
+        $$
+        \mathbbm{P}_x(\tau_\infty<\infty)>0
+        $$
+    \end{definition}
+    \begin{theorem}{Explosion condition}{}
+        Suppose $\mu(x)$, $\sigma(x)$ are bounded on finite intervals and $\sigma(x)>0$ and is continuous. Then the diffusion process explodes if and only if one of the following conditions holds:
+        \\
+        There exists $X_0$ such that,
+        \begin{enumerate}
+            \item 
+            $$
+            \int_{-\infty}^{X_0} \exp\left(-\int_{X_0}^x\frac{2\mu(s)}{\sigma^2(s)}\, ds\right)\left(\int_x^{X_0} \frac{\exp\left(\int_{X_0}^y \frac{2\mu(s)}{\sigma^2(s)}\, ds\right)}{\sigma^2(y)}\, dy\right)\, dx<\infty
+            $$
+            \item 
+            $$
+            \int_{X_0}^{\infty} \exp\left(-\int_{X_0}^x\frac{2\mu(s)}{\sigma^2(s)}\, ds\right)\left(\int_{X_0}^{x} \frac{\exp\left(\int_{X_0}^y \frac{2\mu(s)}{\sigma^2(s)}\, ds\right)}{\sigma^2(y)}\, dy\right)\, dx<\infty
+            $$
+        \end{enumerate}
+    \end{theorem}
+    \begin{corollary}{No drift, No explosion}{}
+        Diffusions with $\mu(x)\equiv 0$ do not explode.
+    \end{corollary}
+\end{document}
