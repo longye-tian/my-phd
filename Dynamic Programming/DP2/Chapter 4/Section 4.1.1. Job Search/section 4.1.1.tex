@@ -11,7 +11,7 @@
 % Theme settings
 \usetheme{Madrid}
 \usecolortheme{default}
-
+\usepackage[dvipsnames]{xcolor}
 
 \definecolor{primcolor}{RGB}{25,50,100} % Dark blue
 \setbeamercolor{structure}{fg=primcolor}
@@ -136,15 +136,69 @@ is an ADP for the Job Search Problem.
 \end{frame}
 
 \begin{frame}{The ADP $(L^1(\varphi),\mathbb{T}_{JS})$ is well-posed.}
-    
+ $$
+ (T_\sigma v)(w) = v(w) 
+ $$
+ $$
+\implies
+ $$
+    $$
+\sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right] = v(w)
+$$
+
+\begin{itemize}
+    \item $\sigma(w) = 1 \implies v(w) = \frac{w}{1-\beta} $ well-defined and unique
+    \item $\sigma(w) = 0\implies v(w) = c+\beta\int v(w') \, \varphi(dw')$ well-defined and unique
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}{The ADP $(L^1(\varphi),\mathbb{T}_{JS})$ is regular}
+$v$-greedy policy (assume accept the offer at indifference)
+    $$
+    \sigma (w) = \mathbf{1}\left\{\frac{w}{1-\beta}\ge c+\beta\int v(w') \, \varphi(dw') \right\}
+    $$
+    with policy operator
+    $$
+    (T_\sigma v)(w) = \max\left\{\frac{w}{1-\beta}, c+\beta\int v(w') \, \varphi(dw')\right\} \textcolor{blue}{\underbrace{= (Tv)(w)}_{\text{greedy}}}
+    $$
+\end{frame}
+
+\begin{frame}{Construct Bellman operator from definition}
+    $Tv = \bigvee_\sigma T_\sigma v$
+    \begin{align*}
+        (Tv)(w) &= \left(\bigvee_\sigma T_\sigma v\right)(w)\\
+        &= \bigvee_\sigma \left(\sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right]\right)\\
+        &= \max\left\{\frac{w}{1-\beta}, c+\beta\int v(w') \, \varphi(dw')\right\}
+    \end{align*}
     
 \end{frame}
 
-\begin{frame}{The Bellman operator is well-defined and order preserving}
+\begin{frame}{Bounded $W$ $\implies$ use smaller value space}
+$$
+\sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right]
+$$
+\begin{itemize}
+    \item From $L^1(\varphi)$ to \textcolor{blue}{$bmW$} bounded Borel measurable function
+    \item From \textcolor{blue}{$bmW$} to \textcolor{ForestGreen}{$bcW$} bounded continuous function
+    \item From \textcolor{ForestGreen}{$bcW$} to \textcolor{Lavender}{$ibcW$} increasing bounded continuous function
+    \item From \textcolor{Lavender}{$ibcW$} to \textcolor{RedOrange}{$ibcW_+$} nonnegative increasing bounded continuous function
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Job Search is RDP}
     
+\end{frame}
+
+
+\begin{frame}{Optimality with IID offers}
+    \begin{proposition}
+        For $(L^1(\varphi),\mathbb{T}_{JS})$,
+        \begin{itemize}
+            \item the fundamental optimality properties hold
+            \item VFI, OPI, HPI all converge.
+        \end{itemize}
+    \end{proposition}
 \end{frame}
 
 \end{document}
