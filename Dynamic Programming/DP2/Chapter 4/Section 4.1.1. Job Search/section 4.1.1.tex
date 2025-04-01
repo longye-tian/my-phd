@@ -65,7 +65,7 @@
 \subtitle{Thomas J. Sargent and John Stachurski}
 \author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
 \institute[ANU]{Australian National University\\ School of Economics}
-\date{March 7th, 2025}
+\date{April 2nd, 2025}
 \DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
 \DeclareFontShape{U}{mathx}{m}{n}{
       <5> <6> <7> <8> <9> <10>
@@ -84,12 +84,21 @@
 
 % Outline frame
 \begin{frame}{Outline}
-  \tableofcontents
+  \begin{enumerate}
+      \item Why Job search Problem?
+      \item What is Job Search Problem?
+      \item Optimality properties
+  \end{enumerate}
 \end{frame}
 
-\begin{frame}{Big Picture}
-    
+\begin{frame}{Why Job Search Problem?}
+    \begin{itemize}
+        \item A good starting point for application 
+        \item optimal stopping problem - binary choice
+        \item Good for illustrating transformations.
+    \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Job Search Model}
     \begin{figure}
@@ -106,9 +115,41 @@
         \item $(W_t)_{t\ge 0}$ is IID and take values from $W\subset \mathbb{R}_+$, \textcolor{blue}{$W$ is nonempty}.
         \item $\varphi$ has finite mean, so $\int w\varphi(dw)<\infty$
         \item Constant discount factor $\beta\in(0,1)$
-        \item $L_1(\varphi):= L_1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$
         \item $\Sigma$ be the set of Borel measurable policy $\sigma: W\to \{0,1\}$
+         \item $L_1(\varphi):= L^1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$
     \end{itemize}
+\end{frame}
+\begin{frame}{Detour to measure theory}
+$L_1(\varphi):= L_1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$.\\
+\\
+\begin{itemize}
+    \item $L^1$-norm is
+    $$
+    \|f\|_1 = \int_W |f|\, d\varphi
+    $$
+    \item $f$ is an equivalence class of functions that equals to $f$ almost everywhere
+    \item The partial order $f\le g$ means that $\varphi(\{f>g\})=0$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Detour to measure theory}
+$L^1(\varphi):= L^1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$.\\
+\\
+\begin{itemize}
+    \item $L^1$-norm is
+    $$
+    \|f\|_1 = \int_W |f|\, d\varphi
+    $$
+    \item $f$ is an equivalence class of functions that equals to $f$ almost everywhere
+    \item The partial order $f\le g$ means that $\varphi(\{f>g\})=0$
+\end{itemize}
+$$
+\implies
+$$
+$$
+\text{$L^1(\varphi)$ is a \textcolor{red}{\textbf{Banach Lattice}}}
+$$
 \end{frame}
 
 \begin{frame}{Job Search problem}
@@ -118,6 +159,33 @@ $$
 $$
     
 \end{frame}
+
+\begin{frame}{Deep look into the Policy Operator}
+        $$
+(T_\sigma v)(w) = \sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\textcolor{blue}{\underbrace{\int v(w')\, \varphi(dw')}_{\text{Dimension Reduction}}}\right]
+$$
+$$
+\text{or equivalently, let $e(w):=\frac{w}{1-\beta}$}
+$$
+
+\begin{align*}
+    T_\sigma v &= \underbrace{[\sigma e+(1-\sigma)c]}_{=:r_\sigma} + \underbrace{(1-\sigma)\beta \mathbb{E}v}_{=:K_\sigma v}\\
+    &= r_\sigma + K_\sigma v
+\end{align*}
+\end{frame}
+
+\begin{frame}{Deeper look into the policy operator}
+    \begin{align*}
+    \textbf{\textcolor{red}{\textbf{$T_\sigma v &= r_\sigma + K_\sigma v$}}}
+\end{align*}
+\begin{itemize}
+    \item $T_\sigma$ is \textcolor{red}{\textbf{affine}}
+    \item $0\le K_\sigma v = (1-\sigma)\beta\mathbb{E}v\le \beta \mathbb{E}v =:Kv$
+    \item we have \textcolor{red}{$K_\sigma \le K$ and $\rho(K) = \beta<1$}
+\end{itemize}
+\end{frame}
+
+
 
 \begin{frame}{ADP formulation}
 $$
@@ -153,7 +221,7 @@ $$
 
 \end{frame}
 
-\begin{frame}{The ADP $(L^1(\varphi),\mathbb{T}_{JS})$ is regular}
+\begin{frame}{The ADP $(L^1(\varphi),\mathbb{T}_{JS})$ is \textcolor{red}{\textbf{regular}}}
 $v$-greedy policy (assume accept the offer at indifference)
     $$
     \sigma (w) = \mathbf{1}\left\{\frac{w}{1-\beta}\ge c+\beta\int v(w') \, \varphi(dw') \right\}
@@ -186,19 +254,33 @@ $$
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Job Search is RDP}
-    
-\end{frame}
 
 
 \begin{frame}{Optimality with IID offers}
-    \begin{proposition}
+    \begin{theorem}
         For $(L^1(\varphi),\mathbb{T}_{JS})$,
         \begin{itemize}
             \item the fundamental optimality properties hold
             \item VFI, OPI, HPI all converge.
         \end{itemize}
-    \end{proposition}
+    \end{theorem}
+
+    \begin{proof}
+    Implore Theorem 1.3.9.\\
+\end{proof}
+
 \end{frame}
+
+
+\begin{frame}{Theorem 1.3.9}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.85\linewidth]{Dynamic Programming//DP2//Chapter 4//Section 4.1.1. Job Search/thm1.3.9.png}
+    \end{figure}
+
+
+\end{frame}
+
 
 \end{document}
