@@ -61,11 +61,11 @@
 }
 
 % Title information
-\title[DP2]{Reading Note of Deep Learning solution to DSGE models}
+\title[DL]{Reading Note of Deep Learning solution to DSGE models}
 \subtitle{Pascal et al 2024}
 \author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
 \institute[ANU]{Australian National University\\ School of Economics}
-\date{March 7th, 2025}
+\date{April 1st, 2025}
 \DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
 \DeclareFontShape{U}{mathx}{m}{n}{
       <5> <6> <7> <8> <9> <10>
@@ -145,15 +145,138 @@ $$
     \item We are able to replace the unknown objective function $\Xi(\theta)$ by a valid approximation \textcolor{red}{-->empirical counterpart}
     \item We are able to perform the actual minimization. \textcolor{red}{-->gradient descent}
 \end{itemize}
-    
+
 \end{frame}
+
+\section{The objective function}
 
 \begin{frame}{The Objective Function - Empirical Counterpart}
+\begin{itemize}
+    \item Minizing the expected loss $\Xi(\theta)$ is not feasible in practice because the joint distribution of inputs and outputs is unknown.
+    \item Invoke the standard laws of large number to build an accurate estimate of the objective function. 
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{LLN to estimate the objective function}
+    Let $\{(x_i,y_i)\}_{i=1}^n$ denote a sample of $n$ independent observations on inputs and outputs. Then the \textbf{empirical cost}
+    $$
+    \widehat{\Xi}_n(\theta) = \frac{1}{n}\sum_{i=1}^n L[F(x_i;\theta),y_i]
+    $$
+    provides an \textbf{unbiased and consistent} estimate of $\Xi(\theta)$.
+\end{frame}
+
+\begin{frame}{Choice of Loss functions}
+Loss function $L$ quantifies the discrepancy between model-implied outputs and actual observations. \textbf{Its choice is model dependent}
+\begin{itemize}
+    \item a continuous loss function might work well when the output is a real number
+    \item a different loss function might work well when the output is binary
+    \item In Maliar et al 2021 JMP, they cast the economic model in DL form using a regression representation in which $F$ outputs a real number. A natural loss function in this case is the mean squared error.
+\end{itemize}
+    
+\end{frame}
+
+\section{Artificial neural networks}
+
+\begin{frame}{Neuron}
+The basic unit of neural networks are called \textbf{neuron/nodes/perceptron/unit}. 
+\begin{itemize}
+    \item It is a simple function
+    $$
+    g: \mathbb{R}^k \to \mathbb{R}
+    $$
+    \item take a vector $z\in\mathbb{R}^k$ as input
+    \item transform it using an \textbf{affine mapping}
+    \item parameterized by a vector of \textbf{weights} $\gamma\in\mathbb{R}^{k+1}$.
+    \item applies a non-linear function (\textbf{activation function}) $f$ to output a real number.
+\end{itemize}
     
 \end{frame}
 
 
+\begin{frame}{Neuron}
+    The basic unit of neural networks are called \textbf{neuron/nodes/perceptron/unit}. 
+\begin{itemize}
+    \item It is a simple function
+    $$
+    g: \mathbb{R}^k \to \mathbb{R}
+    $$
+\end{itemize}
+Formally,
 
+$$
+g(z;\gamma) = f\left(\underbrace{\gamma_0}_{\text{bias}} + \sum_{i=1}^k \gamma_i z_i\right)
+$$
+\end{frame}
+
+\begin{frame}{Layer}
+A \textbf{layer} with $p$ nodes is a vector function stacking $p$ neurons, i.e.,
+$$
+G:\mathbb{R}^k \to \mathbb{R}^p
+$$
+or
+$$
+G(z;\Gamma)  = \begin{bmatrix}
+    g(z;\gamma_1)\\
+    \cdots\\
+    g(z;\gamma_p)
+\end{bmatrix},\quad \text{where $\Gamma = (\gamma_1, \gamma_2,\cdots, \gamma_p)$}
+$$
+
+We call it a layer with \textbf{width $p$}.\\
+\\
+\textcolor{blue}{\textbf{Remark}: In this presentation, we assume that all neurons in a layer share the same input and same activation function. It can be more sophisticated.}
+\end{frame}
+
+\begin{frame}{Neural network/neural net/multilayer perception}
+    A \textbf{neural network} is a composition of several layers. Let $G_1,\cdots, G_\ell$ denote $\ell$ layers of conformable dimensions. A neural network is a function
+    $$
+    N:\mathbb{R}^m \to \mathbb{R}^n
+    $$
+    $$
+    N(x) = (\underbrace{G_\ell}_{output} \circ \underbrace{G_{\ell-1} \circ \cdots\circ G_2}_{hidden}\circ \underbrace{G_1}_{input})(x)
+    $$
+
+    \begin{itemize}
+        \item we call the number of layer $\ell$ the \textbf{length of neural net}
+        \item we call the largest width of layers the \textbf{width of neural net}
+    \end{itemize}
+    \textcolor{blue}{\textbf{Remark}: Only the input and output layers are contrained by the dimensions of the variable of interest. Hidden layers are not}
+\end{frame}
+\begin{frame}{Deep Neural Nets}
+Deeper neural nets are more flexible and have the potential learn more complex function.
+    \begin{itemize}
+        \item More than three layers $\implies$ deep
+        \item Less than three layers $\implies$ shallow 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Universal Approximation Theorem}
+A neural network can approximate any continuous function from one-dimensional space to another with any desired non-zero amount of error, provided it is given sufficient depth or sufficient width.
+    
+\end{frame}
+
+\begin{frame}{Curse of dimensionality}
+For a given approximation error, the number of parameters required to approximate a function with a neural network increase \textbf{linearly with the dimension} of the input $x$, while it increases exponentially for most other classes of approximators.
+    
+\end{frame}
+\begin{frame}{Robustness}
+Neural networks are robust to
+\begin{itemize}
+    \item multi-collinearity
+    \item various kinks
+    \item discontinuities
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Problem}
+\begin{itemize}
+    \item Universal Approximation Theorem do not specify how to identify the neural net with the best fit
+    \item No gurantee neural nets can actually learn the function, i.e., identify the loss-minizing value of $\theta$ given the amount of available data.
+\end{itemize}
+    
+\end{frame}
 
 
 
