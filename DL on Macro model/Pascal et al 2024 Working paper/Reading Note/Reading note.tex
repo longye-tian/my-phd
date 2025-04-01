@@ -1,0 +1,163 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+
+
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Title information
+\title[DP2]{Reading Note of Deep Learning solution to DSGE models}
+\subtitle{Pascal et al 2024}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{March 7th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{The Approximation Problem - A generic AI problem}
+\begin{frame}{A generica AI problem}
+    A generic AI problem is approximating an unknown function
+$$
+F^*: \mathbb{R}^m \to \mathbb{R}^n
+$$
+using
+\begin{itemize}
+    \item potentially noisy observations of inputs $x\in\mathbb{R}^m$
+    \item and output $y = F^*(x)\in\mathbb{R}^n$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Some concepts}
+\begin{itemize}
+    \item Let the \textbf{candidate set}
+    $$
+    S = \{F(\cdot; \theta): \theta\in \mathbb{R}^p\}
+    $$
+    denote a set of \textbf{known} functions indexed by the vector of parameters $\theta$
+    \item Let $L:\mathbb{R}^n\times \mathbb{R}^n\to \mathbb{R}$ denote a loss function penalizing approximation errors, i.e.,
+    
+    $$L[F(x,\theta), y]$$ 
+    measures the cost associated with a discrepancy between the prediction $F(x,\theta)$ and the actual output $y$.
+    \item Let $P:\mathbb{R}^m\times \mathbb{R}^n\to \mathbb{R}_+$ denote the joint cumulative distribution function of $(x, y)$.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Solution concept}
+To solve the approximation problem over $S$ is to \textbf{find the parameter vector $\theta^*$} such that
+$$
+\theta^* = \arg\min_{\theta}\,\, \textcolor{blue}{\Xi(\theta)}
+$$
+where the \textcolor{blue}{expected approximation error} is
+$$
+\Xi(\theta):= \int L[F(x,\theta ),y]\,\textcolor{red}{\underbrace{dP(x,y)}_{\text{unknown}}} = \mathbb{E}\{L[F(x,\theta),y]\}
+$$
+
+    
+\end{frame}
+
+\begin{frame}{Conditions needed to solve the problem }
+\begin{itemize}
+    \item Candidate set $S$ must be flexible enough to contain functions close to $F^*$ -- Otherwise, underfitting
+    \item We are able to replace the unknown objective function $\Xi(\theta)$ by a valid approximation 
+    \item We are able to perform the actual minimization.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{What DL offers}
+
+\begin{itemize}
+    \item Candidate set $S$ must be flexible enough to contain functions close to $F^*$ -- Otherwise, underfitting \textcolor{red}{--> Neural Network}
+    \item We are able to replace the unknown objective function $\Xi(\theta)$ by a valid approximation \textcolor{red}{-->empirical counterpart}
+    \item We are able to perform the actual minimization. \textcolor{red}{-->gradient descent}
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{The Objective Function - Empirical Counterpart}
+    
+\end{frame}
+
+
+
+
+
+
+
+
+
+\end{document}
