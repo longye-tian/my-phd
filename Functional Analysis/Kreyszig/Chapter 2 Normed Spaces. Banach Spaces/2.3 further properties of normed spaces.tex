@@ -1,0 +1,36 @@
+\section{2.3 Further properties of Normed Spaces}
+
+\begin{frame}{definitions}
+\begin{itemize}
+    \item closed subspace
+    \item 
+\end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{Closed subspace of a Banach space}
+\begin{theorem}
+    A subspace $Y$ of a Banach space $X$ is complete if and only if $Y$ is closed.
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Schauder basis}
+\begin{definition}
+    If a normed space $X$ contains a sequence $(e_n)$ with the property that for every $x\in X$ there is a \textbf{unique} sequence of scalars $(\alpha_n)$ such that
+    $$
+    \|x-(\alpha_1e_1+\cdots+\alpha_n e_n)\| \to 0
+    $$
+    Then $(e_n)$ is called a \textbf{Schauder basis} for $X$. The series 
+    $$
+    x = \sum_{k=1}^\infty\alpha_ke_k
+    $$
+    is called the expansion of $x$ with respect to $(e_n)$
+\end{definition}    
+\end{frame}
+
+\begin{frame}{Completion Theorem}
+    Let $X = (X, \|\cdot\|)$  be a normed space. Then there is a Banach space $\widehat X$ and an isometry $A: X\to W$, where $W$ is a dense subspace of $\widehat X$.\\
+    \\
+    The space $\widehat X$ is unique, except for isometry.
+\end{frame}
