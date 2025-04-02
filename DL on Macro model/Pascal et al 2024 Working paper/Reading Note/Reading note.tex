@@ -278,6 +278,108 @@ Neural networks are robust to
     
 \end{frame}
 
+\begin{frame}{Design of Neural Network}
+Three choices involving design a neural net
+\begin{itemize}
+    \item activation function 
+    \item Width
+    \item Depth
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Activation Functions}
+\begin{itemize}
+    \item Introduce nonlinearity in the algorithm 
+    \item All universal approximation theorem needs nonlinear activation function
+    \item We need smooth activation functions to use gradient descent
+    \item logistic sigmoid and hyperbolic tangent vanish fast when away from the origin, makes the gradient descent algoritm slow--> vanishing gradient problem
+    \item ReLu has two numerical advantage: sparse activation, efficient computation, use leaky ReLU for gradient non-zero almost everywhere
+    \item Use ReLu as benchmark for input and hidden layers
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Output activation function}
+    \begin{itemize}
+        \item unconstrained output $\implies$ identity function
+        \item non-negative output $\implies$ exponential function
+        \item probability $\implies $ Sigmoid and Softmax
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Depth and Width}
+Two rules of thumb
+\begin{itemize}
+    \item Deeper neural net works typically require far fewer neurons per layer, and therefore far fewer parameters, they tend to generalize better. 
+    $\implies$
+    a deeper neural network are preferable to wider network
+    \item Complexity of NN should be adapted to the complexity of the approximation problem.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Gradient Descent}
+    \begin{itemize}
+        \item The gradient of a differentiable function 
+        $$
+        G:\mathbb{R}^m \to \mathbb{R}
+        $$
+        indicates the local direction of steepest ascent
+        \item So
+        $$
+        G(x+\lambda x) -G(x)
+        $$
+        is maximized in the neighborhood of $x\in\mathbb{R}^m$, i.e., for $\lambda >0$ small
+        \item 
+        $$
+        v = \nabla G(x)
+        $$
+        is the gradient of $G$ evaluated at $x$
+        \item Conversely
+        $$
+        G(x+\lambda x) -G(x)
+        $$
+        is locally minimized by moving the direction opposite to the gradient, i.e., steepest descent.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Gradient of the empirical loss}
+    $$
+    \widehat{\Xi}_n(\theta) = \frac{1}{n}\sum_{i=1}^n L[F(x_i;\theta),y_i]
+    $$
+    Gradient of the empirical loss is
+    $$
+    \nabla \widehat{\Xi}_n(\theta) = \frac{1}{n} \sum_{i=1}^n\nabla_\theta L[F(x_i,\theta),y_i]
+    $$
+    \begin{itemize}
+        \item Each evaluation of the gradient requires a full pass through the dataset --> batch learning -- consider the full batch of data before updating the parameter $\theta$
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Stochastic gradient descent algorithm}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{DL on Macro model/Pascal et al 2024 Working paper/Reading Note/stochastic gradient descent algorithm.png}
+
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Validation and Regularization}
+The overall objective of DL technique is to provide algorithm that perform well on new inputs
+
+\begin{itemize}
+    \item Don't underfit: able to identify and learn the important properties of the data from the traning sample
+    \item Don't overfit: not learned various idiosyncrasies of the training dataeset that will not generalize well to new inputs
+    \item Broaderly: model should have the right capacity for the task force, i.e., the complexity is enough to represent the data but not overly complex. ==> the NN should have the right structure. This is validation
+\end{itemize}
+    
+\end{frame}
+
+
+
 
 
 
