@@ -50,23 +50,24 @@
 
 % Title information
 \title{\vspace{-1.5cm}\LARGE\textbf{Transition Dynamics in the PBMA Aiyagari Model}}
-\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\begin{abstract}
 \noindent
 \begin{enumerate}
-    \item Use Mukoyama's approach for computing transitions between steady states
-    \item From SRPE to CPE: Gradual adjustment and converge.
-    \item From CPE to SRPE: do not converge
-    \item We use Monte Carlo method to simulate the Mixed Action Equilibrias. 
+    \item[Section \ref{sec:model}] Model Specification
+    \item[Section \ref{sec:equilibrium}] Equilibrium concepts
+    \item[Section \ref{sec:transition}]Use Mukoyama's approach for computing transitions between steady states
+    \begin{itemize}
+        \item From SRPE to CPE: Gradual adjustment and converge.
+        \item From CPE to SRPE: do not converge
+    \end{itemize}
+    \item[Section \ref{sec:pbma}] We use Monte Carlo method to simulate the PBMA
 \end{enumerate}
-\end{abstract}
 
-\section{Model Specification}
+\section{Model Specification}\label{sec:model}
 
 \subsection{Households}
 
@@ -110,14 +111,14 @@ r &= A\alpha\left(\frac{N}{K}\right)^{1-\alpha} - \eta\\
 w &= A(1-\alpha)\left(\frac{K}{N}\right)^{\alpha}
 \end{align}
 
-\section{Equilibrium Concepts}
+\section{Equilibrium Concepts}\label{sec:equilibrium}
 
 There are three types of equilibrium concepts:
 
 \begin{itemize}
     \item Agents keep using short-run policy $\implies$ Short-Run Policy Equilibrium (SRPE)
-    \item Agents Keep using continuation policy $\implies$ Continuation Policy Equilibrium (CPE)
-    \item Agents keep mixing these two policies $\implies$ PBMA equilibrium.
+    \item Agents keep using continuation policy $\implies$ Continuation Policy Equilibrium (CPE)
+    \item Agents keep mixing these two policies $\implies$ PBMA 
 \end{itemize}
 
 \noindent \textbf{Remark}: The PBMA equilibrium is constructed numerically. And it will be discussed separately in Section 4.
@@ -144,11 +145,15 @@ K_{SRPE} &= 3.89\\
 K_{CPE} &= 8.09
 \end{align}
 
-\noindent And we varies the value of $\beta = 0, 0.1, 0.2, \cdots, 0.9, 1$ and compute the aggregate equilibrium capital. Here is the plot
-
-\subsection{Comparing the Stationary Asset Distribution}
-Here is the plot for different stationary asset distribution  with $\beta = 0, 0.1, 0.2, \cdots, 0.9, 1$
-\section{Transition Dynamics Methodology}
+\noindent And we varies the value of $\beta =  0.2, 0.4,0.6,0.8, 1.0$ and compute the aggregate equilibrium capital. See Figure \ref{fig:SRPE with different beta}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{QHD/image/SRPE capital.png}
+    \caption{SRPE capital for different $\beta$}
+    \label{fig:SRPE with different beta}
+\end{figure}
+\newpage 
+\section{Transition Dynamics Methodology}\label{sec:transition}
 We adapt Mukoyama's methodology to compute transitions between these equilibria.\\
 \\
 First, we discuss the transition path from SRPE to CPE, i.e., agents is originally at SRPE and then there is a sudden change in the discount factor $\beta$ to 1.\\
@@ -196,46 +201,66 @@ Starting with the initial stationary distribution $\psi_0$:
         \end{align}
 \end{enumerate}
 \subsection{Transition dynamics from SRPE to CPE}
-The above algorithm converges and we can find a smooth transition path from SRPE to CPE. The transition path is plotted below with different beta.
-
+The above algorithm converges and we can find a smooth transition path from SRPE to CPE. The transition path is plotted below with different beta, see Figure \ref{fig: SRPE to CPE with different Beta}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{QHD/image/SRPE_to_CPE.png}
+    \caption{Transition Dynamics from SRPE to CPE with different $\beta$}
+    \label{fig: SRPE to CPE with different Beta}
+\end{figure}
 \subsection{Transition dynamics from CPE to SRPE}
 Does not converge. By backward induction, the aggregate capital drops to zero very quickly.\\
 \\
-This might be possible, as keep using short-run policy is unstable.  Here is the illustrative plot. I get this plot by setting a larger tolerance.
-
-\section{PBMA}
+This might be possible, as keep using short-run policy is unstable.  See Figure \ref{fig:CPE_to_SRPE} the illustrative plot. I get this plot by setting a larger tolerance.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{QHD/image/CPE_to_SRPE.png}
+    \caption{Fail to converge from CPE to SRPE}
+    \label{fig:CPE_to_SRPE}
+\end{figure}
+\newpage
+\section{PBMA}\label{sec:pbma}
 This section discuss PBMA in this model. We let $\omega$ be the probability of using the short-run policy.
 \subsection{Stationary Asset Distribution of PBMA}
-Since we can get the Markov matrix for both policies, we can also obtain the Markov matrix for the PBMA policies as a weighted average. This induces a stationary asset distribution for PBMA policies and a corresponding aggregate capital. Here is a plot for the aggregate capital under different $\omega$.
+Since we can get the Markov matrix for both short-run and continuation policies, we can also obtain the Markov matrix for the PBMA policies as a weighted average. This induces a stationary asset distribution for PBMA policies and a corresponding aggregate capital. Figure \ref{fig:PBMA different omega} is a plot for the aggregate capital under different $\omega$.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{QHD/image/pbma_capital.png}
     \caption{PBMA aggregate capital across $\omega$}
+    \label{fig:PBMA different omega}
 \end{figure}
 
 \subsection{Use Monte Carlo to verify}
 
-Then I use Monte Carlo method to verify. The general procedure is as follows:
-
+Then I use Monte Carlo method to verify. The procedures are as follows:
+\begin{enumerate}
+    \item calculate theoretical mixed-action capital levels for comparison
+    \item start with the CPE distribution as the initial state.
+    \item For each simulation, generate a random sequence of policy choices based on probability $\omega$ (1=short-run, 0=continuation)
+    \item For each time period,  calculate current aggregate capital from the distribution and
+update the distribution using either the short-run or continuation policy based on the random sequence
+    \item After a burn-in period, average the capital path to get the mean capital level
+    \item aggregate results across multiple simulations to calculate the average capital 
+    \item compare these Monte Carlo results with the theoretical mixed-action capital levels across different values of $\omega$ to validate the equilibrium predictions.
+\end{enumerate}
 
 
 \subsection{Result of Monte Carlo}
 
-As shown in the previous figure, at every level, the simulation result is very similar to the one from stationary asset distribution of PBMA. Here is a detailed result for $\omega=0.2$. (Under other $\omega$, the result is similar)
+As shown in the previous figure, at every level, the simulation result is very similar to the one from stationary asset distribution of PBMA. Figure \ref{fig:Simulation} and \ref{fig:simulation_distribution} are detailed result for $\omega=0.2$. (Under other $\omega$, the results are similar)
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{QHD/image/mc_2.png}
     \caption{Simulation Result for $\omega=0.2$}
+    \label{fig:Simulation}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{QHD/image/mc_dist_2.png}
     \caption{Simulation Distribution for $\omega=0.2$}
+    \label{fig:simulation_distribution}
 \end{figure}
-
-\section{Asset Distribution Dynamics}
-Here is a plot of asset distribution dynamics. 
 
 
 \newpage
