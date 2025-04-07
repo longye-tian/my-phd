@@ -49,52 +49,20 @@ class RbcParams:
         self.mu_e = 0.0
 
     def production_fn(self, a, k_prev, n):
-        """Production function of the RBC model.
-        
-        Args:
-            a: Productivity level
-            k_prev: Capital from previous period
-            n: Labor input
-            
-        Returns:
-            Output level
-        """
+
         return a * (k_prev ** self.alpha) * (n ** self.one_minus_alpha)
 
 
     def marginal_product_capital(self, a, k_prev, n):
-        """Marginal product of capital.
-        
-        Args:
-            a: Productivity level
-            k_prev: Capital from previous period
-            n: Labor input
-            
-        Returns:
-            Marginal product of capital
-        """
+
         return self.alpha * a * ((n / k_prev) ** self.one_minus_alpha)
 
      def utility_fn(self, c):
-        """Utility function (logarithmic).
-        
-        Args:
-            c: Consumption level
-            
-        Returns:
-            Utility value
-        """
+
         return np.log(c)
     
     def marginal_utility(self, c):
-        """Marginal utility of consumption.
-        
-        Args:
-            c: Consumption level
-            
-        Returns:
-            Marginal utility
-        """
+
         return self.eta / c
    
 
