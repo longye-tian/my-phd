@@ -1,0 +1,44 @@
+\section{Job Search with Correlated Wage Draws}
+\begin{frame}{Deep look into the Policy Operator}
+        $$
+(T_\sigma v)(w) = \sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\textcolor{blue}{\underbrace{\int v(w')\, \varphi(dw')}_{\text{Dimension Reduction}}}\right]
+$$
+$$
+\text{or equivalently, let $e(w):=\frac{w}{1-\beta}$}
+$$
+
+\begin{align*}
+    T_\sigma v &= \underbrace{[\sigma e+(1-\sigma)c]}_{=:r_\sigma} + \underbrace{(1-\sigma)\beta \mathbb{E}v}_{=:K_\sigma v}\\
+    &= r_\sigma + K_\sigma v
+\end{align*}
+\end{frame}
+
+\begin{frame}{Comparison}
+\textbf{For IID draws}
+\begin{align*}
+    T_\sigma v &= \underbrace{[\sigma e+(1-\sigma)c]}_{=:r_\sigma} + \textcolor{blue}{\underbrace{(1-\sigma)\beta \mathbb{E}v}_{=:K_\sigma v}}\\
+    &= r_\sigma + \textcolor{blue}{K_\sigma v}
+\end{align*}
+
+\textbf{For Correlated wage draws}
+\begin{align*}
+    T_\sigma v &= \underbrace{[\sigma e+(1-\sigma)c]}_{=:r_\sigma} + \textcolor{blue}{\underbrace{(1-\sigma)\beta P}_{:=\beta P_\sigma}v}\\
+    &= r_\sigma +\textcolor{blue}{\beta P_\sigma v}
+\end{align*}
+We assume $(W_t)$ is $P$-Markov with stationary distribution $\varphi$, $\int w\,\varphi(dw)<\infty$
+\end{frame}
+
+\begin{frame}{Optimality}
+\begin{itemize}
+    \item Value space is also Banach lattice
+    \item $T_\sigma$ also order-preserving self-map
+    \item Similar proof for well-posedness and regularity
+    \item Similar affine and bounded by $\beta P$
+    \item Same optimality results
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Reducing the value space}
+    
+\end{frame}
