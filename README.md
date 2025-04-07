@@ -1,3 +1,45 @@
+# Week April 7th to 13th.
+
+## QHD
+
+- [ ] Research direction??
+
+## Math Reading
+
+- [ ] Kreyszig section 2.4
+- [ ] Kreyszig section 2.5
+- [ ] Kreyszig section 2.6
+- [ ] Kreyszig section 2.7
+- [ ] Kreyszig section 2.8
+- [ ] Kreyszig section 2.9
+
+## Research Reading
+
+- [ ] Chapter 5 Hyperbolic Discounting Labour Supply and Growth
+- [ ] Chapter 6 Hyperbolic Discounting and Macroeconomic Policy
+- [ ] The trouble with rational expectations in Heterogenous agent model: A challenge for Macroeconomics
+- [ ] Present-bias amplifies the household balance sheet channels of macroeconomic policy
+
+## Deep Learning Reading
+
+- [ ] Keep working on the DL on DSGE code
+
+
+## Coursework
+
+- [x] List the Assignments ( Monday 0.5 hours)
+- [ ] Network recording wk 1-6
+- [ ] DG recording wk 1-6
+- [ ] Fractal recording wk 1-6
+- [x] ECMT assignment 6 due wk 7
+- [ ] Fractal midterm wk7 monday
+
+
+
+
+
+
+
 Total budget 60~70 hours
 
 
