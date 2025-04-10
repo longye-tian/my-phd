@@ -39,6 +39,32 @@ We assume $(W_t)$ is $P$-Markov with stationary distribution $\varphi$, $\int w\
     
 \end{frame}
 
-\begin{frame}{Reducing the value space}
+\begin{frame}{Difference}
+\begin{itemize}
+    \item wage draws are not iid anymore
+    \item cannot reduce dimensions as before
+\end{itemize}
     
+\end{frame}
+\begin{frame}{Reducing the value space}
+    Let $\bar v:= (I-\beta P)^{-1}(e+c)$ and $V:= \{v\in L_1(\varphi): 0\le v\le \bar v\}$. Previously we have shown
+    $$
+    v_\sigma  = (I-\beta P_\sigma)^{-1}r_\sigma
+    $$
+    where $P_\sigma v =   (1-\sigma)P v \precsim Pv $, $r_\sigma  = \sigma e +(1-\sigma)c\precsim e+c$.\\
+    \\
+    
+    Hence, we have
+    $$
+    v_\sigma \le \bar v
+    $$
+    By global stability and order preserving, $T_\sigma V\subset V$, i.e., self-map on $V$.
+\end{frame}
+
+\begin{frame}{Optimality on the reduced value space}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\linewidth]{Dynamic Programming/DP2/Chapter 4/Section 4.1.1. Job Search/thm 1.2.13.png}
+        \includegraphics[width=1\linewidth]{Dynamic Programming/DP2/Chapter 4/Section 4.1.1. Job Search/thm1.2.14.png}
+    \end{figure}
 \end{frame}
