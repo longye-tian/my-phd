@@ -15,7 +15,7 @@ from typing import Callable, Union, List, Tuple, Optional
 #_________________________________________________________________________________________________________________________________#
 
 @dataclass
-class RbcParams:
+class RBC:
     """
     RBC model parameters
     """
