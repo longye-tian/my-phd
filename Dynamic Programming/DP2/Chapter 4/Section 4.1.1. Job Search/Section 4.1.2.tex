@@ -139,7 +139,44 @@ $$
 \end{frame}
 
 \begin{frame}{Increase in discount factor}
-    
+    From 
+    $$
+    h_\top = c+\beta\int \max\left\{\frac{w'}{1-\beta}, h_\top\right\}\, \varphi(dw')
+    $$
+    We use $w_\top  = (1-\beta)h_\top$ get
+    \begin{align*}
+         w_\top &= c(1-\beta)+\beta\int \max\left\{w', w_\top\right\}\, \varphi(dw')\\
+    \end{align*}
+We have
+\begin{align*}
+    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
+\end{align*}
+\end{frame}
+
+\begin{frame}{Increase in discount factor continue}
+\begin{align*}
+    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
+    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \int\frac{\partial \max\{w',w_\top\}}{\partial \beta}\,\varphi(dw')\\
+\end{align*}
+We have 
+$$
+\frac{\partial \max\{w',w_\top\}}{\partial \beta} = \begin{cases}
+    0 &\text{if $w'\ge w$}\\
+    \frac{\partial w_\top}{\partial\beta} &\text{if $w'<w_\top$}
+\end{cases}
+$$
+\end{frame}
+
+\begin{frame}{Increase in discount factor continue}
+    \begin{align*}
+    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
+    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \int\frac{\partial \max\{w',w_\top\}}{\partial \beta}\,\varphi(dw')\\
+    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial w_\top}{\partial \beta}\varphi(\{w'<w_\top\})
+\end{align*}
+This implies, when $c\le \int w\,\varphi(dw)$:
+$$
+\underbrace{[1-\beta \varphi(\{w'<w_\top\})]}_{>0}\frac{\partial w_\top}{\partial \beta}=-c+\int \max\left\{w', w_\top\right\}\, \varphi(dw')> 0
+$$
 \end{frame}
 
 \begin{frame}{Changes in distribution}
@@ -161,5 +198,26 @@ If $\psi$ first order stochastically dominates $\varphi$, then $w_\top^\varphi\l
 
 
 \begin{frame}{Mean-preserving spread}
-    
+    We also concern with how behavior changes when decisions become riskier. We introduce the notion of \textbf{mean-preserving spread}. For a given distribution $\varphi$, we say that $\psi$ is a mean-preserving spread of $\varphi$ if there exists a pair of random variable $(Y,Z)$ such that
+    $$
+    \mathbb{E}[Z|Y] = 0,\quad Y=^d \varphi, \quad Y+Z=^d\psi 
+    $$
+\end{frame}
+
+\begin{frame}{In this question}
+We know that
+$$
+W =^d \varphi
+$$
+Let $\psi$ be a mean-preserving spread of $\varphi$. Then there exists a pair of random variable $(W,Z)$ such that
+$$
+\mathbb{E}[Z|W] = 0,\quad W=^d\varphi, \quad W+Z=^d\psi
+$$
+This implies
+\begin{align*}
+    \int\max\{w',w\}\,\psi(dw') &= \mathbb{E}[\max\{W+Z, w\}]= \mathbb{E}\bigg[\mathbb{E}[\max\{W+Z, w\}|W]\bigg]\tag{LIE}\\
+    &\ge \mathbb{E}\bigg[\max\{\mathbb{E}[W+Z|W],w\}\bigg]\tag{Cond. Jensen}\\
+    &= \mathbb{E}\bigg[\max\{W,w\}\bigg]\tag{Linearity}\\
+    &= \int\max\{w',w\}\,\varphi(dw')
+\end{align*}
 \end{frame}

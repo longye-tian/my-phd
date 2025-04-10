@@ -1,0 +1,163 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+
+
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+
+
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Title information
+\title[DL]{Use Deep Learning to Solve RBC model}
+\subtitle{A cookbook}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{April 10th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+  \begin{enumerate}
+      \item General Cookbook procedure
+      \item RBC model as example
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Procedures}
+\begin{enumerate}
+    \item Transform a DSGE model into a DL problem
+    \begin{enumerate}
+        \item First-order/equilibrium conditions
+        \item Establish the Loss function
+        \item AIO operator trick
+    \end{enumerate}
+    \item Solve the DL problem
+    \begin{enumerate}
+        \item Neural network to approximate policy function
+        \item Gradient Descent to minimize loss function
+        \item Evaluate the result
+    \end{enumerate}
+\end{enumerate}
+    
+\end{frame}
+
+
+\begin{frame}{RBC model - Representative Consumer}
+Representative Consumer chooses consumption $c_t$, capital $k_{t+1}$, labor $h_t$, investment $x_t$ to maximize expected lifetime utility:
+$$ \max_{\{c_t, k_{t+1}, h_t,x_t\}_{t=0}^{\infty}} E \big[ \beta^t \Big(\eta \log(c_t) + (1-\eta)\log(1 - h_t) \Big) \Big]$$
+subject to the budget constraint and capital's law of motion:
+
+\begin{align*}
+    c_t + k_{t+1} &= y_t + (1 - \delta)k_{t}\tag{1}\\
+    k_{t+1} &= (1-\delta)k_t + x_t\tag{2}
+\end{align*}
+   
+    
+\end{frame}
+
+\begin{frame}{RBC model - Representative Firm}
+    A representative firm combines capital $k_t$ and labor $h_t$ to create $y_t$ units of a consumption good using a Cobb-Douglas production function: 
+    \begin{align*}
+        y_t = a_t k_t^{\alpha} h_t^{1-\alpha}\tag{3}
+    \end{align*}
+
+The logarithm of total factor productivity (TFP), where TFP is denoted by $a_t$, follows an AR(1) process
+\begin{align*}
+    \log(a_t) = \rho  \log(a_{t-1}) + \varepsilon_t\tag{4}
+\end{align*}
+where $\varepsilon\sim\mathcal{N}(0,\sigma_\epsilon^2)$.
+\end{frame}
+\begin{frame}{First-order conditions}
+FOC for consumption and capital (Euler equation)
+\begin{align*}
+    1 = \beta E_t \Big[ \frac{c_t}{c_{t+1}}\big(\alpha \frac{y_{t+1}}{k_t} + 1 -\delta \big) \Big]\tag{5}
+\end{align*}
+FOC for labor
+\begin{align*}
+    (1-\eta) c_t h_t = \eta(1- \alpha)(1 - h_t) y_t \tag{6}
+\end{align*}
+    
+\end{frame}
+
+\begin{frame}{Dynamic equilibrium characterization: 6 equations, 6 unknown}
+Six unknown: $c_t, k_{t+1}, y_t, h_t, x_t, a_t$
+\begin{align*}
+     c_t + k_{t+1} &= y_t + (1 - \delta)k_{t}\tag{Budget Constr.}\\
+    k_{t+1} &= (1-\delta)k_t + x_t\tag{Capital LoM}\\
+     y_t &= a_t k_t^{\alpha} h_t^{1-\alpha}\tag{Production}\\
+     \log(a_t) &= \rho  \log(a_{t-1}) + \varepsilon_t\tag{Exog. TFP}\\
+     1 &= \beta E_t \Big[ \frac{c_t}{c_{t+1}}\big(\alpha \frac{y_{t+1}}{k_t} + 1 -\delta \big) \Big]\tag{Euler eq.}\\
+     (1-\eta) c_t h_t &= \eta(1- \alpha)(1 - h_t) y_t \tag{Labor foc}\\
+\end{align*}
+Parameters:$\alpha, \beta, \delta, \eta, \rho,\sigma_\epsilon$
+\end{frame}
+
+
+\end{document}
