@@ -91,7 +91,7 @@ Let $V$ be a pospace and $S,T$ be two self-map on $V$ ordered pointwise, i.e.,
 $$
 S\precsim T\iff Sv\precsim Tv\quad \text{for all $v\in V$}
 $$
-If $S\precsim T$, $T$ is order preserving and globally stable on $V$, then its unique fixed points dominates any fixed point of $S$.
+If $S\precsim T$, $T$ is \textcolor{blue}{order preserving and globally stable} on $V$, then its unique fixed points dominates any fixed point of $S$.
 \begin{proof}
    $$
    v_S = Sv_S\precsim Tv_S\implies v_S\precsim v_T
@@ -139,45 +139,38 @@ $$
 \end{frame}
 
 \begin{frame}{Increase in discount factor}
-    From 
-    $$
-    h_\top = c+\beta\int \max\left\{\frac{w'}{1-\beta}, h_\top\right\}\, \varphi(dw')
-    $$
-    We use $w_\top  = (1-\beta)h_\top$ get
-    \begin{align*}
-         w_\top &= c(1-\beta)+\beta\int \max\left\{w', w_\top\right\}\, \varphi(dw')\\
-    \end{align*}
-We have
-\begin{align*}
-    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
-\end{align*}
+From 
+$$
+h_\top = c+\beta\int\max\left\{\frac{w'}{1-\beta}, h_\top\right\}\, \varphi(dw')
+$$
+We use $w_\top = (1-\beta)h_\top$ get
+$$
+w_\top  = c(1-\beta)  + \beta\int\max\{w', w_\top\}\,\varphi(dw')
+$$
+We define the following function (\textcolor{blue}{order-preserving and contraction}):
+$$
+f(w) =  c(1-\beta)  + \beta\int\max\{w', w\}\,\varphi(dw')
+$$
+And $w_\top$ is the unique fixed point. 
 \end{frame}
 
-\begin{frame}{Increase in discount factor continue}
-\begin{align*}
-    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
-    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \int\frac{\partial \max\{w',w_\top\}}{\partial \beta}\,\varphi(dw')\\
-\end{align*}
-We have 
+\begin{frame}{Increase in discount factor}
+We can take partial derivative of $f$ with respect to $\beta$
 $$
-\frac{\partial \max\{w',w_\top\}}{\partial \beta} = \begin{cases}
-    0 &\text{if $w'\ge w$}\\
-    \frac{\partial w_\top}{\partial\beta} &\text{if $w'<w_\top$}
-\end{cases}
+\frac{\partial f(w)}{\partial \beta} = -c+\int\max\{w',w\}\,\varphi(dw')
 $$
+Hence, when 
+$$
+c\le \int w'\,\varphi(dw') \le \int\max\{w',w\}\,d(w')\quad \text{for all $w\in W$}
+$$
+We have for $\beta_1\le\beta_2$
+$$
+\textcolor{blue}{f(w;\beta_1)\le f(w;\beta_2)\quad \text{for all $w\in W$}}
+$$
+By \textcolor{blue}{PropA518}, we have $w_\top^1\le w_\top^2$.
 \end{frame}
 
-\begin{frame}{Increase in discount factor continue}
-    \begin{align*}
-    \frac{\partial w_\top}{\partial \beta} &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial \int \max\left\{w', w_\top\right\}\, \varphi(dw')}{\partial \beta}\\
-    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \int\frac{\partial \max\{w',w_\top\}}{\partial \beta}\,\varphi(dw')\\
-    &= -c+\int \max\left\{w', w_\top\right\}\, \varphi(dw') + \beta \frac{\partial w_\top}{\partial \beta}\varphi(\{w'<w_\top\})
-\end{align*}
-This implies, when $c\le \int w\,\varphi(dw)$:
-$$
-\underbrace{[1-\beta \varphi(\{w'<w_\top\})]}_{>0}\frac{\partial w_\top}{\partial \beta}=-c+\int \max\left\{w', w_\top\right\}\, \varphi(dw')> 0
-$$
-\end{frame}
+
 
 \begin{frame}{Changes in distribution}
 If $\psi$ first order stochastically dominates $\varphi$, then $w_\top^\varphi\le w_\top^\psi$.
