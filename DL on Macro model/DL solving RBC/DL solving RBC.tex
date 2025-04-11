@@ -111,7 +111,7 @@
 
 \begin{frame}{RBC model - Representative Consumer}
 Representative Consumer chooses consumption $c_t$, capital $k_{t+1}$, labor $h_t$, investment $x_t$ to maximize expected lifetime utility:
-$$ \max_{\{c_t, k_{t+1}, h_t,x_t\}_{t=0}^{\infty}} E \big[ \beta^t \Big(\eta \log(c_t) + (1-\eta)\log(1 - h_t) \Big) \Big]$$
+$$ \max_{\{c_t, k_{t+1}, h_t,x_t\}_{t=0}^{\infty}} \mathbb{E}\left[ \sum_{t=0}^\infty\beta^t \Big(\eta \log(c_t) + (1-\eta)\log(1 - h_t) \Big) \right]$$
 subject to the budget constraint and capital's law of motion:
 
 \begin{align*}
@@ -143,7 +143,8 @@ FOC for labor
 \begin{align*}
     (1-\eta) c_t h_t = \eta(1- \alpha)(1 - h_t) y_t \tag{6}
 \end{align*}
-    
+
+(See Appendix \ref{app:foc} for derivation)
 \end{frame}
 
 \begin{frame}{Dynamic equilibrium characterization: 6 equations, 6 unknown}
@@ -159,5 +160,12 @@ Six unknown: $c_t, k_{t+1}, y_t, h_t, x_t, a_t$
 Parameters:$\alpha, \beta, \delta, \eta, \rho,\sigma_\epsilon$
 \end{frame}
 
+\section{FOC derivation}\label{app:foc}
+\begin{frame}{Appendix - FOC derivation}
+    Setup the Lagrangian
+    $$
+    \mathscr{L} = \mathbb{E}\left[ \sum_{t=0}^\infty\beta^t \Big(\eta \log(c_t) + (1-\eta)\log(1 - h_t) \Big) - \lambda_t\left(c_t+k_{t+1}-y_t\right) \right]
+    $$
+\end{frame}
 
 \end{document}
