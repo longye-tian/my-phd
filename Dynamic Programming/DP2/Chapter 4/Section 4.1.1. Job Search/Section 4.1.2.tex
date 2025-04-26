@@ -1,4 +1,9 @@
 \section{Rearranging the Bellman Equation}
+\begin{frame}{Section 4.1.2 Rearranging the Bellman Equation}
+    \begin{itemize}
+        \item Rearranging the Bellman Equation
+    \end{itemize}
+\end{frame}
 \begin{frame}{Rearranging the Bellman Equation - Continuation Value}
     Given the Bellman equation
     $$
@@ -20,16 +25,28 @@ We get a one-dimensional nonlinear equation.
     \end{align*}
 \end{frame}
 
-\begin{frame}{Solve the equation by finding a fixed point}
+\begin{frame}{Exercise 4.1.5}
     We introduce
     $$
     g(h) = c+\beta\int \max\left\{\frac{w'}{1-\beta}, h\right\}\, \varphi(dw')
     $$
-    and we want to find the fixed point of $g$. Using the following inequality
+    and we want to find the fixed point of $g$. Using the elementary bound
     $$
     |\alpha\vee x- \alpha \vee y|\le |x-y|
     $$
-    we can show that $g$ is a contraction. Hence we can get a unique fixed point. Optimal policy is hence
+    show that $g$ is a contraction.
+\end{frame}
+\begin{frame}{Exercise 4.1.5 cont.}
+\begin{proof}
+    Let $h,k\in\mathbb{R}_+$. we have
+    \begin{align*}
+        |g(h)-g(k)| &= \beta\left|\int \max\left\{\frac{w'}{1-\beta},h\right\}\,\varphi(dw')-\int \max\left\{\frac{w'}{1-\beta},k\right\}\,\varphi(dw')\right|\\
+        &\le \beta \int\left|\max\left\{\frac{w'}{1-\beta},h\right\}-\max\left\{\frac{w'}{1-\beta},g\right\}\right|\,\varphi(dw')\tag{Jensen}\\
+        &\le \beta \int |h-k|\,\varphi(dw')\tag{Given}\\
+        &= \beta|h-k|
+    \end{align*}
+\end{proof}
+ Hence we can get a unique fixed point. Optimal policy is hence
     $$
     \sigma_\top (w) = \mathbf{1}\{w\ge w_\top\},\quad \text{where $w_\top:= (1-\beta)h_\top$}
     $$
@@ -91,7 +108,8 @@ Let $V$ be a pospace and $S,T$ be two self-map on $V$ ordered pointwise, i.e.,
 $$
 S\precsim T\iff Sv\precsim Tv\quad \text{for all $v\in V$}
 $$
-If $S\precsim T$, $T$ is \textcolor{blue}{order preserving and globally stable} on $V$, then its unique fixed points dominates any fixed point of $S$.
+\textbf{Proposition A.5.18}
+    If $S\precsim T$, $T$ is \textcolor{blue}{order preserving and globally stable} on $V$, then its unique fixed points dominates any fixed point of $S$.
 \begin{proof}
    $$
    v_S = Sv_S\precsim Tv_S\implies v_S\precsim v_T
@@ -101,7 +119,9 @@ If $S\precsim T$, $T$ is \textcolor{blue}{order preserving and globally stable} 
     
 \end{frame}
 
-\begin{frame}{Unemployment Compensation}
+\begin{frame}{Exercise 4.1.8}
+Prove that the reservation wage $w_\top$ is increasing in unemployment compensation $c$. Prove also that $h_\top$ is increasing with $\beta$.
+\begin{proof}
     We have for $c_1\le c_2$
     $$
     g_1(h) = c_1 + \beta \int \max\left\{\frac{w'}{1-\beta}, h\right\}\,\varphi(dw')\le c_2 + \beta \int \max\left\{\frac{w'}{1-\beta}, h\right\}\,\varphi(dw') = g_2(h)
@@ -111,13 +131,18 @@ If $S\precsim T$, $T$ is \textcolor{blue}{order preserving and globally stable} 
     \item By $w_\top = (1-\beta)h_\top$, $w^1_\top\le w^2_\top$
 \end{itemize}
 Higher unemployment compensation, higher reservation wage.
+\end{proof}
+
+
 \end{frame}
 
-\begin{frame}{Higher unemployment compensation, wait longer on average}
+\begin{frame}{Exercise 4.1.0}
 Let $\tau$ be the first passage time to employment, i.e.,
 $$
 \tau:= \inf\{t\ge 0: \sigma_\top (W_t) = 1\} = \inf\{t\ge 0: W_t\ge w_\top\}
 $$
+Prove that the mean first passage time $\mathbb{E}\tau$ increases with $c$.
+
 \textbf{Remark:} Here $\tau$ is a random variable with sample space $\Omega = W^\mathbb{N}$. We have
 \begin{align*}
     \mathbb{E}\tau  &= 0\cdot \mathbb{P}(W_0\ge w_\top) + 1\cdot \mathbb{P}(W_1\ge w_\top
@@ -172,45 +197,86 @@ By \textcolor{blue}{PropA518}, we have $w_\top^1\le w_\top^2$.
 
 
 
-\begin{frame}{Changes in distribution}
-If $\psi$ first order stochastically dominates $\varphi$, then $w_\top^\varphi\le w_\top^\psi$.
+\begin{frame}{Changes in distribution (Lemma 4.1.2.)}
+\begin{lemma}
+    If $\varphi,\psi$ are supported on $[0,M]$, $M\in\mathbb{R_+}$, $\psi$ first order stochastically dominates $\varphi$, then $w_\top^\varphi\le w_\top^\psi$.
+\end{lemma}
 \begin{definition}
-    Let $ibX$ be the increasing bounded real-value functions on $X$. We say that $\nu$ first order stochastically dominates $\mu$ and write $\mu\precsim_F \nu$ if 
+    Let $ibX$ be the increasing bounded  functions on $X$. We say that $\nu$ first order stochastically dominates $\mu$ and write $\mu\precsim_F \nu$ if 
     $$
     \int u(x)\,\mu(dx)\le \int u(x)\,\nu(dx)\quad\text{for every $u\in ibX$}
     $$
 \end{definition}
+    
+\end{frame}
+\begin{frame}{Remark: $f:\mathbb{R}\to\mathbb{R}$ and increasing implies measurable}
+    \begin{proof}
+        To prove that $f$ is measurable, we need to show that for any $a \in \mathbb{R}$, the set $f^{-1}((-\infty, a))$ is measurable.
+Since $f$ is increasing, for any $a \in \mathbb{R}$, we can define $c = \sup{x \in \mathbb{R} : f(x) < a}$.
+By the properties of increasing functions, the set $f^{-1}((-\infty, a))$ takes one of two forms:
+\begin{itemize}
+\item If $f(c) < a$ (or if $c = \infty$), then $f^{-1}((-\infty, a)) = (-\infty, c]$
+\item If $f(c) \geq a$ (or if $c = -\infty$), then $f^{-1}((-\infty, a)) = (-\infty, c)$
+\end{itemize}
+In either case, the preimage is a Borel set and therefore measurable. Since the preimage of every interval of the form $(-\infty, a)$ is measurable, and these intervals generate the Borel $\sigma$-algebra on $\mathbb{R}$, the function $f$ is measurable.
+    \end{proof}
+\end{frame}
+
+\begin{frame}{Change in distribution cont.}
 \begin{proof}
-     We have for $c_1\le c_2$
-    $$
-    g_\varphi(h) = c + \beta \int \max\left\{\frac{w'}{1-\beta}, h\right\}\,\varphi(dw')\le c+ \beta \int \max\left\{\frac{w'}{1-\beta}, h\right\}\,\psi(dw') = g_\psi(h)
-    $$
+     We have for $\varphi\precsim_F \psi$, fix $w\in\mathbb{R}^+$,$w'\mapsto \max\{w',w\}\in ib[0,M]$.
+     \begin{align*}
+         f_\varphi(w) &=  c(1-\beta)  + \beta\textcolor{blue}{\int\max\{w', w\}\,\varphi(dw')}\\
+         &\le c(1-\beta)  + \beta\textcolor{blue}{\int\max\{w', w\}\,\psi(dw')}\\
+         &=f_\psi(w)
+     \end{align*}
+    \begin{itemize}
+        \item $f_\psi$ is order-preserving and globally stable
+        \item $f_\varphi\precsim f_\psi$
+    \end{itemize}
+    By \textcolor{blue}{PropA518}, $w_\top^\varphi \le w_\top^\psi$
 \end{proof}
+    
     
 \end{frame}
 
 
+
+
 \begin{frame}{Mean-preserving spread}
-    We also concern with how behavior changes when decisions become riskier. We introduce the notion of \textbf{mean-preserving spread}. For a given distribution $\varphi$, we say that $\psi$ is a mean-preserving spread of $\varphi$ if there exists a pair of random variable $(Y,Z)$ such that
+    We also concern with how \textcolor{blue}{behavior changes when decisions become riskier}. We introduce the notion of \textbf{mean-preserving spread}.
+    
+    \begin{definition}
+        For a given distribution $\varphi$, we say that $\psi$ is a mean-preserving spread of $\varphi$ if there exists a pair of random variable $(Y,Z)$ such that
     $$
     \mathbb{E}[Z|Y] = 0,\quad Y=^d \varphi, \quad Y+Z=^d\psi 
     $$
+    \end{definition}
 \end{frame}
 
-\begin{frame}{In this question}
-We know that
+\begin{frame}{Lemma 4.1.3}
+If $\psi$ is a mean-preserving spread of $\varphi$, then $w_\top^\varphi\le w_\top^\psi$.\\
+\\
+\begin{proof}
+    We know that
 $$
-W =^d \varphi
+W_t =^d \varphi,\quad\text{by iid, we have $W_\cdot =^d \varphi$}
 $$
-Let $\psi$ be a mean-preserving spread of $\varphi$. Then there exists a pair of random variable $(W,Z)$ such that
+Let $\psi$ be a mean-preserving spread of $\varphi$. Then there exists a pair of random variable $(W_\cdot,Z)$ such that
 $$
-\mathbb{E}[Z|W] = 0,\quad W=^d\varphi, \quad W+Z=^d\psi
+\mathbb{E}[Z|W] = 0,\quad W_\cdot=^d\varphi, \quad W_\cdot+Z=^d\psi
 $$
-This implies
+\end{proof}
+\end{frame}
+\begin{frame}{Lemma 4.1.3 Cont.}
+\begin{proof}
+    This implies
 \begin{align*}
-    \int\max\{w',w\}\,\psi(dw') &= \mathbb{E}[\max\{W+Z, w\}]= \mathbb{E}\bigg[\mathbb{E}[\max\{W+Z, w\}|W]\bigg]\tag{LIE}\\
-    &\ge \mathbb{E}\bigg[\max\{\mathbb{E}[W+Z|W],w\}\bigg]\tag{Cond. Jensen}\\
-    &= \mathbb{E}\bigg[\max\{W,w\}\bigg]\tag{Linearity}\\
+    \int\max\{w',w\}\,\psi(dw') &= \mathbb{E}[\max\{W_\cdot+Z, w\}]= \mathbb{E}\bigg[\textcolor{blue}{\mathbb{E}\left[\textcolor{red}{\max\{}W_\cdot+Z, \textcolor{red}{w\}}|W_\cdot\right]}\bigg]\tag{LIE}\\
+    &\ge \mathbb{E}\bigg[\textcolor{red}{\max\{}\textcolor{blue}{\mathbb{E}[W_\cdot+Z|W_\cdot]},\textcolor{red}{w\}}\bigg]\tag{Cond. Jensen}\\
+    &= \mathbb{E}\bigg[\max\{W_\cdot,w\}\bigg]\tag{Linearity}\\
     &= \int\max\{w',w\}\,\varphi(dw')
 \end{align*}
+\end{proof}
+    
 \end{frame}

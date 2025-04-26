@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+% Title information
+\title[Zaanen]{Every positive operator on $L^p$ is order continuous}
+\subtitle{by Adriaan C. Zaanen}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{April 17th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+  \begin{enumerate}
+  \item Definitions
+  \item Exercise 17.15
+  \item Theorem 18.4
+  \item Example 21.6
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Definitions}
+    \begin{definition}[Definition 1.3 (iv) Lattice]
+        Let $X$ be a partially ordered set. $X$ is a \textbf{lattice} if every subset consisting of two points has a supremum and infimum
+    \end{definition}
+    \begin{definition}[Definition 4.1 Ordered vector space]
+        The real vector space $E$ is called an \textbf{ordered vector space} if $E$ is partially ordered in such a manner that the vector space structure and the order structure are compatible, i.e.,
+        \begin{enumerate}
+            \item $f\le g\implies f+h\le g+h$ for every $h\in E$
+            \item $f\ge 0\implies \alpha f\ge 0$ for every $\alpha \ge 0\in \mathbb{R}$
+        \end{enumerate}
+    \end{definition}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{definition}[Definition 4.1 Riesz space]
+The ordered vector space $E$ is called a \textbf{Riesz space} if $E$ is a lattice with respect to the partial ordering.
+\end{definition}
+
+\begin{definition}[p.85 Riesz norm]
+    Let $E$ be a Riesz space equipped with a norm. The norm in $E$ is called a \textbf{Riesz norm} if $|f|\le |g|$ in $E$ implies $\|f\|\le \|g\|$.
+\end{definition}
+\end{frame}
+
+\begin{frame}{Definitions}
+    \begin{definition}[p.85 normed Riesz space]
+Any Riesz space, equipped with a Riesz norm, is called a \textbf{normed Riesz space}
+\end{definition}
+\begin{definition}[p.85 Banach lattice]
+If the normed Riesz space $E$ is norm complete, $E$ is called a \textbf{Banach lattice}.
+\end{definition}
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{definition}[Definition 10.9 Directed set]
+The non-empty subset $D$ of the Riesz space $E$ is said to be \textbf{upward directed (or downward directed)} if for any two elements $f$ and $g$ in $D$ there exists an element $h\in D$ such that $h\ge f\vee g$ (or $h\le f\wedge g$). 
+\end{definition}
+\textbf{Notation (p.103)}: If $D$ is an upward (or downwar) directed set in the Riesz space $E$, we write $D\uparrow$ or ($D\downarrow$). If $D\uparrow$ and $D$ has the supremum $f_0$, we write $D\uparrow f_0$. If $D\downarrow$ and $D$ has infimum $f_0$, we write $D\downarrow f_0$.
+\end{frame}
+
+\begin{frame}{Definitions}
+\begin{definition}[Definition 17.7 Order continuous norm]
+The normed Riesz space $E$ is said to have \textbf{order continuous norm} if, for any subset $D\downarrow 0$ in $E$, we have $\inf(\|f\|:f\in D)=0$. The norm is said to be $\sigma$-order continuous if, for any sequence $f_n\downarrow 0$ in $E$, we have $\|f_n\|\downarrow 0$    
+\end{definition}
+    
+\end{frame}
+
+\begin{frame}{Theorem 17.9}
+Let $E$ be a Banach lattice and every increasing and bounded above sequence in $E$ converges in norm. Then $E$ has a $\sigma$-order continuous norm.
+\begin{proof}
+Fix $f_n\downarrow 0$ in $E$. We want to show that $\|f_n\|\downarrow 0$. Let
+$$
+g_n = f_1-f_n\quad \text{for each $n\ge 1$}
+$$
+Then $g_n\uparrow$ as $f_n\downarrow$. Moreover, we have for any $n<m$,
+$$
+g_m-g_n = f_1-f_m-(f_1-f_n)=f_n-f_m\ge 0
+$$
+Moreover, $g_n$ is bounded above by $f_1$. By our assumption,  this implies $(g_n)$ converges in norm to some element $g\in E$.
+\end{proof}
+\end{frame}
+
+
+
+
+\end{document}

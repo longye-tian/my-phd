@@ -5,14 +5,11 @@
 % and a custom color scheme for a clean, professional look
 % that works well with mathematical content.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
-
 % Theme settings
 \usetheme{Madrid}
 \usecolortheme{default}
 \usepackage[dvipsnames]{xcolor}
-
 \definecolor{primcolor}{RGB}{25,50,100} % Dark blue
 \setbeamercolor{structure}{fg=primcolor}
 \setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
@@ -21,11 +18,9 @@
 \setbeamercolor{author}{fg=primcolor} % White author text
 \setbeamercolor{date}{fg=primcolor} % White date text
 \setbeamercolor{institute}{fg=primcolor} % White institute text
-
 % Font settings
 \usefonttheme{professionalfonts}
 \usefonttheme{serif}
-
 % Package imports
 \usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
 \usepackage{mathtools} % Enhanced math tools
@@ -34,15 +29,11 @@
 \usepackage{booktabs} % Professional tables
 \usepackage{tikz} % For diagrams
 \usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
-
 % Use beamer's theorem styles
 \setbeamertemplate{theorem}[ams style]
 \setbeamertemplate{theorems}[numbered]
-
-
 % Remove navigation symbols
 \setbeamertemplate{navigation symbols}{}
-
 % Custom footer
 \setbeamertemplate{footline}{
   \leavevmode%
@@ -54,12 +45,11 @@
     \usebeamerfont{title in head/foot}\insertshorttitle
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
-    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
-    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace{2ex} 
   \end{beamercolorbox}}%
   \vskip0pt%
 }
-
 % Title information
 \title[DP2]{Dynamic Programming}
 \subtitle{Thomas J. Sargent and John Stachurski}
@@ -117,11 +107,12 @@
         \item $\varphi$ has finite mean, so $\int w\varphi(dw)<\infty$
         \item Constant discount factor $\beta\in(0,1)$
         \item $\Sigma$ be the set of Borel measurable policy $\sigma: W\to \{0,1\}$
-         \item $L_1(\varphi):= L^1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$
+         \item $L_1(\varphi):= L^1(W,\mathcal{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$
     \end{itemize}
 \end{frame}
+
 \begin{frame}{Detour to measure theory}
-$L_1(\varphi):= L_1(W,\mathscr{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$.\\
+$L_1(\varphi):= L_1(W,\mathcal{B}, \varphi)$ be all Borel measurable function $f:W\to \mathbb{R}$ with $\int|f|\,d\varphi<\infty$.\\
 \\
 \begin{itemize}
     \item $L^1$-norm is
@@ -204,8 +195,10 @@ $$
 is an ADP for the Job Search Problem. 
 \end{frame}
 
-\begin{frame}{The ADP $(L^1(\varphi),\mathbb{T}_{JS})$ is well-posed.}
- $$
+\begin{frame}{Exercise 4.1.1}
+Prove that $(L_1(\varphi), \mathbb{T}_{JS})$ is well-posed.
+\begin{proof}
+     $$
  (T_\sigma v)(w) = v(w) 
  $$
  $$
@@ -214,11 +207,12 @@ is an ADP for the Job Search Problem.
     $$
 \sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right] = v(w)
 $$
-
 \begin{itemize}
     \item $\sigma(w) = 1 \implies v(w) = \frac{w}{1-\beta} $ well-defined and unique
     \item $\sigma(w) = 0\implies v(w) = c+\beta\int v(w') \, \varphi(dw')$ well-defined and unique
 \end{itemize}
+\end{proof}
+
 
 \end{frame}
 
@@ -233,17 +227,22 @@ $v$-greedy policy (assume accept the offer at indifference)
     $$
 \end{frame}
 
-\begin{frame}{Construct Bellman operator from definition}
-    $Tv = \bigvee_\sigma T_\sigma v$
+\begin{frame}{Exercise 4.1.2}
+Starting from the usual ADP definition $Tv = \bigvee_\sigma T_\sigma v$, show that
+$$
+(Tv)(w) = \max\left\{\frac{w}{1-\beta}, c+\beta\int v(w')\, \varphi(dw')\right\}
+$$
+\begin{proof}
     \begin{align*}
         (Tv)(w) &= \left(\bigvee_\sigma T_\sigma v\right)(w)\\
         &= \bigvee_\sigma \left(\sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right]\right)\\
         &= \max\left\{\frac{w}{1-\beta}, c+\beta\int v(w') \, \varphi(dw')\right\}
     \end{align*}
     
+\end{proof}
 \end{frame}
 
-\begin{frame}{Bounded $W$ $\implies$ use smaller value space}
+\begin{frame}{Exercise 4.1.3}
 $$
 \sigma(w) \frac{w}{1-\beta} + (1-\sigma(w))\left[c+\beta\int v(w')\, \varphi(dw')\right]
 $$
@@ -257,7 +256,7 @@ $$
 
 
 
-\begin{frame}{Optimality with IID offers}
+\begin{frame}{Proposition 4.1.1. - Optimality with IID offers}
     \begin{theorem}
         For $(L^1(\varphi),\mathbb{T}_{JS})$,
         \begin{itemize}
