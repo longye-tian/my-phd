@@ -1,0 +1,708 @@
+\section{Theorem 1 and 3 of \cite{tsitsiklis1994asynchronous}}
+
+In this section, we go through a simplified version of Theorem 1 and Theorem 3 of \cite{tsitsiklis1994asynchronous}. In particular, we omit the asynchronous algorithm part. First, we present the setup in \cite{tsitsiklis1994asynchronous} and compared to the simplified version. Then, we use Robbins-Siegmund Theorem to explicitly prove Lemma 1 in \cite{tsitsiklis1994asynchronous}. Last, we present the proof of Theorem 1 and 3 in details.\\
+\\
+\subsection{Model Setup in \cite{tsitsiklis1994asynchronous}}
+
+We consider iterative updates of a vector $x \in \mathbb{R}^n$ to solve the fixed-point equation $F(x) = x$, where $F: \mathbb{R}^n \mapsto \mathbb{R}^n$ with component mappings $F_i: \mathbb{R}^n \mapsto \mathbb{R}$.\\
+\\
+Let $x(t)$ denote the state at discrete time $t \in \mathbb{N}$, with components $x_i(t)$. For each component $i$, we have:
+\begin{equation}\label{eq:update_rule_tsi}
+x_i(t + 1) = 
+\begin{cases}
+x_i(t), & t \notin T^i \\
+x_i(t) + \alpha_i(t)(F_i(x^i(t)) - x_i(t) + w_i(t)), & t \in T^i
+\end{cases}
+\end{equation}
+where:
+\begin{itemize}
+\item $T^i \subset \mathbb{N}$ is the set of update times for component $i$
+\item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+\item $w_i(t)$ is a noise term
+\item $x^i(t) = (x_1(\tau_1^i(t)), \ldots, x_n(\tau_n^i(t)))$ contains possibly outdated information with $0 \leq \tau_j^i(t) \leq t$
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history.\\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation*}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation*}
+When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.
+\subsection{Simplified model setup}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+\begin{equation}
+    x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(\textcolor{blue}{x(t)}) + w_i(t)) 
+\end{equation}\label{eq:x_t}
+
+where
+\begin{itemize}
+    \item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+    \item $w_i(t)$ is a noise term
+\end{itemize}
+\begin{remark}
+    In this simplified setup, we can write \autoref{eq:x_t} into vector form, i.e.,
+    $$
+    \mathbf{x}(t+1) = \mathbf{x}(t) + \mathbf{A}(t)(\mathbf{F}(\mathbf{x}(t)) +\mathbf{w}(t))
+    $$
+    where
+    $$
+    \mathbf{x}(t) = \begin{pmatrix}
+        x_1(t)\\
+        \vdots\\
+        x_n(t)
+    \end{pmatrix},\mathbf{A}(t) = \begin{pmatrix}
+        \alpha_1(t) & 0& \cdots & 0\\
+        0& \alpha_2(t) & \cdots & 0\\
+        \vdots & \vdots & \ddots & 0\\
+        0 &0 &\cdots & \alpha_n(t)
+    \end{pmatrix},\mathbf{F}(\mathbf{x}(t)) = \begin{pmatrix}
+        F_1(\mathbf{x}(t))\\
+        \vdots\\
+        F_n(\mathbf{x}(t))
+    \end{pmatrix},\mathbf{w}(t) = \begin{pmatrix}
+        w_1(t)\\
+        \vdots\\
+        w_n(t)
+    \end{pmatrix}
+    $$
+    But for the sake of doing one thing at a time, we keep the notation in \cite{tsitsiklis1994asynchronous} for now.
+\end{remark}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation*}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation*}
+\noindent When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.\\
+\\
+\noindent Compared to \autoref{eq:update_rule_tsi}, no information is outdated, hence, we have $x^i(t) = x(t)$. And we don't consider the update time for different cases. As mentioned in \cite{tsitsiklis1994asynchronous}, this is a special case, hene all the theorems work fine under this setup.
+
+\subsection{Assumptions in \cite{tsitsiklis1994asynchronous}}
+
+\noindent
+\textcolor{blue}{\textbf{Assumption 1} (Total Asynchronism).
+For any $i$ and $j$, $\lim_{t \to \infty} \tau_j^i(t) = \infty$, with probability 1.}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$, $j$, and $t$, $\alpha_i(t)$ and \textcolor{blue}{$\tau_j^i(t)$} are $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 5} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 6} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\begin{remark}
+    We don't present assumption 4 as it is not required for the theorem of interest. Later, in the simplified version, we will re-enumerate the number. Here is the enumeration to match \cite{tsitsiklis1994asynchronous}
+\end{remark}
+\subsection{Simplified assumptions}
+\noindent
+\textbf{Assumption 1} (Simplified).
+This assumption is no longer needed since no information is outdated.
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 5} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 6} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\subsection{Simplified model setup and assumptions}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+where
+\begin{itemize}
+    \item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+    \item $w_i(t)$ is a noise term
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation*}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation*}
+\noindent When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.\\
+\noindent
+\textbf{Assumption 1} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 4} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\begin{remark}\label{rm:3implies4}
+    Notice that Assumption 3 implies Assumption 4.
+        \begin{align*}
+        \|F(x)\|_v &\le \|F(x)-x^*\|_v + \|x^*\|_v\tag{$\Delta$ ineq.}\\
+        &\le \beta \|x-x^*\|_v+\|x^*\|_v\tag{Assumption 3}\\
+        &\le \beta\|x\|_v + (1+\beta) \|x^*\|_v\tag{$\Delta$ ineq.}
+    \end{align*}
+    Let $D:= (1+\beta)\|x^*\|_v$
+\end{remark}
+\subsection{Related Theorem}
+In this section, we present the theorem related to the proof. Currently, we take these theorem as granted. 
+\begin{theorem}[Robbins-Siegmund]\label{thm:robbins siegmund}
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space and $\{\mathcal{F}_n\}_{n=0}^{\infty}$ be a filtration. Let $\{V_n,\beta_n, \xi_n, \zeta_n\}_{n=0}^\infty$ be sequences of non-negative random variables adapted to $\{\mathcal{F}_n\}_{n=0}^{\infty}$ such that:
+$$
+\mathbb{E}[V_{n+1} \mid \mathcal{F}_n] \leq (1+\beta_n)V_n+\xi_n-\zeta_n\quad \text{a.s. for all } n \geq 0
+$$
+where
+\begin{itemize}
+    \item $\sum_{n=0}^\infty \beta_n<\infty$ almost surely
+    \item $\sum_{n=0}^\infty \xi_n<\infty$ almost surely
+\end{itemize}
+Then:
+\begin{itemize}
+    \item $\lim_{n\to\infty}V_n = V_\infty$ exists and is finite almost surely
+    \item $\sum_{n=0}^\infty \zeta_n<\infty$ almost surely
+\end{itemize}
+\end{theorem}
+
+\subsection{Related Lemmas}
+
+\begin{lemma}\label{lm:1}
+Let $\{\mathcal{F}(t)\}$ be an increasing sequence of $\sigma$-fields. For each $t$, let $\alpha(t)$, $w(t-1)$, and $B(t)$ be $\mathcal{F}(t)$-measurable scalar random variables. Let $C$ be a deterministic constant. Suppose that the following hold with probability 1:
+\begin{enumerate}
+\item[(a)] $\mathbb{E}[w(t) \mid \mathcal{F}(t)] = 0$;
+\item[(b)] $\mathbb{E}[w^2(t) \mid \mathcal{F}(t)] \leq B(t)$;
+\item[(c)] $\alpha(t) \in [0,1]$;
+\item[(d)] $\sum_{t=0}^{\infty} \alpha(t) = \infty$;
+\item[(e)] $\sum_{t=0}^{\infty} \alpha^2(t) \leq C$.
+\end{enumerate}
+Suppose that the sequence $\{B(t)\}$ is bounded with probability 1. Let $W(t)$ satisfy the recursion
+\begin{equation}
+W(t+1) = (1 - \alpha(t))W(t) + \alpha(t)w(t).
+\end{equation}
+Then $\lim_{t \to \infty} W(t) = 0$, with probability 1.
+\end{lemma}
+
+\begin{proof}
+Let us first note that, without loss of generality, we can assume that $B(t) \leq K$ for some constant $K$, since the sequence $\{B(t)\}$ is bounded with probability 1.\\
+\\
+We analyze the evolution of the squared process $V(t) = W^2(t)$. From the recursion for $W(t)$, we have:
+\begin{align*}
+W(t+1) &= (1 - \alpha(t))W(t) + \alpha(t)w(t)
+\end{align*}
+
+\noindent Squaring both sides yields:
+\begin{align*}
+W^2(t+1) &= \left((1 - \alpha(t))W(t) + \alpha(t)w(t)\right)^2 \\
+&= (1 - \alpha(t))^2W^2(t) + 2(1-\alpha(t))\alpha(t)W(t)w(t) + \alpha^2(t)w^2(t)
+\end{align*}
+
+\noindent Taking the conditional expectation with respect to $\mathcal{F}(t)$:
+\begin{align*}
+\mathbb{E}[W^2(t+1) \mid \mathcal{F}(t)] &= (1 - \alpha(t))^2W^2(t) + 2(1-\alpha(t))\alpha(t)W(t)\mathbb{E}[w(t) \mid \mathcal{F}(t)] + \alpha^2(t)\mathbb{E}[w^2(t) \mid \mathcal{F}(t)]
+\end{align*}
+
+\noindent Using the conditions $\mathbb{E}[w(t) \mid \mathcal{F}(t)] = 0$ and $\mathbb{E}[w^2(t) \mid \mathcal{F}(t)] \leq B(t)$, we obtain:
+\begin{align*}
+\mathbb{E}[V(t+1) \mid \mathcal{F}(t)] &\leq (1 - \alpha(t))^2V(t) + \alpha^2(t)B(t) \\
+&= (1 - 2\alpha(t) + \alpha^2(t))V(t) + \alpha^2(t)B(t) \\
+&= V(t) - 2\alpha(t)V(t) + \alpha^2(t)V(t) + \alpha^2(t)B(t) \\
+&= V(t) - \alpha(t)V(t)(2 - \alpha(t)) + \alpha^2(t)B(t)
+\end{align*}
+
+\noindent Since $\alpha(t) \in [0,1]$, we have $(2 - \alpha(t)) \geq 1$, which gives:
+\begin{align*}
+\mathbb{E}[V(t+1) \mid \mathcal{F}(t)] &\leq V(t) - \alpha(t)V(t) + \alpha^2(t)B(t) \\
+&= (1 - \alpha(t))V(t) + \alpha^2(t)B(t)
+\end{align*}
+
+\noindent Now, let us define a perturbed Lyapunov function:
+\begin{align*}
+U(t) = V(t) + \gamma \sum_{k=t}^{\infty} \alpha^2(k)
+\end{align*}
+where $\gamma > K$ is a constant. This is well-defined and finite because $\sum_{t=0}^{\infty} \alpha^2(t) \leq C < \infty$.\\
+\\
+Computing the conditional expectation of $U(t+1)$:
+\begin{align*}
+\mathbb{E}[U(t+1) \mid \mathcal{F}(t)] &= \mathbb{E}[V(t+1) \mid \mathcal{F}(t)] + \gamma \sum_{k=t+1}^{\infty} \alpha^2(k) \\
+&\leq (1 - \alpha(t))V(t) + \alpha^2(t)B(t) + \gamma \sum_{k=t+1}^{\infty} \alpha^2(k) \\
+&= (1 - \alpha(t))V(t) + \alpha^2(t)B(t) + \gamma \sum_{k=t}^{\infty} \alpha^2(k) - \gamma \alpha^2(t) \\
+&= (1 - \alpha(t))V(t) + \gamma \sum_{k=t}^{\infty} \alpha^2(k) + \alpha^2(t)(B(t) - \gamma)
+\end{align*}
+
+\noindent Since $B(t) \leq K < \gamma$, we have $(B(t) - \gamma) < 0$. Therefore:
+\begin{align*}
+\mathbb{E}[U(t+1) \mid \mathcal{F}(t)] &\leq (1 - \alpha(t))V(t) + \gamma \sum_{k=t}^{\infty} \alpha^2(k) \\
+&= (1 - \alpha(t))V(t) + (1 - \alpha(t))\gamma \sum_{k=t}^{\infty} \alpha^2(k) + \alpha(t)\gamma \sum_{k=t}^{\infty} \alpha^2(k) \\
+&= (1 - \alpha(t))\left(V(t) + \gamma \sum_{k=t}^{\infty} \alpha^2(k)\right) + \alpha(t)\gamma \sum_{k=t}^{\infty} \alpha^2(k) \\
+&= (1 - \alpha(t))U(t) + \alpha(t)\gamma \sum_{k=t}^{\infty} \alpha^2(k)
+\end{align*}
+
+\noindent For any $\delta > 0$, there exists some $T_\delta$ such that $\gamma \sum_{k=t}^{\infty} \alpha^2(k) < \delta$ for all $t \geq T_\delta$, since $\sum_{t=0}^{\infty} \alpha^2(t) < \infty$. Thus, for $t \geq T_\delta$:
+\begin{align*}
+\mathbb{E}[U(t+1) \mid \mathcal{F}(t)] &\leq (1 - \alpha(t))U(t) + \alpha(t)\delta \\
+&= U(t) - \alpha(t)(U(t) - \delta)
+\end{align*}
+
+\noindent Let us define:
+\begin{align*}
+\mu(t) = 
+\begin{cases}
+\alpha(t)(U(t) - \delta), & \text{if } U(t) \geq \delta \\
+0, & \text{otherwise}
+\end{cases}
+\end{align*}
+
+\noindent Then:
+\begin{align*}
+\mathbb{E}[U(t+1) \mid \mathcal{F}(t)] \leq U(t) - \mu(t)
+\end{align*}
+
+\noindent Since $U(t) \geq 0$ and $\mu(t) \geq 0$, by \autoref{thm:robbins siegmund}, $U(t)$ converges to a finite limit $U_{\infty}$, and $\sum_{t=0}^{\infty} \mu(t) < \infty$ almost surely.\\ 
+\\
+Suppose, for contradiction, that $P(U_\infty>\delta)>0$. On the event $\{U_\infty >\delta\}$, there exists $T'$ such that for all $t\ge T'$, $U(t)>\delta$. Therefore, for $t\ge \max\{T_\sigma, T'\}$, we have
+$$
+\mu(t) = \alpha(t)(U(t)-\delta)>0
+$$
+Moreover, we have there exists a fixed constant $\varepsilon>0$ such that for all $t\ge T'$, $U(t)-\delta>\varepsilon$. This implies
+$$
+\mu(t) \ge \alpha(t)\varepsilon
+$$
+This gives
+$$
+\sum_{t=0}^\infty \mu(t) \ge \varepsilon \sum_{t=T'}^\infty \alpha(t) = \infty
+$$
+which contradicts to the fact that $\sum_{t=0}^\infty\mu(t)<\infty$.\\
+\\
+Hence, we have $P(U_\infty >\delta) = 0$ for any $\delta>0$, i.e., $U\infty =0$ almost surely.\\
+\\
+Since $U(t) = V(t) + \gamma\sum_{k=t}^\infty \alpha^2(k)$ and $\lim_{t\to\infty}\sum_{k=t}^\infty \alpha^2(k)=0$. We can conclude that
+$$
+\lim_{t\to \infty} V(t) =0
+$$
+almost surely.\\
+\\
+Since $V(t) = W^2(t)$ and $\lim_{t\to \infty} V(t) =0$ almost surely, we have
+$$
+\lim_{t\to \infty} W(t) =0
+$$
+almost surely. This completes the proof.
+\end{proof}
+
+\subsection{Main Theorems}
+
+\begin{theorem}\label{thm:bounded}
+Let $(\Omega, \mathcal{F},P)$ be a probability space with filtration $\{\mathcal{F}_t\}_{t=0}^\infty$. Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+If \textbf{Assumption 1} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 4} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\noindent holds.\\
+\\
+\noindent Then, the sequence $x(t)$ is bounded with probability 1.
+
+\end{theorem}
+\begin{proof}
+First, we assume that we have already discarded a suitable null set, so we do not need to keep repeating the quanlification ``with probability 1''.\\
+\\
+We calso assume that all components of the vector $v$ in \textbf{Assumption 4} are equal to $1$. (The case of a general positive weighting vector $v$ can be reduced to this special case by a suitable coordinate scaling.)\\
+\\
+In other words, we have there exists some $\beta\in [0,1)$ and some $D$ such that 
+$$
+\|F(x)\|_\infty \le \beta\|x\|_\infty  + D,\quad \forall x\in\mathbb{R}^n
+$$
+There exists $\gamma\in[0,1)$ and $G_0>0$ such that
+\begin{equation}\label{eq:Fandgamma}
+    \|F(x)\|_\infty  \le \gamma \max\{\|x\|_\infty, G_0\},\quad\forall x\in\mathbb{R}^n
+\end{equation}
+(Any $\gamma\in[0,1)$ and $G_0>0$ satisfying $\beta G_0+D\le \gamma G_0$ will do.) Then, we fix $\epsilon>0$ such that $\gamma(1+\epsilon)=1$.\\
+\\
+Define
+\begin{equation}\label{eq:M(t)}
+    M(t) = \max_{\tau\le t} \|x(\tau)\|_\infty 
+\end{equation}
+Now, we define a sequence $\{G(t)\}$, recursively. 
+\begin{itemize}
+    \item Let $G(0) = \max\{M(0), G_0\}$
+    \item Let 
+    \begin{equation}\label{eq:updateruleofG}
+           G(t+1) = \begin{cases}
+        G(t) & \text{if $M(t+1)\le (1+\epsilon)G(t)$}\\
+        G_0(1+\epsilon)^k &\text{if $M(t+1)>(1+\epsilon)G(t)$}
+    \end{cases} 
+    \end{equation}
+    where $k$ is chosen so that 
+    $$
+    G_0(1+\epsilon)^{k-1}<M(t+1) \le G_0(1+\epsilon)^k
+    $$
+\end{itemize}
+Under this construction, we have
+
+\begin{equation}\label{eq:MtandGt}
+    M(t)\le (1+\epsilon)G(t),\quad \forall t\ge 0
+\end{equation}
+and
+\begin{equation}\label{eq:MtandGt2}
+    M(t)\le G(t)\quad \text{if $G(t-1)<G(t)$}
+\end{equation}
+
+Also notice, that under this contruction, $\{G(t)\}_{t=0}^\infty$ is an increasing sequence, i.e.,
+\begin{equation}
+    G_0\le G(0) \le G(1) \le \cdots
+\end{equation}\label{eq:G(t)increasing}
+
+Moreover, we have $M(t),G(t)$ are all $\mathcal{F}(t)$-measurable. Next, we define
+$$
+\tilde w_i(t) = \frac{w_i(t)}{G(t)},\quad \forall t\ge 0
+$$
+which is $\mathcal{F}(t+1)$-measurable. Under \textbf{Assumption 1 (d)}, we have
+$$
+\mathbb{E}(\tilde w_i(t)|\mathcal{F}(t)) = \frac{\mathbb{E}(w_i(t)|\mathcal{F}(t))}{G(t)} = 0
+$$
+and
+\begin{align*}
+    \mathbb{E}(\tilde w_i^2(t)|\mathcal{F}(t)) &= \frac{\mathbb{E}(w_i^2(t)|\mathcal{F}(t))}{G^2(t)}\\
+    &\le \frac{A + B \max_j\max_{\tau\le t}|x_j(\tau)|^2}{G^2(t)}\tag{Assumption 1(e)}\\
+    &= \frac{A + B M(t)^2}{G^2(t)}\tag{\autoref{eq:M(t)}}\\
+    &\le \frac{A+B(1+\epsilon)^2G^2(t)}{G^2(t)}\tag{\autoref{eq:MtandGt}}\\
+    &= \frac{A}{G^2(t)} + B(1+\epsilon)^2 \\
+    &\le \frac{A}{G_0^2} + B(1+\epsilon)^2 \tag{\autoref{eq:G(t)increasing}}\\
+    &=:K\quad \forall t\ge 0
+\end{align*}
+where $K$ is some deterministic constant.\\
+\\
+For any $i$ and $t_0\ge 0$, we define $\tilde W_i(t_0;t_0) = 0$ and
+\begin{equation}\label{eq:tildeW}
+    \tilde W_i(t+1; t_0) = (1-\alpha_i(t))\tilde W_i(t;t_0) + \alpha_i(t)\tilde w_i(t),\quad \forall t\ge 0
+\end{equation}
+
+Under this definition, we iterate to get the expression for $\tilde W_i(t;0)$ as
+$$
+\tilde W_i(t;0) = \left[\prod_{\tau = t_0}^{t-1} (1-\alpha_i(\tau))\right]\tilde W_i(t_0;0) + \tilde W_i(t;t_0)
+$$
+for every $t\ge t_0$. This implies
+$$
+|\tilde W_i(t;t_0)|\le |\tilde W_i(t;0)| + |\tilde W_i(t_0;0)|
+$$
+By \autoref{lm:1}, we have 
+$$
+\lim_{t\to\infty} \tilde W_i(t;0) = 0
+$$
+Hence, we have for every $\delta >0$, there exists some $T$ such that $|\tilde W_i(t;t_0)|\le \delta$, for every $t$ and $t_0$ satisfying $T\le t_0\le t$.\\
+\\
+Now we prove that $x(t)$ is bounded by contradiction. Suppose that $x(t)$ is unbounded. The by \autoref{eq:M(t)} and \autoref{eq:MtandGt}, we have $G(t)$ goes to infinity.\\
+\\
+Then by the construction of $G(t)$ and \autoref{eq:MtandGt2}, the inequality $M(t)\le G(t)$ holds for infinitely many different values of $t$.\\
+\\
+Moreover, since $G(t)$ goes to infinity and by \autoref{eq:MtandGt2}, there exists some $t_0$ such that $M(t_0)\le G(t_0)$ and
+\begin{equation}\label{eq:tildeWgoesto0}
+    |\tilde W_i(t;t_0)|\le \epsilon,\quad \forall t\ge t_0,\,\,\forall i
+\end{equation}
+Now we show by induction that for every $t\ge t_0$, we have $G(t)=G(t_0)$ and for every $i$, we have
+$$
+-G(t_0)(1+\epsilon) \le -G(t_0) + \tilde W_i(t;t_0)G(t_0)\le x_i(t)\le G(t_0) + \tilde W_i(t;t_0)G(t_0)\le G(t_0)(1+\epsilon)
+$$
+We start with the case for $t=t_0$, we have
+$$
+|x_i(t_0)|\le M(t_0)\le G(t_0)
+$$
+and
+$$
+\tilde W_i(t_0;t_0) = 0
+$$
+Suppose the result is true for some time $t>t_0$. We use this induction hypothesis and \autoref{eq:Fandgamma}, we get
+\begin{align*}
+    x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
+    &\le (1-\alpha_i(t))(G(t_0) + \tilde W_i(t;t_0)G(t_0)) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
+    &\le (1-\alpha_i(t))(G(t_0) + \tilde W_i(t;t_0)G(t_0)) + \alpha_i(t)\gamma\max\{\|x\|_\infty,G_0\} + \alpha_i(t)w_i(t)\tag{\autoref{eq:Fandgamma}}\\
+    &\le (1-\alpha_i(t))(G(t_0) + \tilde W_i(t;t_0)G(t_0)) + \alpha_i(t)\gamma G(t_0)(1+\epsilon)+ \alpha_i(t)w_i(t)\tag{Induction}\\
+    &\le (1-\alpha_i(t))(G(t_0) + \tilde W_i(t;t_0)G(t_0)) + \alpha_i(t)\gamma G(t_0)(1+\epsilon)+ \alpha_i(t)\tilde w_i(t)G(t_0)\tag{Induction}\\
+    & = G(t_0) + ((1-\alpha_i(t))\tilde W_i(t;t_0)+\alpha_i(t)\tilde w_i(t))G(t_0)\tag{$\gamma(1+\epsilon)=1$}\\
+    & = G(t_0)+ \tilde W_i(t+1;t_0)G(t_0) \tag{\autoref{eq:tildeW}}
+\end{align*}
+Symmetrically, we get
+\begin{align*}
+x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
+&\geq (1-\alpha_i(t))(-G(t_0) + \tilde W_i(t;t_0)G(t_0)) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
+&\geq (1-\alpha_i(t))(-G(t_0) + \tilde W_i(t;t_0)G(t_0)) - \alpha_i(t)\gamma\max{|x|_\infty,G_0} + \alpha_i(t)w_i(t)\tag{\autoref{eq:Fandgamma}}\\
+&\geq (1-\alpha_i(t))(-G(t_0) + \tilde W_i(t;t_0)G(t_0)) - \alpha_i(t)\gamma G(t_0)(1+\epsilon)+ \alpha_i(t)w_i(t)\tag{Induction}\\
+&\geq (1-\alpha_i(t))(-G(t_0) + \tilde W_i(t;t_0)G(t_0)) - \alpha_i(t)\gamma G(t_0)(1+\epsilon)+ \alpha_i(t)\tilde w_i(t)G(t_0)\tag{Induction}\\
+& = -G(t_0) + ((1-\alpha_i(t))\tilde W_i(t;t_0)+\alpha_i(t)\tilde w_i(t))G(t_0)\tag{$\gamma(1+\epsilon)=1$}\\
+& = -G(t_0)+ \tilde W_i(t+1;t_0)G(t_0) \tag{\autoref{eq:tildeW}}
+\end{align*}
+Then, by \autoref{eq:tildeWgoesto0}, we get
+$$
+|x_i(t+1)|\le G(t_0)(1+\epsilon)
+$$
+Hence, we have
+$$
+\|x(t+1)\|_\infty \le G(t_0)(1+\epsilon)
+$$
+By \autoref{eq:M(t)}, we have $M(t+1) = \max\{M(t), \|x(t+1)\|_\infty\}$. And by the induction hypothesis, we have $G(t) = G(t_0)$ for $t\ge t_0$. Hence, by \autoref{eq:MtandGt2}, we have
+$$
+M(t) \le (1+\epsilon)G(t) = G(t_0)(1+\epsilon)
+$$
+This implies
+\begin{align*}
+    M(t+1) &= \max\{M(t),\|x(t+1)\|_\infty\}\\
+    &= \max\{G(t_0)(1+\epsilon), G(t_0)(1+\epsilon)\}\\
+    &= G(t_0)(1+\epsilon)\\
+    & = G(t)(1+\epsilon)
+\end{align*}
+Then, by the update rule, i.e., \autoref{eq:updateruleofG}, we have $G(t+1) = G(t) = G(t_0)$.\\
+\\
+This contradicts to $G(t)$ goes to infinity, hence $x(t)$ is bounded.
+\end{proof}
+
+\begin{theorem}
+Let $(\Omega, \mathcal{F},P)$ be a probability space with filtration $\{\mathcal{F}_t\}_{t=0}^\infty$. Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+If \textbf{Assumption 1} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation} holds.\\
+\\
+\noindent Then, the sequence $x(t)$ converges to $x^*$ with probability 1.
+\end{theorem}
+\begin{proof}
+   Notice that Assumption 3 implies Assumption 4.
+        \begin{align*}
+        \|F(x)\|_v &\le \|F(x)-x^*\|_v + \|x^*\|_v\tag{$\Delta$ ineq.}\\
+        &\le \beta \|x-x^*\|_v+\|x^*\|_v\tag{Assumption 3}\\
+        &\le \beta\|x\|_v + (1+\beta) \|x^*\|_v\tag{$\Delta$ ineq.}
+    \end{align*}
+    Let $D:= (1+\beta)\|x^*\|_v$. Then we can apply \autoref{thm:bounded}, we get $x(t)$ is bounded with probabilty 1. (W.l.o.g., we let $x^*=0$) Hence there exists some (generally random) $D_0$ such that 
+    $$
+    \|x(t)\|_\infty \le D_0,\quad \forall t\ge 0
+    $$
+    Fix some $\epsilon>0$ such that $\beta(1+2\epsilon)<1$, we define
+    \begin{equation}\label{eq:Dkrecursive}
+        D_{k+1} = \beta(1+2\epsilon)D_k,\quad k\ge 0
+    \end{equation}
+    Clearly, $D_k$ converges to $0$. Now we prove by induction to show that for each $k$, there exists a time $t_k$ such that $\|x(t)\|_\infty\le D_k$ for all $t\ge t_k$.\\
+    \\
+    \textbf{Base case $k=0$}:\\
+    This case has already been shown above.\\
+    \\
+    \textbf{Induction hypothesis}:\\
+    Assume there exists $t_k$ such that $\|x(t)\|_\infty \le D_k$ for all $t\ge t_k$. We need to show there exists $t_{k+1}\ge t_k$ such that 
+    $$
+    \|x(t)\|_\infty \le D_{k+1},\quad \forall t\ge t_{k+1}
+    $$
+    We define a sequence $W_i(t)$ to track the accumulated noise:
+    \begin{itemize}
+        \item $W_i(0)$ = 0\\
+        \item $W_i(t+1) = (1-\alpha_i(t))W_i(t) + \alpha_i(t)w_i(t)$
+    \end{itemize}
+    As previously shown in the proof of \autoref{thm:bounded}, for every $\delta>0$, there exists a time $T$ such that
+    \begin{equation}\label{eq:th3Wt}
+         |W_i(t;t_0)|\le \delta,\quad \forall T\le t_0\le t
+    \end{equation}
+    Choose $\tau_k\ge t_k$ such that
+    \begin{itemize}
+        \item $|W_i(t;\tau_k)|\le \beta\epsilon D_k$ for all $t\ge \tau_k$ by \autoref{eq:th3Wt}\\
+        \item $\|x(t)\|_\infty \le D_k$ for all $t\ge \tau_k\ge t_k$ by the induction hypothesis
+    \end{itemize}
+    Then we can define a sequence that provides an upper bound, 
+    \begin{itemize}
+        \item Let $Y_i(\tau_k) = D_k$
+        \item Let 
+        \begin{equation}\label{eq:Yrecusive}
+            Y_i(t+1) = (1-\alpha_i(t))Y_i(t)+\alpha_i(t)\beta D_k
+        \end{equation}
+        for all $t\ge \tau_k$
+    \end{itemize}
+    Now we prove that 
+    \begin{equation}\label{eq:lemma8induction}
+     -Y_i(t) + W_i(t;\tau_k)\le x_i(t)\le Y_i(t) + W_i(t;\tau_k),\quad \forall t\ge \tau_k   
+    \end{equation}
+    by induction.\\
+    \\
+    \textbf{Base case $t= \tau_k$}\\
+    This is satisfied by $\|x(t)\|_\infty \le D_k$ as $Y_i(\tau_k)=D_k$ and $W_i(\tau_k;\tau_k)=0$.\\
+    \\
+    \textbf{Induction hypothesis}:\\
+    Suppose that \autoref{eq:lemma8induction} holds for some $t>\tau_k$. Then, we have
+    \begin{align*}
+         x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
+         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
+         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)\beta\|x(t)\|_\infty + \alpha_i(t)w_i(t)\tag{Assumption 3}\\
+         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)\beta D_k + \alpha_i(t)w_i(t)\tag{$\|x(t)\|_\infty \le D_k$}\\
+         & =[(1-\alpha_i(t))Y_i(t) + \alpha_i(t)\beta D_k] + [(1-\alpha_i(t)) W_i(t;\tau_k) + \alpha_i(t)w_i(t)]\\
+         &= Y_i(t+1) + W_i(t+1;\tau_k)
+    \end{align*}
+    Symmetrically, we can show that
+    \begin{align*}
+         x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
+         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
+         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)\beta\|x(t)\|_\infty + \alpha_i(t)w_i(t)\tag{Assumption 3}\\
+         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)\beta D_k + \alpha_i(t)w_i(t)\tag{$\|x(t)\|_\infty \le D_k$}\\
+         & =[-(1-\alpha_i(t))Y_i(t) - \alpha_i(t)\beta D_k] + [(1-\alpha_i(t)) W_i(t;\tau_k) + \alpha_i(t)w_i(t)]\\
+         &= -Y_i(t+1) + W_i(t+1;\tau_k)
+    \end{align*}
+    Hence, we have
+    $$
+    -Y_i(t+1) + W_i(t+1)\le x_i(t+1)\le Y_i(t+1) + W_i(t+1;\tau_k),\quad\forall t\ge \tau_k
+    $$
+    Hence, by induction we prove \autoref{eq:lemma8induction}. Moreover since $Y_i(t)$ are positive, we can get
+    \begin{equation}\label{eq:xiboundedlast}
+        |x_i(t)| \le Y_i(t) + |W_i(t;\tau_k)|
+    \end{equation}
+    By \autoref{eq:Yrecusive}, we have
+    \begin{align*}
+        Y_i(t+1) -\beta D_k &= (1-\alpha_i(t))Y_i(t)+\alpha_i(t)\beta D_k -\beta D_k\\
+        Z_i(t+1) &= (1-\alpha_i(t))Y_i(t)-(1-\alpha_i(t))\beta D_k\tag{$Z_i(t):= Y_i(t)-\beta D_k$}\\
+        Z_i(t+1) &= (1-\alpha_i(t)) Z_i(t)
+    \end{align*}
+    Hence, by \textbf{Assumption 2}, we get $Y_i(t)\to \beta D_k$ as $t\to \infty$.\\
+    \\
+    Since $\limsup$ always exists for bounded sequence, we have
+    \begin{equation}
+        \limsup_{t\to\infty} |x_i(t)| \le \limsup_{t\to\infty} (Y_i(t) + |W_i(t;\tau_k)|)
+    \end{equation}
+    Use the property that the limsup of a sum is at most the sum of the limsup, we get
+    $$
+    \limsup_{t\to\infty} (Y_i(t) + |W_i(t;\tau_k)|)\le \limsup_{t\to\infty} Y_i(t) + \limsup_{t\to\infty} |W_i(t;\tau_k)|
+    $$
+    As $Y_i(t)\to \beta D_k$, we have $\limsup_{t\to \infty} Y_i(t) = \beta D_k$. Moreover, since we have $|W_i(t;\tau_k)|\le \beta\epsilon D_k$ for all $t\ge \tau_k$ by \autoref{eq:th3Wt}. We have, in all,
+    $$
+    \limsup_{t\to\infty} |x_i(t)| \le \beta D_k  + \beta \epsilon D_k = \beta(1+\epsilon) D_k<\beta(1+2\epsilon) D_k =D_{k+1}
+    $$
+    by \autoref{eq:Dkrecursive}. Hence, this implies there exist $t$ large enough, $|x_i(t)|<D_{k+1}$. This proves the claim.\\
+    \\
+    Hence, we have $\|x(t)\|_\infty\le D_k$ for all $t\ge t_k$ and $D_k$ converges to $0$. This implies $x(t)$ converges to $0$.
+\end{proof}
