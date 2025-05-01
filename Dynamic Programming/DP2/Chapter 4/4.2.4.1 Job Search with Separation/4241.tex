@@ -231,7 +231,7 @@ $$
 Now we just need to show that $v\in bmW$ and $d_\infty(v_n,v)<\epsilon$.
 \end{frame}
 \begin{frame}{Supremum metric is complete}
-\textbf{Measurability}: For $v_n:W\to\mathbb{R}$, pointwise limit of measurable function is measurable. (See details in appendix)\\
+\textbf{Measurability}: For $v_n:W\to\mathbb{R}$, pointwise limit of measurable function is measurable. (See details in appendix page \ref{app:pointwise})\\
 \textbf{Boundedness}: let $m,n\ge N$, we have
 $$
 |v_m(x) - v_n(x)|<\epsilon \implies |v_m(x)|\le |v_m(x)-v_n(x)|+|v_n(x)|<\epsilon + |v_n(x)|
@@ -308,7 +308,7 @@ Recall that we can rewrite $T_\sigma v_u = J_\sigma + K_\sigma v_u$, where $J_\s
         \includegraphics[width=1\linewidth]{Dynamic Programming/DP2/Chapter 4/4.2.4.1 Job Search with Separation/thm135.png}
     \end{figure}
 \end{frame}
-\begin{frame}{Appendix 1 - pointwise limit}
+\begin{frame}{Appendix 1 - pointwise limit}\label{app:pointwise}
     Let 
     \begin{itemize}
         \item $(X,\mathcal{A})$ be a measurable space
@@ -321,7 +321,19 @@ Recall that we can rewrite $T_\sigma v_u = J_\sigma + K_\sigma v_u$, where $J_\s
     $$
     i.e., we need to show $\{x\in X: f(x)\le \alpha\}$ is measurable. 
 \end{frame}
-\begin{frame}{Optimal policy}
+
+\begin{frame}{Appendix 1 - pointwise limit}
+Using the definition of limit we have,
+\begin{align*}
+    \{x\in X: f(x)\le \alpha\} &= \{x\in X: \forall\epsilon>0,\exists N\in\mathbb{N}, \forall n\ge N, f_n(x)<\alpha+\epsilon\}\\
+    &= \bigcap_{\epsilon>0}\bigcup_{N\in\mathbb{N}}\bigcap_{n\ge N} \{x\in X: f_n(x)<\alpha+\epsilon\}\\
+    &= \bigcap_{\epsilon>0,\epsilon\in \mathbb{Q}}\bigcup_{N\in\mathbb{N}}\bigcap_{n\ge N}\underbrace{\{x\in X: f_n(x)<\alpha+\epsilon\}}_{\text{measurable}}\tag{$\mathbb{Q}$ is dense in $\mathbb{R}$}\\
+\end{align*}
+Hence $\{x\in X: f(x)\le \alpha\}$ is a countable intersection of countable union of countable intersection of measurable set, hence measurable.
+    
+\end{frame}
+
+\begin{frame}{Appendix 2 - Optimal policy}
 Let $\sigma^\top$ be the optimal policy and $v_u^\top$ be the value function. We have
 $$
 v_u^\top = \max\{h+\gamma Pv_u^\top, c\mathbf{1} + \beta Pv_u^\top\}
@@ -340,18 +352,8 @@ $$
 \sigma^\top = \mathbf{1}{\{s^\top\ge f^\top\}}
 $$
 \end{frame}
-\begin{frame}{Reservation wage}
+\begin{frame}{Appendix 2 - Reservation wage}
 We define the smallest $w\in W$ such that $\sigma^\top (w) =1$ as \textbf{reservation wage}.
-    
-\end{frame}
-\begin{frame}{Appendix 1 - pointwise limit}
-Using the definition of limit we have,
-\begin{align*}
-    \{x\in X: f(x)\le \alpha\} &= \{x\in X: \forall\epsilon>0,\exists N\in\mathbb{N}, \forall n\ge N, f_n(x)<\alpha+\epsilon\}\\
-    &= \bigcap_{\epsilon>0}\bigcup_{N\in\mathbb{N}}\bigcap_{n\ge N} \{x\in X: f_n(x)<\alpha+\epsilon\}\\
-    &= \bigcap_{\epsilon>0,\epsilon\in \mathbb{Q}}\bigcup_{N\in\mathbb{N}}\bigcap_{n\ge N}\underbrace{\{x\in X: f_n(x)<\alpha+\epsilon\}}_{\text{measurable}}\tag{$\mathbb{Q}$ is dense in $\mathbb{R}$}\\
-\end{align*}
-Hence $\{x\in X: f(x)\le \alpha\}$ is a countable intersection of countable union of countable intersection of measurable set, hence measurable.
     
 \end{frame}
 \end{document}

@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+% Title information
+\title[NN]{Neural Network and Curse of Dimensionality}
+\subtitle{a survey}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{May 2nd, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline frame
+\begin{frame}{Big picture}
+    
+\end{frame}
+\begin{frame}{What is curse of dimensionality?}
+    
+\end{frame}
+
+\begin{frame}{What is the curse of dimensionality?}
+    Increase in the dimension of input space, the amount of data or computational power need to grow exponentially to maintain the same approximation accuracy. 
+\end{frame}
+
+\begin{frame}{Big O notation}
+Let $f(n)$ and $g(n)$ be functions from the set of natural numbers to the set of real numbers. We say that $f(n)$ is $O(g(n))$ if and only of there exists positive constants $c$ and $n_0$ such that
+$$
+f(n) \le c\cdot g(n),\quad\text{for all $n\ge n_0$}
+$$
+In other words, $f(n) \in O(g(n))$ means that $f(n)$ grows no faster than $g(n)$ up to a constant factor. 
+\end{frame}
+
+\begin{frame}{Example of Big O notation}
+
+$f(n)$ is $O(n^2)$, this means $f(n)$ can be $2n^2$ or $100 n^2$ or $n^2+3n+7$, as long as the leading factor is $n^2$
+\begin{itemize}
+    \item $O(1)$: constant time
+    \item $O(n)$: linear time
+    \item $O(n^2)$: quadratic time
+    \item $O(log\,n )$:  logarithmic time
+    \item $O(2^n)$: exponential time
+\end{itemize}
+\end{frame}
+\begin{frame}{Quick introduction to neural network}
+    
+\end{frame}
+\begin{frame}{Bach 2017}
+    
+\end{frame}
+\begin{frame}{Neural Network Approximation and CoD}
+\begin{itemize}
+    \item Barron 1993
+    \item 
+\end{itemize}
+    
+\end{frame}
+\begin{frame}{Barron 1993}
+For a specific function class $\Gamma_{C,B}$ (see next page for detailed desciption)
+\begin{itemize}
+    \item Neural network with one hidden layer of $n$ nodes has error bound $\mathcal{O}(1/n)$ indenpendent of dimension $d$. 
+    \item Fixed basis method: error bound no better than $\mathcal{O}(1/n^{2/d})$
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Barron 1993 - function class}
+Let $\Gamma_c$ be the set of functions $f$ on $\mathbb{R}^d$ for which there exists a complex-valued Fourier transform measure $\hat F(d\omega)$ such that
+$$
+f(x) = \int_{\mathbb{R}^d} e^{i\omega\cdot x} \hat F(d\omega)
+$$
+with the first moment of the Fourier magnitude distribution bounded by
+$$
+C_f = \int_{\mathbb{R}^d} |\omega||\hat F(d\omega)| \le C
+$$
+For a bounded set $B\subset\mathbb{R}^d$ containing the origin $\Gamma_{C,B}$ is the set of functions $f$ on $B$ that can be represented by the above integrals for $x\in B$ with
+$$
+C_{f,B} = \int \sup_{x\in B} |\omega \cdot x| |\hat F(d\omega)|\le C
+$$
+    
+\end{frame}
+\end{document}
