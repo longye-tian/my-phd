@@ -9,7 +9,7 @@
 % Theme settings
 \usetheme{Madrid}
 \usecolortheme{default}
-\usetikzlibrary{arrows.meta}
+%\usetikzlibrary{arrows.meta}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{forest}
 \definecolor{primcolor}{RGB}{25,50,100} % Dark blue
@@ -53,7 +53,7 @@
   \vskip0pt%
 }
 % Title information
-\title[NN]{Neural Network and Curse of Dimensionality}
+\title[NN]{Neural Network and Curse of Dimensionality (CoD)}
 \subtitle{a survey}
 \author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
 \institute[ANU]{Australian National University\\ School of Economics}
@@ -76,9 +76,27 @@
 
 % Outline frame
 \begin{frame}{Big picture}
-    
+\begin{itemize}
+    \item CoD is prevalent in heterogenous agent macro
+    \item Macro papers cite some NN paper and say ``NN can deal with CoD"
+    \item Why and when?
+\end{itemize}
+
 \end{frame}
-\begin{frame}{What is curse of dimensionality?}
+
+\begin{frame}{Structure}
+\begin{itemize}
+    \item Background
+    \begin{itemize}
+        \item What is CoD? Big $\mathcal{O}$ notation
+        \item What is NN?
+    \end{itemize}
+    \item A survey on two important papers
+    \begin{itemize}
+        \item Barron 1993
+        \item Poggio et al 2017
+    \end{itemize}
+\end{itemize}
     
 \end{frame}
 
@@ -105,21 +123,97 @@ $f(n)$ is $O(n^2)$, this means $f(n)$ can be $2n^2$ or $100 n^2$ or $n^2+3n+7$, 
     \item $O(2^n)$: exponential time
 \end{itemize}
 \end{frame}
-\begin{frame}{Quick introduction to neural network}
+\begin{frame}{Neuron}
+The basic unit of neural networks are called \textbf{neuron/nodes/perceptron/unit}. 
+\begin{itemize}
+    \item It is a simple function
+    $$
+    g: \mathbb{R}^k \to \mathbb{R}
+    $$
+    \item take a vector $z\in\mathbb{R}^k$ as input
+    \item transform it using an \textbf{affine mapping}
+    \item parameterized by a vector of \textbf{weights} $\gamma\in\mathbb{R}^{k+1}$.
+    \item applies a non-linear function (\textbf{activation function}) $f$ to output a real number.
+\end{itemize}
     
 \end{frame}
-\begin{frame}{Bach 2017}
+
+
+\begin{frame}{Neuron}
+    The basic unit of neural networks are called \textbf{neuron/nodes/perceptron/unit}. 
+\begin{itemize}
+    \item It is a simple function
+    $$
+    g: \mathbb{R}^k \to \mathbb{R}
+    $$
+\end{itemize}
+Formally,
+
+$$
+g(z;\gamma) = f\left(\underbrace{\gamma_0}_{\text{bias}} + \sum_{i=1}^k \gamma_i z_i\right)
+$$
+\end{frame}
+
+\begin{frame}{Layer}
+A \textbf{layer} with $p$ nodes is a vector function stacking $p$ neurons, i.e.,
+$$
+G:\mathbb{R}^k \to \mathbb{R}^p
+$$
+or
+$$
+G(z;\Gamma)  = \begin{bmatrix}
+    g(z;\gamma_1)\\
+    \cdots\\
+    g(z;\gamma_p)
+\end{bmatrix},\quad \text{where $\Gamma = (\gamma_1, \gamma_2,\cdots, \gamma_p)$}
+$$
+
+We call it a layer with \textbf{width $p$}.\\
+\\
+\textcolor{blue}{\textbf{Remark}: In this presentation, we assume that all neurons in a layer share the same input and same activation function. It can be more sophisticated.}
+\end{frame}
+
+\begin{frame}{Neural network/neural net/multilayer perception}
+    A \textbf{neural network} is a composition of several layers. Let $G_1,\cdots, G_\ell$ denote $\ell$ layers of conformable dimensions. A neural network is a function
+    $$
+    N:\mathbb{R}^m \to \mathbb{R}^n
+    $$
+    $$
+    N(x) = (\underbrace{G_\ell}_{output} \circ \underbrace{G_{\ell-1} \circ \cdots\circ G_2}_{hidden}\circ \underbrace{G_1}_{input})(x)
+    $$
+
+    \begin{itemize}
+        \item we call the number of layer $\ell$ the \textbf{length of neural net}
+        \item we call the largest width of layers the \textbf{width of neural net}
+    \end{itemize}
+    \textcolor{blue}{\textbf{Remark}: Only the input and output layers are contrained by the dimensions of the variable of interest. Hidden layers are not}
+\end{frame}
+\begin{frame}{Deep Neural Nets}
+Deeper neural nets are more flexible and have the potential learn more complex function.
+    \begin{itemize}
+        \item More than three layers $\implies$ deep
+        \item Less than three layers $\implies$ shallow 
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Universal Approximation Theorem}
+A neural network can approximate any continuous function from one-dimensional space to another with any desired non-zero amount of error, provided it is given sufficient depth or sufficient width.
+    
+\end{frame}
+
+\begin{frame}{Curse of dimensionality}
+For a given approximation error, the number of parameters required to approximate a function with a neural network increase \textbf{linearly with the dimension} of the input $x$, while it increases exponentially for most other classes of approximators.
     
 \end{frame}
 \begin{frame}{Neural Network Approximation and CoD}
 \begin{itemize}
     \item Barron 1993: Universal Approximation Bounds in Superpositions of a Sigmoidal Function
-    \item Bach 2017: Breaking the Curse of Dimensionality with Convex Neural Networks
+    %\item Bach 2017: Breaking the Curse of Dimensionality with Convex Neural Networks
     \item Poggio et al 2017: Why and When can deep-but not shallow-network avoid the curse of dimensionality: A review
 \end{itemize}
     
 \end{frame}
-\begin{frame}{Barron 1993}
+\begin{frame}{Barron 1993 - Key messages}
 For a specific function class $\Gamma_{C,B}$ (see next page for detailed desciption)
 \begin{itemize}
     \item Neural network with one hidden layer of $n$ nodes has error bound $\mathcal{O}(1/n)$ indenpendent of dimension $d$. 
@@ -187,10 +281,10 @@ What kind of functions are in this class?
 \begin{itemize}
     \item Ridge functions
     $$
-    f(x) = g(a\cdot x),\quad a\in\mathbb{R}, |a|=1, \quad g\text{ univariate}
+    f(x) = g(a\cdot x),\quad a\in\mathbb{R}^d, |a|=1, \quad g\text{ univariate}
     $$
     \textbf{Remark}: This type is particular good as $C_f$ is independent $d$.
-    \item Sigmoidal network
+    \item \textcolor{blue}{Sigmoidal network with smooth activation function} (has limitation as discussed below)
     \item Radial function
     $$
     f(x) = g(|x|)
@@ -243,14 +337,7 @@ Main message: Deep convolutional net have the theoretical guarantee which shallo
 \end{itemize}
     
 \end{frame}
-\begin{frame}{Barron 1993 - CoD}
 
-    
-\end{frame}
-\begin{frame}{Poggio et al 2017 - function class}
-Let $X = (X,\|\cdot\|_\infty)$ be a normed space and $W$ is a subspace of $X$. 
-    
-\end{frame}
 \begin{frame}{Poggio et al 2017 - Compositional functions with Binary tree structure}
 The function is composed of with functions in a binary tree structure (each take 2 inputs and 1 outputs)
     $$
@@ -314,8 +401,8 @@ For general function with directed acyclic graph, i.e.,
 \begin{frame}{Poggio et al 2017 - function class}
 Since $f$ is unknown, we need to make some assumptions on the class of functions from whih the unknown target function is chosen. 
 \begin{itemize}
-    \item $f\in W^{n}_m$: functions of $n$ variables with continuous partial derivatives of order up to $m$
-    \item $f\in W^{n,2}_{m}$: compositional functions with binary tree architecture where consituent functions are in $W^2_m$
+    \item $f\in W^{d}_m$: functions of $n$ variables with continuous partial derivatives of order up to $m$
+    \item $f\in W^{d,2}_{m}$: compositional functions with binary tree architecture where consituent functions are in $W^2_m$
     \item Argument: many real-world functions have this compositional structure where each constituent function depends on only a small number of variables
 \end{itemize}
 \end{frame}
@@ -334,36 +421,36 @@ Since $f$ is unknown, we need to make some assumptions on the class of functions
 \end{frame}
 \begin{frame}{Poggio et al 2017 - Key theoerm 1}
 \begin{theorem}[Shallow network leads to CoD]
-    For general functions $f\in W_m^n$, shallow networks requires
+    For general functions $f\in W_m^d$, shallow networks requires
     $$
-    N = \mathcal{O}(\epsilon ^{-n/m})
+    N = \mathcal{O}(\epsilon ^{-d/m})
     $$
     nodes to achieve accuracy $\epsilon$. This implies CoD.
 \end{theorem}
-    \textbf{Remark}: Let $\epsilon = 10^{-5}$, i.e., for a $n$-dimensional $C^m$ function, use shallow network to approximate with error $10^{-5}$ need nodes of order 
+    \textbf{Remark}: Let $\epsilon = 10^{-5}$, i.e., for a $d$-dimensional $C^m$ function, use shallow network to approximate with error $10^{-5}$ need nodes of order 
     $$
-    (10^{-5})^{-n/m} = 10^{5n/m}
+    (10^{-5})^{-d/m} = 10^{5d/m}
     $$
     \begin{itemize}
-        \item For $n=10, m=1$, $(10^{-5})^{-10} = 10^{50}$
-        \item For $n=100, m=1$, $(10^{-5})^{-100} = 10^{500}$
+        \item For $d=10, m=1$, $(10^{-5})^{-10} = 10^{50}$
+        \item For $d=100, m=1$, $(10^{-5})^{-100} = 10^{500}$
     \end{itemize}
 \end{frame}
 \begin{frame}{Poggio et al 2017 - key theorem 2}
 \begin{theorem}[Deep network with Binary Tree structure]
-For compositional functions $f\in W^{n,2}_m$, deep networks need only
+For compositional functions $f\in W^{d,2}_m$, deep networks need only
 $$
-N = \mathcal{O}((n-1)\epsilon^{-2/m})
+N = \mathcal{O}((d-1)\epsilon^{-2/m})
 $$
 nodes to achieve approximation error $\epsilon$. 
 \end{theorem}
-\textbf{Remark}: Note here we have linear dependency on input. Let $\epsilon = 10^{-5}$, i.e., for a $n$-dimensional $C^m$ function with binary tree structure, we need 
+\textbf{Remark}: Note here we have linear dependency on input. Let $\epsilon = 10^{-5}$, i.e., for a $d$-dimensional $C^m$ function with binary tree structure, we need 
 $$
-(n-1)\times (10^{-5})^{-2/m}) = (n-1)\times 10^{10/m}
+(d-1)\times (10^{-5})^{-2/m}) = (d-1)\times 10^{10/m}
 $$
 \begin{itemize}
-    \item For $n=10, m=1$, $(10-1)\times (10^{-5})^{-2/m} = 9\times 10^{10}$
-    \item For $n=100, m=1$, $(100-1)\times (10^{-5})^{-2/m} = 99\times 10^{10}$
+    \item For $d=10, m=1$, $(10-1)\times (10^{-5})^{-2/m} = 9\times 10^{10}$
+    \item For $d=100, m=1$, $(100-1)\times (10^{-5})^{-2/m} = 99\times 10^{10}$
 \end{itemize}
 \end{frame}
 \begin{frame}{Poggio et al 2017 - key theorem 3}
@@ -386,112 +473,117 @@ $$
 \end{itemize}
     
 \end{frame}
-\begin{frame}{Bach 2017 - Setup}
-\begin{itemize}
-    \item Single hiddne layer neural networks
-    \item A hidden layer with $k$ nodes
-    \item Each node computes
-    $$
-    \sigma(w_j^Tx+b_j)
-    $$
-    where $w_j$: weight vector of node $j$, $b_j$: bias of node $j$. 
-    \item $\sigma$ is the activation function, focus on ReLu $\max\{0,x\}$
-    \item The neurel network output is
-    $$
-    f(x) = \sum_{j=1}^k\eta_j \sigma(w_j^Tx+b_j)
-    $$
-\end{itemize}
+% \begin{frame}{Bach 2017 - Setup}
+% \begin{itemize}
+%     \item Single hiddne layer neural networks
+%     \item A hidden layer with $k$ nodes
+%     \item Each node computes
+%     $$
+%     \sigma(w_j^Tx+b_j)
+%     $$
+%     where $w_j$: weight vector of node $j$, $b_j$: bias of node $j$. 
+%     \item $\sigma$ is the activation function, focus on ReLu $\max\{0,x\}$
+%     \item The neurel network output is
+%     $$
+%     f(x) = \sum_{j=1}^k\eta_j \sigma(w_j^Tx+b_j)
+%     $$
+% \end{itemize}
     
-\end{frame}
-\begin{frame}{Bach 2017 - Key message}
-\begin{itemize}
-    \item If the function adaptive to unknown underlying linear structures such as the dependence on the projection of the input ariables onto a low-dimensional subspace. 
-\end{itemize}
+% \end{frame}
+% \begin{frame}{Bach 2017 - Key message}
+% \begin{itemize}
+%     \item If the function adaptive to unknown underlying linear structures such as the dependence on the projection of the input ariables onto a low-dimensional subspace. 
+% \end{itemize}
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Bach 2017 - Setup}
-For finite number of nodes, we train by adjusting $w_j, b_j, \eta_j$.
-\begin{itemize}
-    \item Bach 2017 consider we have a continuous set $V$ of possible nodes
-    \item Each node is identified by its parameter $v=(w,b)\in V$.
-    \item Use a measure $\mu$ to tell how much each node contribute
-    \item network output: 
-    $$
-    f(x) = \int_V \sigma(w^T x+b)\,d\mu(w,b)
-    $$
-    \item $\mu$ is like a weight function over all possible neurons
-\end{itemize}
+% \begin{frame}{Bach 2017 - Setup}
+% For finite number of nodes, we train by adjusting $w_j, b_j, \eta_j$.
+% \begin{itemize}
+%     \item Bach 2017 consider we have a continuous set $V$ of possible nodes
+%     \item Each node is identified by its parameter $v=(w,b)\in V$.
+%     \item Use a measure $\mu$ to tell how much each node contribute
+%     \item network output: 
+%     $$
+%     f(x) = \int_V \sigma(w^T x+b)\,d\mu(w,b)
+%     $$
+%     \item $\mu$ is like a weight function over all possible neurons
+% \end{itemize}
     
-\end{frame}
-\begin{frame}{Bach 2017 - variational norm}
-\begin{itemize}
-    \item Let $V$ be a compact topological space and 
-    $$
-    \{\varphi_v: X\to\mathbb{R}\}_{v\in V}
-    $$
-    be a family of nodes parameterized by $v\in V$.
-    \item The function space $F_1$ is defined as the set of all functions $f:X\to\mathbb{R}$ that can be represented as
-    $$
-    f(x) = \int_V \phi_v(x)\, d\mu(v)
-    $$
-    where $\mu$ is a signed Radon measure on $V$ with finite total variation $|\mu|(V)$.
-\end{itemize}
+% \end{frame}
+% \begin{frame}{Bach 2017 - variational norm}
+% \begin{itemize}
+%     \item Let $V$ be a compact topological space and 
+%     $$
+%     \{\varphi_v: X\to\mathbb{R}\}_{v\in V}
+%     $$
+%     be a family of nodes parameterized by $v\in V$.
+%     \item The function space $F_1$ is defined as the set of all functions $f:X\to\mathbb{R}$ that can be represented as
+%     $$
+%     f(x) = \int_V \phi_v(x)\, d\mu(v)
+%     $$
+%     where $\mu$ is a signed Radon measure on $V$ with finite total variation $|\mu|(V)$.
+% \end{itemize}
     
-\end{frame}
-\begin{frame}{Bach 2017 - Variational norm}
-The variational norm $\gamma_1(f)$ is formally defined as
-$$
-\gamma_1(f) = \inf\{|\mu|(V): f(x)= \int_V\phi_v(x)\, d\mu(v)\,\text{for all $x\in X$}\}
-$$
-that is the infimum of the total variation $|\mu|(V)$ over all possible signed Radon measure $\mu$ that represent the function $f$.
+% \end{frame}
+% \begin{frame}{Bach 2017 - Variational norm}
+% The variational norm $\gamma_1(f)$ is formally defined as
+% $$
+% \gamma_1(f) = \inf\{|\mu|(V): f(x)= \int_V\phi_v(x)\, d\mu(v)\,\text{for all $x\in X$}\}
+% $$
+% that is the infimum of the total variation $|\mu|(V)$ over all possible signed Radon measure $\mu$ that represent the function $f$.
     
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Bach 2017 - Total variation of a measure}
-The total variation $|\mu|(V)$ of a signed Radon measure $\mu$ is defined as
-$$
-|\mu|(V) = \sup\left\{\int_V g(v)\, d\mu(v): g\text{ is continuous with $|g(v)|\le 1$ for all $v\in V$}\right\}
-$$
-Heuristically, this measures the size of $\mu$ by testing it againt all bounded continuous functions.
-\end{frame}
-\begin{frame}{Special case: Density representation}
-When the measure $\mu$ has a density $p$ with respect to a probability measure $\tau$, i.e., $d\mu(v) = p(v)\, d\tau(v)$, then the variation norm simplifies to
-$$
-\gamma_1(f) = \inf\left\{\int_V|p(v)|\, d\tau(v): f(x) = \int_V \phi_v(x)p(x)\, d\tau(v)\text{ for all $x\in X$}\right\}
-$$
-which is the $L^1$ norm of of the density function $p$
+% \begin{frame}{Bach 2017 - Total variation of a measure}
+% The total variation $|\mu|(V)$ of a signed Radon measure $\mu$ is defined as
+% $$
+% |\mu|(V) = \sup\left\{\int_V g(v)\, d\mu(v): g\text{ is continuous with $|g(v)|\le 1$ for all $v\in V$}\right\}
+% $$
+% Heuristically, this measures the size of $\mu$ by testing it againt all bounded continuous functions.
+% \end{frame}
+% \begin{frame}{Special case: Density representation}
+% When the measure $\mu$ has a density $p$ with respect to a probability measure $\tau$, i.e., $d\mu(v) = p(v)\, d\tau(v)$, then the variation norm simplifies to
+% $$
+% \gamma_1(f) = \inf\left\{\int_V|p(v)|\, d\tau(v): f(x) = \int_V \phi_v(x)p(x)\, d\tau(v)\text{ for all $x\in X$}\right\}
+% $$
+% which is the $L^1$ norm of of the density function $p$
  
-\end{frame}
-\begin{frame}{Bach 2017 - Finite Neuron case}
-For the specific case where $f$ is represented by finitely many neurons,
-$$
-f(x) = \sum_{j=1}^k \eta_j\varphi_{v,j}(x)
-$$
-this correspond to 
-$$
-\mu = \sum_{j=1}^k \eta_j \mathbf{1}(v=v_j)
-$$
-and total variation is
-$$
-|\mu|(V) = \sum_{j=1}^k|\eta_j|
-$$
+% \end{frame}
+% \begin{frame}{Bach 2017 - Finite Neuron case}
+% For the specific case where $f$ is represented by finitely many neurons,
+% $$
+% f(x) = \sum_{j=1}^k \eta_j\varphi_{v,j}(x)
+% $$
+% this correspond to 
+% $$
+% \mu = \sum_{j=1}^k \eta_j \mathbf{1}(v=v_j)
+% $$
+% and total variation is
+% $$
+% |\mu|(V) = \sum_{j=1}^k|\eta_j|
+% $$
     
-\end{frame}
-\begin{frame}{Bach 2017 - Function class}
-The function class considered in Bach 2017 is denoted as $F_1$, all the functions that can be represented as
-$$
-f(x) =\int_V \sigma(w^\top x+ b)\, d\mu(w,b)
-$$
-i.e., all the functions that can be expressed as possibly infinitely weighted combinations of neurons.
-\begin{itemize}
-    \item Each function $f\in F_1$ has a complexity measure $\gamma_1(f)$
-    \item The smaller $\gamma_1(f)$ is, the simpler the function. 
-\end{itemize}
+% \end{frame}
+% \begin{frame}{Bach 2017 - Function class}
+% The function class considered in Bach 2017 is denoted as $F_1$, all the functions that can be represented as
+% $$
+% f(x) =\int_V \sigma(w^\top x+ b)\, d\mu(w,b)
+% $$
+% i.e., all the functions that can be expressed as possibly infinitely weighted combinations of neurons.
+% \begin{itemize}
+%     \item Each function $f\in F_1$ has a complexity measure $\gamma_1(f)$
+%     \item The smaller $\gamma_1(f)$ is, the simpler the function. 
+% \end{itemize}
     
+% \end{frame}
+
+\begin{frame}{Are these applicable to macro?}
+    \begin{itemize}
+        \item Is the policy function smooth?
+        \item Does the policy function has finite mean in Fourier distribution
+        \item Does the policy function have low local dimensions?
+    \end{itemize}
 \end{frame}
-
-
-
 
 \end{document}
