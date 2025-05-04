@@ -403,6 +403,12 @@ $$
 \end{itemize}
     
 \end{frame}
+\begin{frame}{Bach 2017 - Key message}
+\begin{itemize}
+    \item If the function adaptive to unknown underlying linear structures such as the dependence on the projection of the input ariables onto a low-dimensional subspace. 
+\end{itemize}
+    
+\end{frame}
 
 \begin{frame}{Bach 2017 - Setup}
 For finite number of nodes, we train by adjusting $w_j, b_j, \eta_j$.
@@ -470,6 +476,18 @@ and total variation is
 $$
 |\mu|(V) = \sum_{j=1}^k|\eta_j|
 $$
+    
+\end{frame}
+\begin{frame}{Bach 2017 - Function class}
+The function class considered in Bach 2017 is denoted as $F_1$, all the functions that can be represented as
+$$
+f(x) =\int_V \sigma(w^\top x+ b)\, d\mu(w,b)
+$$
+i.e., all the functions that can be expressed as possibly infinitely weighted combinations of neurons.
+\begin{itemize}
+    \item Each function $f\in F_1$ has a complexity measure $\gamma_1(f)$
+    \item The smaller $\gamma_1(f)$ is, the simpler the function. 
+\end{itemize}
     
 \end{frame}
 
