@@ -1,0 +1,168 @@
+\section{Appendix}
+\subsection{Direct comparison of the simplified setup and \cite{tsitsiklis1994asynchronous}}\label{app:comparison}
+\subsubsection{Model Setup in \cite{tsitsiklis1994asynchronous}}
+
+We consider iterative updates of a vector $x \in \mathbb{R}^n$ to solve the fixed-point equation $F(x) = x$, where $F: \mathbb{R}^n \mapsto \mathbb{R}^n$ with component mappings $F_i: \mathbb{R}^n \mapsto \mathbb{R}$.\\
+\\
+Let $x(t)$ denote the state at discrete time $t \in \mathbb{N}$, with components $x_i(t)$. For each component $i$, we have:
+\begin{equation}\label{eq:update_rule_tsi}
+x_i(t + 1) = 
+\begin{cases}
+x_i(t), & t \notin T^i \\
+x_i(t) + \alpha_i(t)(F_i(x^i(t)) - x_i(t) + w_i(t)), & t \in T^i
+\end{cases}
+\end{equation}
+where:
+\begin{itemize}
+\item $T^i \subset \mathbb{N}$ is the set of update times for component $i$
+\item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+\item $w_i(t)$ is a noise term
+\item $x^i(t) = (x_1(\tau_1^i(t)), \ldots, x_n(\tau_n^i(t)))$ contains possibly outdated information with $0 \leq \tau_j^i(t) \leq t$
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history.\\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation*}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation*}
+When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.
+\subsubsection{Simplified model setup}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+\begin{equation}
+    x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(\textcolor{blue}{x(t)}) + w_i(t)) 
+\end{equation}\label{eq:x_t}
+
+where
+\begin{itemize}
+    \item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+    \item $w_i(t)$ is a noise term
+\end{itemize}
+\begin{remark}
+    In this simplified setup, we can write \autoref{eq:x_t} into vector form, i.e.,
+    $$
+    \mathbf{x}(t+1) =(I-\mathbf{A}(t)) \mathbf{x}(t) + \mathbf{A}(t)(\mathbf{F}(\mathbf{x}(t)) +\mathbf{w}(t))
+    $$
+    where
+    $$
+    \mathbf{x}(t) = \begin{pmatrix}
+        x_1(t)\\
+        \vdots\\
+        x_n(t)
+    \end{pmatrix},\mathbf{A}(t) = \begin{pmatrix}
+        \alpha_1(t) & 0& \cdots & 0\\
+        0& \alpha_2(t) & \cdots & 0\\
+        \vdots & \vdots & \ddots & 0\\
+        0 &0 &\cdots & \alpha_n(t)
+    \end{pmatrix},\mathbf{F}(\mathbf{x}(t)) = \begin{pmatrix}
+        F_1(\mathbf{x}(t))\\
+        \vdots\\
+        F_n(\mathbf{x}(t))
+    \end{pmatrix},\mathbf{w}(t) = \begin{pmatrix}
+        w_1(t)\\
+        \vdots\\
+        w_n(t)
+    \end{pmatrix}
+    $$
+    But for the sake of doing one thing at a time, we keep the notation in \cite{tsitsiklis1994asynchronous} for now.
+\end{remark}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation*}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation*}
+\noindent When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.\\
+\\
+\noindent Compared to \autoref{eq:update_rule_tsi}, no information is outdated, hence, we have $x^i(t) = x(t)$. And we don't consider the update time for different cases. As mentioned in \cite{tsitsiklis1994asynchronous}, this is a special case, hene all the theorems work fine under this setup.
+
+\subsubsection{Assumptions in \cite{tsitsiklis1994asynchronous}}
+
+\noindent
+\textcolor{blue}{\textbf{Assumption 1} (Total Asynchronism).
+For any $i$ and $j$, $\lim_{t \to \infty} \tau_j^i(t) = \infty$, with probability 1.}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$, $j$, and $t$, $\alpha_i(t)$ and \textcolor{blue}{$\tau_j^i(t)$} are $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 5} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 6} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\begin{remark}
+    We don't present assumption 4 as it is not required for the theorem of interest. Later, in the simplified version, we will re-enumerate the number. Here is the enumeration to match \cite{tsitsiklis1994asynchronous}
+\end{remark}
+\subsubsection{Simplified assumptions}
+\noindent
+\textbf{Assumption 1} (Simplified).
+This assumption is no longer needed since no information is outdated.
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 2} (Statistical Properties).
+\begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 3} (Stepsize Conditions).
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 5} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+
+\vspace{1em}
+
+\noindent
+\textbf{Assumption 6} (Boundedness).
+There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}

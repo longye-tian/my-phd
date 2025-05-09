@@ -79,7 +79,7 @@
 \begin{itemize}
     \item CoD is prevalent in heterogenous agent macro
     \item Macro papers cite some NN paper and say ``NN can deal with CoD"
-    \item Why and when?
+    \item Why and when? (Function class)
 \end{itemize}
 
 \end{frame}
@@ -214,7 +214,7 @@ For a given approximation error, the number of parameters required to approximat
     
 \end{frame}
 \begin{frame}{Barron 1993 - Key messages}
-For a specific function class $\Gamma_{C,B}$ (see next page for detailed desciption)
+For a specific function class $\Gamma_{C,B}$ (see later for detailed desciption)
 \begin{itemize}
     \item Neural network with one hidden layer of $n$ nodes has error bound $\mathcal{O}(1/n)$ indenpendent of dimension $d$. 
     \item Fixed basis method: error bound no better than $\mathcal{O}(1/n^{2/d})$
@@ -258,6 +258,39 @@ $$
     
 \end{frame}
 
+\begin{frame}{Interpretation of $C_f$ and $C_{f,B}$}
+\begin{itemize}
+    \item It is an average of the norm of the frequency vector weighted by the Fourier distribution
+    $$
+C_f = \int_{\mathbb{R}^d} |\omega||\hat F(d\omega)| \le C
+$$
+\item It measure the extend the function oscillates
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Example that does not work - $\sin(1/x)$}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.6\linewidth]{Reinforcement Learning/Curse of Dimensionality/sin1_x.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Barron 1993 - Key theorem}
+\begin{theorem}
+    For every function $f$ with finite $C_f$ and every $n\ge 1$, there exists a neural network with one hidden layer of $n$-sigmoidal nodes:
+    $$
+    f_n(x) = \sum_{k=1}^n c_k\phi(a_k \cdot x + b_k)+c_0
+    $$
+    such that the approximation error with respect to any probability measure $\mu$ on the ball $B_r = \{x: |x|\le r\}$ satisfies
+    $$
+    \int (f(x)-f_n(x))^2 \, \mu(dx) \le \frac{(2rC_f)^2}{n}
+    $$
+\end{theorem}
+\textbf{Remark:} the dimension $d$ doesn't matter with  approximation error of $\mathcal{O}(1/n)$. One caveat: be careful with $C_f$ that depends on $d$.
+    
+\end{frame}
+
 \begin{frame}{Barron 1993 - function class}
 What kind of functions are in this class?
 \begin{itemize}
@@ -276,6 +309,14 @@ What kind of functions are in this class?
     \end{itemize}
     
 \end{itemize}
+
+\end{frame}
+\begin{frame}{Gaussian}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{Reinforcement Learning/Curse of Dimensionality/gaussian.png}
+\end{figure}
+    
 \end{frame}
 \begin{frame}{Barron 1993 - function class}
 \begin{itemize}
@@ -289,7 +330,7 @@ What kind of functions are in this class?
     $$
     f(x) = g(|x|)
     $$
-    \item Linear functions, quadratic forms, polynomials
+    \item Linear functions, quadratic forms, polynomials, step functions
 \end{itemize}
 \end{frame}
 \begin{frame}{Barron 1993 - functions}
@@ -299,20 +340,7 @@ What kind of functions are in this class?
 \end{itemize}
     
 \end{frame}
-\begin{frame}{Barron 1993 - Key theorem}
-\begin{theorem}
-    For every function $f$ with finite $C_f$ and every $n\ge 1$, there exists a neural network with one hidden layer of $n$-sigmoidal nodes:
-    $$
-    f_n(x) = \sum_{k=1}^n c_k\phi(a_k \cdot x + b_k)+c_0
-    $$
-    such that the approximation error with respect to any probability measure $\mu$ on the ball $B_r = \{x: |x|\le r\}$ satisfies
-    $$
-    \int (f(x)-f_n(x))^2 \, \mu(dx) \le \frac{(2rC_f)^2}{n}
-    $$
-\end{theorem}
-\textbf{Remark:} the dimension $d$ doesn't matter with  approximation error of $\mathcal{O}(1/n)$. One caveat: be careful with $C_f$ that depends on $d$.
-    
-\end{frame}
+
 
 \begin{frame}{Barron 1993 - Key message}
 \begin{itemize}

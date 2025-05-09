@@ -373,3 +373,26 @@
 % end appendix autoref patch
 
 \setcounter{tocdepth}{1}
+
+% Add Amber/Gold color for assumptions
+\definecolor{Amber}{RGB}{255, 191, 0}
+
+% Create the theorem style for assumptions
+\declaretheoremstyle[
+    headfont=\bfseries\sffamily\color{Amber!70!black}, bodyfont=\normalfont,
+    mdframed={
+            linewidth=2pt,
+            rightline=false, topline=false, bottomline=false,
+            linecolor=Amber, backgroundcolor=Amber!5,
+            nobreak=false
+        }
+]{thmamberbox}
+
+% Declare the assumption environment with numbering by section
+\declaretheorem[style=thmamberbox, name=Assumption, numberwithin=section]{assumption}
+
+% Also create an unnumbered version
+\declaretheorem[style=thmamberbox, name=Assumption, numbered=no]{assumption*}
+
+% Add this to ensure hyperref works correctly with the assumption counter
+\renewcommand\theHassumption{\thesection.\arabic{assumption}}

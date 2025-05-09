@@ -23,5 +23,90 @@ We call a self-map $S$ on a subset $V$ of a Banach lattice $E$ if there exists a
     \item $\rho(K)<1$ 
     \item $|Sv-Sw|\le K|v-w|$  for all $v,w\in V$
 \end{itemize}
-    
+
 \end{definition}
+\begin{lemma}[Gelfand's formula]\label{lm:gelfand}
+    If $B$ is any square matrix and $\|\cdot\|$ is any matrix norm, then
+    $$
+    \rho(B)^k\le \|B^k\|\quad \text{for all $k\in\mathbb{N}$}
+    $$
+    $$
+    \|B^k\|^{1/k}\to \rho(B)\text{ as $k\to\infty$}
+    $$
+\end{lemma}
+\begin{corollary}\label{col:gelfand col}
+    If $B$ is any square matrix and $\|\cdot\|$ is any matrix form, then if there exists $n\in\mathbb{N}$ such that 
+    $$
+    \|B^n\|<1
+    $$
+    this implies $\rho(B)<1$.
+\end{corollary}
+\begin{proof}
+    Using \autoref{lm:gelfand}, we have
+    $$
+    \rho(B)^n \le \|B^n\|<1
+    $$
+    Hence, $\rho(B)< \sqrt[n]{1}=1$.
+\end{proof}
+\begin{lemma}
+Let $A$ be a $n$-dimensional nonnegative square matrix with spectral radius $\rho(A)<1$. Then there exists a strictly positive matrix $B$ such that 
+$$
+A< B\text{ and $\rho(B)<1$}
+$$
+\end{lemma}
+\begin{proof}
+    Let $J$ denote the $n$-dimensional square matrix with every entry equals to 1. We construct $B = A +\epsilon  J$. We show that there exists $1>\epsilon>0$ such that $\rho(B)<1$.\\
+    \\
+    Using the Gelfand's formula, we have there exists $N\in\mathbb{N}$ such that for all $n\ge N$, $\|A^n\|< 1$. Fix $n\ge N$. We set $\delta:= 1-\|A^n\|$.\\
+    \\
+    Moreover, we have 
+    \begin{align*}
+        \|B^n\| &= \|(A+\epsilon J)^n\|\\
+        &= \|A^n +  \epsilon (\Gamma_{1,1} +\cdots + \Gamma_{1,C^n_1})+\cdots +  \epsilon^{n-1}(\Gamma_{n-1, 1} + \cdots \Gamma_{n-1, C^{n}_{n-1}}) +\epsilon^n J^n\|
+    \end{align*}
+    for some square matrix $\Gamma_{i,j}$. 
+    \begin{remark}
+    To motive this step, we have for $n=2$,
+    \begin{align*}
+        (A + \epsilon J)^2  &= A^2 + \epsilon AJ + \epsilon J A + \epsilon^2 J^2\\
+        &= A^2 + \epsilon (AJ +JA) +\epsilon ^2 J^2
+    \end{align*}
+    Hence, we have $\Gamma_{1,1} = AJ$ and $\Gamma_{1,2} = JA$
+\end{remark}
+    \noindent Then by triangle inequality, we have
+    \begin{align*}
+         \|B^n\| &\le \|A^n\| + \sum_{k=1}^{n-1} \epsilon^k \left(\sum_{j=1}^{C^n_k} \|\Gamma_{k,j}\|\right) + \epsilon^n \|J^n\|
+    \end{align*}
+    Let 
+    $$
+    M:=\max_{1\le k,j\le n}\{\|\Gamma_{k,j}\|, \|J^n\|\}
+    $$
+    $$
+    \gamma: =\max_{1\le k\le n} C^n_k
+    $$
+    By finite dimension, we have $M$ is well-defined and finite. This gives
+   \begin{align*}
+         \|B^n\| &\le \|A^n\| + \gamma M\sum_{k=1}^{n} \epsilon^k\\
+         &<\|A^n\| + \gamma M n\epsilon \tag{$0<\epsilon<1$}
+    \end{align*}
+    Let $\epsilon <\frac{\delta}{\gamma Mn}$. Then, we have
+    $$
+    \|B^k\| = \|(A+\epsilon J)^k\|< 1
+    $$
+    By \autoref{col:gelfand col}, this implies $\rho(B)<1$.
+\end{proof}
+
+In the finite dimensional case, we can extend \textbf{Assumption 3} (contraction) to \textbf{Assumption $3'$} (eventually contraction). Here is the comparison: \\
+\\
+\textbf{Assumption $3$} (Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation} holds.\\
+\\
+\textbf{Assumption $3'$}  (Eventual Contraction).
+There exists a vector $x^* \in \mathbb{R}^n$, and positive linear operator $K$ such that
+\begin{equation}
+|F(x) - x^*| \leq K |x - x^*|, \quad \forall x \in \mathbb{R}^n.
+\end{equation} holds.\\
+\\
