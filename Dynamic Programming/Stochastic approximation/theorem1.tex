@@ -1,22 +1,63 @@
-\section{Full proof for theorem 1}
-
-We need three lemmas as in \cite{jaakkola1993convergence}.
-
-\begin{lemma}[Lemma 1 of \cite{jaakkola1993convergence}]
-A random process 
-$$
-w_{n+1}(x) = (1-\alpha_n(x))w_n(x)+\beta_n(x)r_n(x)
-$$
-converges to zero with probability one if the following conditions are satisfied:
+\newpage
+\section{Extension to Eventual Contraction}\label{sec:2}
+In this section, we extend the simplified setup in \autoref{sub:simple setup}. In particular, we change the Contraction \autoref{ass:contraction} to Eventual Contraction \autoref{ass:contraction2}.\\
+\\
+The general idea of the proof this extension is
 \begin{enumerate}
-    \item $\sum_{n=1}^\infty \alpha_n(x) = \infty, \sum_{n=1}^\infty \alpha_n^2(x)<\infty$ and $\sum_{n=1}^\infty \beta_n(x) = \infty$, and $\sum_{n=1}^\infty \beta_n^2(x)<\infty$ uniformly over $x$ with probability one.
-    \item $\mathbb{E}(r_n(x)|P_n,\beta_n) = 0$ and $\mathbb{E}(r_n^2(x)|P_n,\beta_n)\le C$ with probability one where
+    \item show that positive linear operator with spetral radius less than one can be perturbed into a stricly positive linear operator with spetral radius less than one.
+    \item Use the perturbed strictly positive linear operator, we can define a contraction with weighted maximum norm
+    \item Use the new contraction to satisfies the original \autoref{ass:contraction} and \autoref{ass:boundedness}.
+\end{enumerate}
+\subsection{Setup and Assumptions}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+where
+\begin{itemize}
+    \item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+    \item $w_i(t)$ is a noise term
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
+\\
+
+\begin{assumption}[Statistical Properties]\label{ass:stat2}
+We assume
+    \begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+\end{assumption}
+\begin{assumption}[Stepsize conditions]\label{ass:stepsize2}
+We assume
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
 \end{enumerate}
     
-\end{lemma}
+\end{assumption}
+\begin{assumption}[Eventual Contraction]\label{ass:contraction2}
+There exists a vector $x^* \in \mathbb{R}^n$, and positive linear operator $K$ with spectral radius $\rho(K)<1$ such that
+\begin{equation}
+|F(x) - x^*|\leq K|x - x^*|, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+    
+\end{assumption}
 
-\section{Extension}
-\subsection{Related Definitions}
+\begin{assumption}[Boundedness]\label{ass:boundedness2}
+    There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\end{assumption}
+
+\newpage
+\subsection{Related Definitions and useful theorems}
+We use the definition of eventual contraction from DP2. And we use Gelfand's formula to prove that positive linear operator with spectral radius less than one can be perturbed into a strictly positive linear operator with spectral radius less than one as in \autoref{lm: perturbed}.\\
 \begin{definition}[Eventual contraction]
 We call a self-map $S$ on a subset $V$ of a Banach lattice $E$ if there exists a positive linear operator $K:E \to E$ such that
 \begin{itemize}
@@ -48,14 +89,14 @@ We call a self-map $S$ on a subset $V$ of a Banach lattice $E$ if there exists a
     $$
     Hence, $\rho(B)< \sqrt[n]{1}=1$.
 \end{proof}
-\begin{lemma}
+\begin{lemma}\label{lm: perturbed}
 Let $A$ be a $n$-dimensional nonnegative square matrix with spectral radius $\rho(A)<1$. Then there exists a strictly positive matrix $B$ such that 
 $$
 A< B\text{ and $\rho(B)<1$}
 $$
 \end{lemma}
 \begin{proof}
-    Let $J$ denote the $n$-dimensional square matrix with every entry equals to 1. We construct $B = A +\epsilon  J$. We show that there exists $1>\epsilon>0$ such that $\rho(B)<1$.\\
+    Let $J$ denote the $n$-dimensional square matrix with every entry equals to 1. We construct $B = A +\epsilon  J$. We show that there exists $0<\epsilon<1$ such that $\rho(B)<1$.\\
     \\
     Using the Gelfand's formula, we have there exists $N\in\mathbb{N}$ such that for all $n\ge N$, $\|A^n\|< 1$. Fix $n\ge N$. We set $\delta:= 1-\|A^n\|$.\\
     \\
@@ -64,14 +105,14 @@ $$
         \|B^n\| &= \|(A+\epsilon J)^n\|\\
         &= \|A^n +  \epsilon (\Gamma_{1,1} +\cdots + \Gamma_{1,C^n_1})+\cdots +  \epsilon^{n-1}(\Gamma_{n-1, 1} + \cdots \Gamma_{n-1, C^{n}_{n-1}}) +\epsilon^n J^n\|
     \end{align*}
-    for some square matrix $\Gamma_{i,j}$. 
+    for some square matrix $\Gamma_{i,j}$ and $C^i_j$ be the number of combinations of choosing $j$ objects from $i$ objects.
     \begin{remark}
     To motive this step, we have for $n=2$,
     \begin{align*}
         (A + \epsilon J)^2  &= A^2 + \epsilon AJ + \epsilon J A + \epsilon^2 J^2\\
         &= A^2 + \epsilon (AJ +JA) +\epsilon ^2 J^2
     \end{align*}
-    Hence, we have $\Gamma_{1,1} = AJ$ and $\Gamma_{1,2} = JA$
+    Hence, we have $\Gamma_{1,1} = AJ$ and $\Gamma_{1,2} = JA$ with $C^2_1 =2$.
 \end{remark}
     \noindent Then by triangle inequality, we have
     \begin{align*}
@@ -84,29 +125,83 @@ $$
     $$
     \gamma: =\max_{1\le k\le n} C^n_k
     $$
-    By finite dimension, we have $M$ is well-defined and finite. This gives
+    By finite dimension, we have $M$ and $\gamma$ is well-defined and finite. This gives
    \begin{align*}
          \|B^n\| &\le \|A^n\| + \gamma M\sum_{k=1}^{n} \epsilon^k\\
          &<\|A^n\| + \gamma M n\epsilon \tag{$0<\epsilon<1$}
     \end{align*}
-    Let $\epsilon <\frac{\delta}{\gamma Mn}$. Then, we have
+    Let $0<\epsilon <\frac{\delta}{\gamma Mn}$. Then, we have
     $$
-    \|B^k\| = \|(A+\epsilon J)^k\|< 1
+    \|B^n\| = \|(A+\epsilon J)^n\|< \|A^n\| + \delta < 1
     $$
     By \autoref{col:gelfand col}, this implies $\rho(B)<1$.
 \end{proof}
-
-In the finite dimensional case, we can extend \textbf{Assumption 3} (contraction) to \textbf{Assumption $3'$} (eventually contraction). Here is the comparison: \\
-\\
-\textbf{Assumption $3$} (Contraction).
-There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
-\begin{equation}
-\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
-\end{equation} holds.\\
-\\
-\textbf{Assumption $3'$}  (Eventual Contraction).
-There exists a vector $x^* \in \mathbb{R}^n$, and positive linear operator $K$ such that
-\begin{equation}
-|F(x) - x^*| \leq K |x - x^*|, \quad \forall x \in \mathbb{R}^n.
-\end{equation} holds.\\
-\\
+\subsection{Main extension proof}
+In this section, we prove a proposition that \autoref{ass:contraction2} can be viewed of \autoref{ass:contraction} with a specific weighted maximum norm.
+\begin{proposition}[\autoref{ass:contraction2} implies \autoref{ass:contraction}]\label{prop: extension} 
+Suppose there exists a vector $x^*\in\mathbb{R}^n$ and a positive linear operator $K$ with spectral radius $\rho(K)<1$ such that 
+$$
+|F(x)-x^*|\le K|x-x^*|,\quad \forall x\in \mathbb{R}^n
+$$
+Then, this implies there exists a positive vector $v\in\mathbb{R}^n$ and a scalar $\beta\in [0,1)$, such that
+$$
+\|F(x)-x^*\|_v \le \beta\|x-x^*\|_v
+$$
+In other words, \autoref{ass:contraction2} implies \autoref{ass:contraction}.
+\end{proposition}
+\begin{proof}
+    First, since $K$ is a positive linear operator in a finite dimensional space, it can be represented by a nonnegative matrix with spectral radius $\rho(K)<1$.\\
+    \\
+    By \autoref{lm: perturbed}, there exists a strictly positive matrix $\tilde K>K$ such that $\rho(\tilde K)<1$.\\
+    \\
+    Using Perron-Frobenius theorem, we know
+    \begin{itemize}
+        \item the spectral radius $\beta:=\rho(\tilde K) =\frac{(\tilde Kv)_i}{v_i}<1 $ is a positive real simple eigenvalue of $\tilde K$
+        \item Its corresponding eigenvector $v$ is uniquely positive up to positive scaling. 
+    \end{itemize}
+    Hence, we have pointwise 
+    $$
+    |F_i(x)-x^*_i|\le (K|x-x^*|)_i \le (\tilde K|x-x^*|)_i,\quad i=1,2,\cdots, n
+    $$
+    as $K<\tilde K$. Using the matrix representation, we have
+    $$
+    (\tilde K|x-x^*|)_i= \sum_{j=1}^n \tilde K_{ij}|x_j-x_j^*|
+    $$
+    As in \autoref{eq:weighted norm}, we define
+    $$
+    \|z\|_v:=\max_{1\le i\le n}\frac{|z_i|}{v_i},\quad \forall z\in \mathbb{R}^n
+    $$
+    as the weighted maximum norm using $v$. Hence, this implies
+    $$
+    \frac{|z_j|}{v_j}\le \max_{1\le i\le n}\frac{|z_i|}{v_i},\quad j=1,2,\cdots,n
+    $$
+    Hence,
+    $$
+    |z_j|\le v_j\|z\|_v,\quad j=1,2,\cdots,n
+    $$
+    We can apply this to $|x_j-x_j^*|$, we get
+    \begin{align*}
+        (\tilde K|x-x^*|)_i &= \sum_{j=1}^n \tilde K_{ij}|x_j-x_j^*|\\
+        &\le \sum_{j=1}^n \tilde K_{ij} v_j\|x-x^*\|_v\\
+        &= \|x-x^*\|_v\sum_{j=1}^n \tilde K_{ij}v_j\\
+        &= \|x-x^*\|_v(\tilde Kv)_i\\
+    \end{align*}
+    This implies
+    $$
+    |F_i(x)-x^*_i|\le\|x-x^*\|_v(\tilde Kv)_i
+    $$
+    Now we divide both sides by $v_i$, we get
+    \begin{align*}
+        \frac{|F_i(x)-x^*_i|}{v_i}\le \frac{(\tilde Kv)_i}{v_i} \|x-x^*\|_v= \beta \|x-x^*\|_v
+    \end{align*}
+    for all $i=1,2,\cdots, n$. Hence, we have
+    $$
+    \|F(x)-x^*\|_v = \max_{1\le i \le n}\frac{|F_i(x)-x^*_i|}{v_i} \le\beta \|x-x^*\|_v
+    $$
+    This completes the proof.
+\end{proof}
+\begin{remark}
+    \autoref{prop: extension} implies eventual contraction in finite dimension can be viewed as a contraction with a particular weighted maximum norm. Hence the original Contraction \autoref{ass:contraction} and Boundedness \autoref{ass:boundedness} holds under Eventual Contraction \autoref{ass:contraction2}.\\
+    \\
+    Thus, the original proof for \autoref{thm:bounded} and \autoref{thm: contraction} still holds under eventual contraction.
+\end{remark}

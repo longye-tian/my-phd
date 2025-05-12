@@ -1,6 +1,5 @@
-\section{Appendix}
-\subsection{Direct comparison of the simplified setup and \cite{tsitsiklis1994asynchronous}}\label{app:comparison}
-\subsubsection{Model Setup in \cite{tsitsiklis1994asynchronous}}
+\section{Direct comparison of the simplified setup and \cite{tsitsiklis1994asynchronous}}\label{app:comparison}
+\subsection{Model Setup in \cite{tsitsiklis1994asynchronous}}
 
 We consider iterative updates of a vector $x \in \mathbb{R}^n$ to solve the fixed-point equation $F(x) = x$, where $F: \mathbb{R}^n \mapsto \mathbb{R}^n$ with component mappings $F_i: \mathbb{R}^n \mapsto \mathbb{R}$.\\
 \\
@@ -26,7 +25,7 @@ For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum
 \|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
 \end{equation*}
 When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.
-\subsubsection{Simplified model setup}
+\subsection{Simplified model setup}
 Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
 \begin{equation}
     x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(\textcolor{blue}{x(t)}) + w_i(t)) 
@@ -75,7 +74,7 @@ For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum
 \\
 \noindent Compared to \autoref{eq:update_rule_tsi}, no information is outdated, hence, we have $x^i(t) = x(t)$. And we don't consider the update time for different cases. As mentioned in \cite{tsitsiklis1994asynchronous}, this is a special case, hene all the theorems work fine under this setup.
 
-\subsubsection{Assumptions in \cite{tsitsiklis1994asynchronous}}
+\subsection{Assumptions in \cite{tsitsiklis1994asynchronous}}
 
 \noindent
 \textcolor{blue}{\textbf{Assumption 1} (Total Asynchronism).
@@ -123,7 +122,7 @@ There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$
 \begin{remark}
     We don't present assumption 4 as it is not required for the theorem of interest. Later, in the simplified version, we will re-enumerate the number. Here is the enumeration to match \cite{tsitsiklis1994asynchronous}
 \end{remark}
-\subsubsection{Simplified assumptions}
+\subsection{Simplified assumptions}
 \noindent
 \textbf{Assumption 1} (Simplified).
 This assumption is no longer needed since no information is outdated.

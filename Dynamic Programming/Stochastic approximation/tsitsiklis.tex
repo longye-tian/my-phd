@@ -1,8 +1,7 @@
-\section{Theorem 1 and 3 of \cite{tsitsiklis1994asynchronous}}
+\section{Theorem 1 and 3 of \cite{tsitsiklis1994asynchronous}}\label{sec:1}
 
-In this section, we go through a simplified version of Theorem 1 and Theorem 3 of \cite{tsitsiklis1994asynchronous}. In particular, we omit the asynchronous algorithm part. First, we present the simplified setup in \cite{tsitsiklis1994asynchronous}\footnote{See \autoref{app:comparison} for direct comparison between the setup in \cite{tsitsiklis1994asynchronous} and the simplified setup}. Then, we use Robbins-Siegmund Theorem from \cite{robbins1971convergence}, i.e., \autoref{thm:robbins siegmund}, to explicitly prove Lemma 1 in \cite{tsitsiklis1994asynchronous}. Last, we present the proof of Theorem 1 and 3 of \cite{tsitsiklis1994asynchronous} in details.\\
-\\
-\subsection{Simplified model setup and assumptions}
+In this section, we go through a simplified version of Theorem 1 and Theorem 3 of \cite{tsitsiklis1994asynchronous}. In particular, we omit the asynchronous algorithm part. First, we present the simplified setup in \cite{tsitsiklis1994asynchronous}\footnote{See \autoref{app:comparison} for direct comparison between the setup in \cite{tsitsiklis1994asynchronous} and the simplified setup}. Then, we use Robbins-Siegmund Theorem from \cite{robbins1971convergence}, i.e., \autoref{thm:robbins siegmund}, to explicitly prove Lemma 1 in \cite{tsitsiklis1994asynchronous} (see \autoref{lm:1}). Last, we present the proof of Theorem 1 (\autoref{thm:bounded}) and 3 (\autoref{thm: contraction}) of \cite{tsitsiklis1994asynchronous} in details.
+\subsection{Simplified model setup and assumptions}\label{sub:simple setup}
 Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
 $$
 x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
@@ -15,9 +14,9 @@ where
 All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
 \\
 For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
-\begin{equation*}
+\begin{equation}\label{eq:weighted norm}
 \|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
-\end{equation*}
+\end{equation}
 \noindent When $v = (1,\ldots,1)$, this is the standard maximum norm $\|\cdot\|_{\infty}$.\\
 \noindent
 
@@ -66,7 +65,8 @@ There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scala
 \end{remark}
 \newpage
 \subsection{Related Theorem}
-In this section, we present the theorem related to the proof. Currently, we take this theorem as granted. Detailed proof is from \cite{robbins1971convergence}.
+In this section, we present the theorem related to the proof. Currently, we take this theorem as granted. Detailed proof is from \cite{robbins1971convergence} and here is a very nice blog post related to this theorem, see \href{https://nrhstat.org/post/robbins_siegmund/}{Why stochastic gradient descent works: 
+The Robbins-Siegmund theorem on almost supermartingales}
 \begin{theorem}[Robbins-Siegmund]\label{thm:robbins siegmund}
 Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space and $\{\mathcal{F}_n\}_{n=0}^{\infty}$ be a filtration. Let $\{V_n,\beta_n, \xi_n, \zeta_n\}_{n=0}^\infty$ be sequences of non-negative random variables adapted to $\{\mathcal{F}_n\}_{n=0}^{\infty}$ such that:
 $$
@@ -91,7 +91,7 @@ W(t+1) = (1-\alpha(t))W(t)  +\alpha(t) w(t)
 $$
 The proof is based on \autoref{thm:robbins siegmund}.
 \begin{enumerate}
-    \item We use the squared process and show that the squared process fits the condition of \autoref{thm:robbins siegmund}.
+    \item We use the squared process $V(t) =W^2(t)$ and show that the squared process fits the condition of \autoref{thm:robbins siegmund}.
     \item Use \autoref{thm:robbins siegmund} to get convergence $V(t) \to V_\infty$
     \item Prove $V_\infty=0$ almost surely by contradiction, hence the original process converges to zero almost surely.
 \end{enumerate}
@@ -112,7 +112,7 @@ Then $\lim_{t \to \infty} W(t) = 0$, with probability 1.
 \end{lemma}
 
 \begin{proof}
-Let us first note that, without loss of generality, we can assume that $B(t) \leq K$ for some constant $K$, since the sequence $\{B(t)\}$ is bounded with probability 1.\\
+Let us first note that, without loss of generality, we can assume that $B(t) \leq K$ for some constant $K$ almost surely, since the sequence $\{B(t)\}$ is bounded with probability 1.\\
 \\
 \textbf{Step 1: Use the squared process}\\
 \\
@@ -150,25 +150,25 @@ W^2(t+1) &= \left((1 - \alpha(t))W(t) + \alpha(t)w(t)\right)^2 \\
 \\
 \noindent Now, we let
 \begin{itemize}
-    \item $\xi_n = \alpha^2(t)K$, we have 
+    \item $\xi_t = \alpha^2(t)K$, we have 
     $$
-    \sum_{n=0}^\infty \xi_n  = \sum_{n=0}^\infty \alpha(t)^2K = K\sum_{n=0}^\infty \alpha^2(t) <\infty
+    \sum_{t=0}^\infty \xi_t  = \sum_{t=0}^\infty \alpha(t)^2K = K\sum_{t=0}^\infty \alpha^2(t) <\infty
     $$
     by our assumption. 
-    \item $\zeta_n = \alpha(t)V(t)$ is nonnegative and adapted to the filtration. 
+    \item $\zeta_t = \alpha(t)V(t)$ is nonnegative and adapted to the filtration. 
 \end{itemize}
 Hence, we use \autoref{thm:robbins siegmund}, we get
 \begin{itemize}
-    \item $\lim_{n\to\infty} V(t) = V_\infty$ exists and is finite almost surely
-    \item $\sum_{n=0}^\infty \zeta_n = \sum_{n=0}^\infty \alpha(t) V(t)<\infty$ almost surely.
+    \item $\lim_{t\to\infty} V(t) = V_\infty$ exists and is finite almost surely
+    \item $\sum_{t=0}^\infty \zeta_t = \sum_{t=0}^\infty \alpha(t) V(t)<\infty$ almost surely.
 \end{itemize}
 \textbf{Step 3: Prove $V_\infty =0$ almost surely by contradiction}\\
 \\
 Suppose that $V_\infty>\epsilon$ almost surely for some $\epsilon>0$. Then we have
 $$
-\sum_{n=0}^\infty \epsilon \alpha(t) =\epsilon\sum_{n=0}^\infty \alpha(t) <\infty
+\sum_{t=0}^\infty \epsilon \alpha(t) =\epsilon\sum_{t=0}^\infty \alpha(t) <\infty
 $$
-This implies $\sum_{n=0}^\infty \alpha(t)<\infty$ which contradicts to the assumption that $\sum_{n=0}^\infty \alpha(t) = \infty$.\\
+This implies $\sum_{t=0}^\infty \alpha(t)<\infty$ which contradicts to the assumption that $\sum_{t=0}^\infty \alpha(t) = \infty$.\\
 \\
 Hence, this contradiction gives $V_\infty =0$ almost surely.
 \end{proof}
@@ -179,7 +179,7 @@ This section presents two main theorems from \cite{tsitsiklis1994asynchronous}. 
 \\
 The second main theorem \autoref{thm: contraction} shows that this process converges to zero under assumption 1,2, and 3 which is based on the first theorem.
 \subsubsection{\autoref{thm:bounded}}
-In this section, we prove the first main theorem \autoref{thm:bounded}, which proof the process is bounded.  The strategy of this proof is proof by contradiction by assuming $x(t)$ is unbounded, in particular,
+In this section, we prove the first main theorem \autoref{thm:bounded}, which prove the process is bounded.  The strategy is proof by contradiction by assuming $x(t)$ is unbounded, in particular,
 \begin{enumerate}
     \item Create a growing envelope $G(t)$ to track the growth of $x(t)$
     \item Use this tracking and growing envelope to normalize the noise and this normalized noise fits the condition of \autoref{lm:1}
@@ -200,14 +200,12 @@ If \autoref{ass:stat},~\ref{ass:stepsize}, and~\ref{ass:boundedness} holds, then
 \\
 First, we assume that we have already discarded a suitable null set, so we do not need to keep repeating the quanlification ``with probability 1''.\\
 \\
-We also assume that all components of the vector $v$ in \textbf{Assumption 4} are equal to $1$. (The case of a general positive weighting vector $v$ can be reduced to this special case by a suitable coordinate scaling.)\\
+We also assume that all components of the vector $v$ in \autoref{ass:boundedness}  are equal to $1$. (The case of a general positive weighting vector $v$ can be reduced to this special case by a suitable coordinate scaling.)\\
 \\
 In other words, we have there exists some $\beta\in [0,1)$ and some $D$ such that 
 $$
 \|F(x)\|_\infty \le \beta\|x\|_\infty  + D,\quad \forall x\in\mathbb{R}^n
 $$
-\\
-Now we suppose that $x(t)$ is unbounded.\\
 \\
 \textbf{Step 1: Create a growing envelope $G(t)$ to monitor the growth of $x(t)$}\\
 \\
@@ -219,7 +217,7 @@ We want to create a growing envelope $G(t)$ to monitor the growth of $x(t)$. Fix
 \\
 Then, we fix $\epsilon>0$ such that $\gamma(1+\epsilon)=1$.
 \begin{remark}
-    Here $\gamma$ is the new contraction modulus for the growth of $x$. And $(1+\epsilon)$ is going to be the growth rate of the envelop. The choice of $\gamma(1+\epsilon)=1$ balances out the contraction and growth of the envelope which plays a key role in this proof.
+    Here $(1+\epsilon)$ is going to be the growth rate of the envelop. The choice of $\gamma(1+\epsilon)=1$ balances out the contraction and growth of the envelope which plays a key role in this proof.
 \end{remark}
 
 \noindent We want this envelope $G(t)$ to bound $x(t)$, we need to find the maximum of $x(t)$ up to some time $t$, hence, we define
@@ -265,14 +263,14 @@ Moreover, we have $M(t),G(t)$ are all $\mathcal{F}(t)$-measurable. Next, we defi
 $$
 \tilde w_i(t) = \frac{w_i(t)}{G(t)},\quad \forall t\ge 0
 $$
-which is $\mathcal{F}(t+1)$-measurable. Under \textbf{Assumption 1 (d)}, we have
+which is $\mathcal{F}(t+1)$-measurable. Under \autoref{ass:stat}, we have
 $$
 \mathbb{E}(\tilde w_i(t)|\mathcal{F}(t)) = \frac{\mathbb{E}(w_i(t)|\mathcal{F}(t))}{G(t)} = 0
 $$
 and
 \begin{align*}
     \mathbb{E}(\tilde w_i^2(t)|\mathcal{F}(t)) &= \frac{\mathbb{E}(w_i^2(t)|\mathcal{F}(t))}{G^2(t)}\\
-    &\le \frac{A + B \max_j\max_{\tau\le t}|x_j(\tau)|^2}{G^2(t)}\tag{Assumption 1(e)}\\
+    &\le \frac{A + B \max_j\max_{\tau\le t}|x_j(\tau)|^2}{G^2(t)}\tag{\autoref{ass:stat}}\\
     &= \frac{A + B M(t)^2}{G^2(t)}\tag{\autoref{eq:M(t)}}\\
     &\le \frac{A+B(1+\epsilon)^2G^2(t)}{G^2(t)}\tag{\autoref{eq:MtandGt}}\\
     &= \frac{A}{G^2(t)} + B(1+\epsilon)^2 \\
@@ -378,7 +376,15 @@ This contradicts to $G(t)$ goes to infinity, hence $x(t)$ is bounded.
 \end{proof}
 \newpage
 \subsubsection{\autoref{thm: contraction}}
-
+This is the second main theorem we are interested in, that this process converges to $x^*$ under the contraction assumption, i.e., \autoref{ass:contraction}.\\
+\\
+The proof of this theorem uses a nested induction approach. The structure of the proof follows
+\begin{enumerate}
+    \item Show that $x(t)$ is bounded using \autoref{thm:bounded}
+    \item Create a sequence of decreasing bounds $D_0, D_1, D_2,\cdots$ that converges to zero
+    \item Prove using induction that for each $k$, the proess eventually stays within the bounds given by $D_k$, this is the outer induction.
+    \item To prove the induction step in the outer induction, we use an inner induction to show that the process eventually moves to $D_{k+1}$.
+\end{enumerate}
 \begin{theorem}\label{thm: contraction}
 Let $(\Omega, \mathcal{F},P)$ be a probability space with filtration $\{\mathcal{F}_t\}_{t=0}^\infty$. Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
 $$
@@ -387,13 +393,19 @@ $$
 If \autoref{ass:stat},~\ref{ass:stepsize}, and~\ref{ass:contraction} holds,then, the sequence $x(t)$ converges to $x^*$ with probability 1.
 \end{theorem}
 \begin{proof}
-   Notice that Assumption 3 implies Assumption 4.
+\textbf{Step 1: Show that $x(t)$ is bounded using \autoref{thm:bounded}}\\
+\\
+   Notice that \autoref{ass:contraction} implies \autoref{ass:boundedness}.
         \begin{align*}
         \|F(x)\|_v &\le \|F(x)-x^*\|_v + \|x^*\|_v\tag{$\Delta$ ineq.}\\
-        &\le \beta \|x-x^*\|_v+\|x^*\|_v\tag{Assumption 3}\\
+        &\le \beta \|x-x^*\|_v+\|x^*\|_v\tag{\autoref{ass:contraction}}\\
         &\le \beta\|x\|_v + (1+\beta) \|x^*\|_v\tag{$\Delta$ ineq.}
     \end{align*}
-    Let $D:= (1+\beta)\|x^*\|_v$. Then we can apply \autoref{thm:bounded}, we get $x(t)$ is bounded with probabilty 1. (W.l.o.g., we let $x^*=0$) Hence there exists some (generally random) $D_0$ such that 
+    Let $D:= (1+\beta)\|x^*\|_v$. Then we can apply \autoref{thm:bounded}, we get $x(t)$ is bounded with probabilty 1. (W.l.o.g., we let $x^*=0$).\\
+    \\
+    \textbf{Step 2: Create a sequence of decreasing bounds $D_0, D_1,\cdots$ that converges to $0$}\\
+    \\
+    Hence there exists some (generally random) $D_0$ such that 
     $$
     \|x(t)\|_\infty \le D_0,\quad \forall t\ge 0
     $$
@@ -401,19 +413,26 @@ If \autoref{ass:stat},~\ref{ass:stepsize}, and~\ref{ass:contraction} holds,then,
     \begin{equation}\label{eq:Dkrecursive}
         D_{k+1} = \beta(1+2\epsilon)D_k,\quad k\ge 0
     \end{equation}
-    Clearly, $D_k$ converges to $0$. Now we prove by induction to show that for each $k$, there exists a time $t_k$ such that $\|x(t)\|_\infty\le D_k$ for all $t\ge t_k$.\\
+    Clearly, $D_k$ converges to $0$.\\
+    \\
+    \textbf{Step 3: Prove using induction that for each $k$, the proess eventually stays within the bounds given by $D_k$}\\
+    \\
+    Now we prove by induction to show that for each $k$, there exists a time $t_k$ such that $\|x(t)\|_\infty\le D_k$ for all $t\ge t_k$.\\
     \\
     \textbf{Base case $k=0$}:\\
     This case has already been shown above.\\
     \\
     \textbf{Induction hypothesis}:\\
-    Assume there exists $t_k$ such that $\|x(t)\|_\infty \le D_k$ for all $t\ge t_k$. We need to show there exists $t_{k+1}\ge t_k$ such that 
+    Assume there exists $t_k$ such that $\|x(t)\|_\infty \le D_k$ for all $t\ge t_k$.\\
+    \\
+    \textbf{Induction step at $k+1$}\\
+    We need to show there exists $t_{k+1}\ge t_k$ such that 
     $$
     \|x(t)\|_\infty \le D_{k+1},\quad \forall t\ge t_{k+1}
     $$
     We define a sequence $W_i(t)$ to track the accumulated noise:
     \begin{itemize}
-        \item $W_i(0)$ = 0\\
+        \item $W_i(0)$ = 0
         \item $W_i(t+1) = (1-\alpha_i(t))W_i(t) + \alpha_i(t)w_i(t)$
     \end{itemize}
     As previously shown in the proof of \autoref{thm:bounded}, for every $\delta>0$, there exists a time $T$ such that
@@ -434,39 +453,41 @@ If \autoref{ass:stat},~\ref{ass:stepsize}, and~\ref{ass:contraction} holds,then,
         \end{equation}
         for all $t\ge \tau_k$
     \end{itemize}
+    \textbf{Step 4: Inner induction}\\
+    \\
     Now we prove that 
     \begin{equation}\label{eq:lemma8induction}
      -Y_i(t) + W_i(t;\tau_k)\le x_i(t)\le Y_i(t) + W_i(t;\tau_k),\quad \forall t\ge \tau_k   
     \end{equation}
     by induction.\\
     \\
-    \textbf{Base case $t= \tau_k$}\\
+    \textbf{Inner induction: Base case $t= \tau_k$}\\
     This is satisfied by $\|x(t)\|_\infty \le D_k$ as $Y_i(\tau_k)=D_k$ and $W_i(\tau_k;\tau_k)=0$.\\
     \\
-    \textbf{Induction hypothesis}:\\
-    Suppose that \autoref{eq:lemma8induction} holds for some $t>\tau_k$. Then, we have
+    \textbf{Inner induction hypothesis}:\\
+    Suppose that \autoref{eq:lemma8induction} holds for some $t>\tau_k$. \\
+    \\
+    \textbf{Inner induction step: }\\
+    Then, we have
     \begin{align*}
          x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
-         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
-         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)\beta\|x(t)\|_\infty + \alpha_i(t)w_i(t)\tag{Assumption 3}\\
+         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Inner Induction}\\
+         &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)\beta\|x(t)\|_\infty + \alpha_i(t)w_i(t)\tag{\autoref{ass:contraction}}\\
          &\le (1-\alpha_i(t))(Y_i(t) + W_i(t;\tau_k)) + \alpha_i(t)\beta D_k + \alpha_i(t)w_i(t)\tag{$\|x(t)\|_\infty \le D_k$}\\
          & =[(1-\alpha_i(t))Y_i(t) + \alpha_i(t)\beta D_k] + [(1-\alpha_i(t)) W_i(t;\tau_k) + \alpha_i(t)w_i(t)]\\
          &= Y_i(t+1) + W_i(t+1;\tau_k)
     \end{align*}
-    Symmetrically, we can show that
-    \begin{align*}
-         x_i(t+1) &= (1-\alpha_i(t))x_i(t) + \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\\
-         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)F_i(x(t)) + \alpha_i(t)w_i(t)\tag{Induction}\\
-         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)\beta\|x(t)\|_\infty + \alpha_i(t)w_i(t)\tag{Assumption 3}\\
-         &\ge (1-\alpha_i(t))(-Y_i(t) + W_i(t;\tau_k)) - \alpha_i(t)\beta D_k + \alpha_i(t)w_i(t)\tag{$\|x(t)\|_\infty \le D_k$}\\
-         & =[-(1-\alpha_i(t))Y_i(t) - \alpha_i(t)\beta D_k] + [(1-\alpha_i(t)) W_i(t;\tau_k) + \alpha_i(t)w_i(t)]\\
-         &= -Y_i(t+1) + W_i(t+1;\tau_k)
-    \end{align*}
+    Symmetrically, we can show the other direction.\\
+    \\
     Hence, we have
     $$
     -Y_i(t+1) + W_i(t+1)\le x_i(t+1)\le Y_i(t+1) + W_i(t+1;\tau_k),\quad\forall t\ge \tau_k
     $$
-    Hence, by induction we prove \autoref{eq:lemma8induction}. Moreover since $Y_i(t)$ are positive, we can get
+    Hence, by induction we prove \autoref{eq:lemma8induction}. \\
+    \\
+    \textbf{Finally, we use the result from the inner induction: }\\
+    \\
+    Moreover since $Y_i(t)$ are positive, we can get
     \begin{equation}\label{eq:xiboundedlast}
         |x_i(t)| \le Y_i(t) + |W_i(t;\tau_k)|
     \end{equation}
@@ -476,7 +497,7 @@ If \autoref{ass:stat},~\ref{ass:stepsize}, and~\ref{ass:contraction} holds,then,
         Z_i(t+1) &= (1-\alpha_i(t))Y_i(t)-(1-\alpha_i(t))\beta D_k\tag{$Z_i(t):= Y_i(t)-\beta D_k$}\\
         Z_i(t+1) &= (1-\alpha_i(t)) Z_i(t)
     \end{align*}
-    Hence, by \textbf{Assumption 2}, we get $Y_i(t)\to \beta D_k$ as $t\to \infty$.\\
+    Hence, by \autoref{ass:stepsize}, we get $Y_i(t)\to \beta D_k$ as $t\to \infty$.\\
     \\
     Since $\limsup$ always exists for bounded sequence, we have
     \begin{equation}

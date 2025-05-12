@@ -1,13 +1,13 @@
 \input{preambles/preamble}
-\title{Extend a theorem in Stochastic approximation}
+\title{Extend \cite{tsitsiklis1994asynchronous} to Eventual Contraction}
 \author{Longye Tian}
 \begin{document}
 \maketitle
-This note extends Theorem 1 of \cite{tsitsiklis1994asynchronous}. First, we go through the proof of a simplified version of Theorem 1 in \cite{tsitsiklis1994asynchronous}. In particular, we don't include asynchronous algorithm part. We present a comparison of the setup and proof the main theorem, i.e., theorem 1 and 3 in \cite{tsitsiklis1994asynchronous}. Moreover, we provide an explicit proof of lemma 1 in \cite{tsitsiklis1994asynchronous} using Robbins-Siegmund Theorem by \cite{robbins1971convergence}\\
+This note extends Theorem 1 and 3 of \cite{tsitsiklis1994asynchronous} to eventual contraction.\\
 \\
-Then we go through the proof of theorem 1 in \cite{jaakkola1993convergence} which is similar.\\
+\indent In \autoref{sec:1}, we present a simplified setup of \cite{tsitsiklis1994asynchronous}. In particular, we do not include asynchronous algorithm part. Then we present the proof of Theorem 1 and 3 in \cite{tsitsiklis1994asynchronous}. Moreover, we provide an explicit proof of Lemma 1 in \cite{tsitsiklis1994asynchronous} using Robbins-Siegmund Theorem by \cite{robbins1971convergence}\\
 \\
-Last, we extend these theorems.
+\indent In \autoref{sec:2}, we present the extension to eventual contraction by arguing eventual contraction assumption implies original contraction assumption with a specific weighted maximum norm.
 \tableofcontents
 \newpage
 
@@ -15,8 +15,13 @@ Last, we extend these theorems.
 
 
 \input{Dynamic Programming/Stochastic approximation/theorem1}
-
 \newpage
+
+\printbibliography{}
+\newpage
+
+\appendix
+\appendixpage{}
 \input{Dynamic Programming/Stochastic approximation/appendix}
 
 
