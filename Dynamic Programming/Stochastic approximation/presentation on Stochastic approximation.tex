@@ -1,0 +1,635 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Professional Mathematical Presentation Template
+% 
+% This template uses the beamer class with the Madrid theme
+% and a custom color scheme for a clean, professional look
+% that works well with mathematical content.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[aspectratio=169]{beamer} % 16:9 aspect ratio (modern)
+% Theme settings
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{primcolor}{RGB}{25,50,100} % Dark blue
+\setbeamercolor{structure}{fg=primcolor}
+\setbeamercolor{frametitle}{bg=primcolor!15, fg=primcolor}
+\setbeamercolor{title}{fg=white} % White title text for contrast
+\setbeamercolor{subtitle}{fg=white} % White subtitle text
+\setbeamercolor{author}{fg=primcolor} % White author text
+\setbeamercolor{date}{fg=primcolor} % White date text
+\setbeamercolor{institute}{fg=primcolor} % White institute text
+% Font settings
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+% Package imports
+\usepackage{amsmath, amsfonts, amssymb, amsthm} % Math packages
+\usepackage{mathtools} % Enhanced math tools
+\usepackage{bm} % Bold math symbols
+\usepackage{graphicx} % For images
+\usepackage{booktabs} % Professional tables
+\usepackage{tikz} % For diagrams
+\usetikzlibrary{arrows, positioning, matrix, decorations.pathreplacing}
+% Use beamer's theorem styles
+\setbeamertemplate{theorem}[ams style]
+\setbeamertemplate{theorems}[numbered]
+% Remove navigation symbols
+\setbeamertemplate{navigation symbols}{}
+% Custom footer
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+% Title information
+\title[SA]{Note on Stochastic Approximation}
+\subtitle{Extending Tsitsiklis 1994}
+\author[Longye]{Longye Tian \\ \texttt{longye.tian@anu.edu.au}}
+\institute[ANU]{Australian National University\\ School of Economics}
+\date{May 16th, 2025}
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareMathSymbol{\bigtimes}{1}{mathx}{"91}
+
+\begin{document}
+
+% Title frame
+\begin{frame}
+  \titlepage
+\end{frame}
+\begin{frame}{Big Picture}
+\begin{itemize}
+    \item We want to estimate some unknown function $x^*$
+    \item We have an estimate $x(t)$ at time $t$
+    \item At each time $t$, we have noisy observation $F(x(t))+w(t)$
+    \begin{itemize}
+        \item $F(x(t))$: we can think this as the fixed point equation
+        $$
+        F(x^*) = x^*
+        $$
+        \item $w(t)$: a random noise comes with the observation
+    \end{itemize}
+    \item Stochastic approximation algorithm ($x(t)\to x^*$ as $t\to\infty$)
+    $$
+    x(t+1) = (1-\alpha(t)) x(t) + \alpha(t) (F(x(t))+w(t))
+    $$
+    or
+    $$
+    x(t+1) = x(t) + \alpha(t) \left[F(x(t)) + w(t) -x(t)\right]
+    $$
+\end{itemize}
+\end{frame}
+\begin{frame}{Motivating example: Q-learning}
+    \begin{itemize}
+        \item We want to estimate the unknown $Q^*(s,a)$
+        \begin{itemize}
+            \item $Q^*(s,a)$ is the maximal expected lifetime rewards given state $s$ and action $a$.
+            \item with \textbf{known} reward function $r(s,a)$ and transition probability, we can use DP method to compute $Q^*$
+            $$
+            Q^*(s,a) = \textcolor{blue}{r(s,a)} + \beta \sum_{s'} \max_{a'}Q^*(s',a') \textcolor{blue}{P(s'|s,a)}
+            $$
+            \item Sometime, we only observe
+            \begin{itemize}
+                \item one realization of the random variable for reward $R$
+                \item one next state $s'$ not all possible next states
+                \item use current estimate of $Q$ not $Q^*$
+            \end{itemize}
+        \end{itemize}
+        \item at each time $t$, we observe 
+        $$
+        R(t) + \beta \max_{a'} Q(s',a')
+        $$
+        where $F(Q(s,a))=\mathbb{E}(R+\beta \max_{a'}Q(s',a')|s,a)$
+    \end{itemize}
+\end{frame}
+\begin{frame}{Motivating example: Q-learning}
+The stochastic approximation algorithm in Q-learning
+$$
+Q(s,a) \leftarrow Q(s,a) + \alpha(t) \left[R + \beta \max_{a'} Q(s',a')- Q(s,a)\right]
+$$
+    
+\end{frame}
+% Outline frame
+\begin{frame}{Outline}
+\begin{itemize}
+    \item Simplified setup compared to Tsitsiklis 1994
+    \item Lemma 1 and Robbins-Siegmund Theorem
+    \item Theorem 1 in Tsitsiklis 1994
+    \item Theorem 3 in Tsitsiklis 1994
+    \item Extension to Eventual contraction assumption
+\end{itemize}
+\end{frame}
+\begin{frame}{Simplified Setup}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+where
+\begin{itemize}
+    \item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+    \item $w_i(t)$ is a noise term
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history. \\
+\\
+For any positive vector $v = (v_1, \ldots, v_n)$, we define the weighted maximum norm:
+\begin{equation}\label{eq:weighted norm}
+\|x\|_v = \max_i \frac{|x_i|}{v_i}, \quad x \in \mathbb{R}^n
+\end{equation}
+    
+\end{frame}
+
+\begin{frame}{Simplified Setup - Assumption 1 - need for all theorems}
+We assume
+    \begin{enumerate}
+\item[(a)] $x(0)$ is $\mathcal{F}(0)$-measurable;
+\item[(b)] For every $i$ and $t$, $w_i(t)$ is $\mathcal{F}(t+1)$-measurable;
+\item[(c)] For every $i$ and $t$, $\alpha_i(t)$ is $\mathcal{F}(t)$-measurable;
+\item[(d)] For every $i$ and $t$, we have $\mathbb{E}[w_i(t) \mid \mathcal{F}(t)] = 0$;
+\item[(e)] There exist constants $A$ and $B$ such that
+$\mathbb{E}[w_i^2(t) \mid \mathcal{F}(t)] \leq A + B \max_j \max_{\tau \leq t} |x_j(\tau)|^2$, $\forall i, t$.
+\end{enumerate}
+    
+\end{frame}
+\begin{frame}{Assumption 2 - need for all theorems}
+We assume
+\begin{enumerate}
+\item[(a)] For every $i$, $\sum_{t=0}^{\infty} \alpha_i(t) = \infty$, w.p.1;
+\item[(b)] There exists a constant $C$ such that for every $i$, $\sum_{t=0}^{\infty} \alpha_i^2(t) \leq C$, w.p.1.
+\end{enumerate}
+\end{frame}
+\begin{frame}{Assumption 3 - contraction}
+    There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\end{frame}
+\begin{frame}{Assumption 4 - boundedness}
+    There exists a positive vector $v$, a scalar $\beta \in [0,1)$, and a scalar $D$ such that
+\begin{equation}
+\|F(x)\|_v \leq \beta\|x\|_v + D, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\end{frame}
+\begin{frame}{Remark: Assumption 3 implies Assumption 4}
+Notice that Assumption 3 implies Assumption 4:
+        \begin{align*}
+        \|F(x)\|_v &\le \|F(x)-x^*\|_v + \|x^*\|_v\tag{$\Delta$ ineq.}\\
+        &\le \beta \|x-x^*\|_v+\|x^*\|_v\tag{Assumption 3}\\
+        &\le \beta\|x\|_v + (1+\beta) \|x^*\|_v\tag{$\Delta$ ineq.}
+    \end{align*}
+    Let $D:= (1+\beta)\|x^*\|_v$
+    
+\end{frame}
+
+\begin{frame}{Robbins-Siegmund Theorem (Almost supermartingale)}
+\begin{theorem}[Robbins-Siegmund]\label{thm:robbins siegmund}
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space and $\{\mathcal{F}_n\}_{n=0}^{\infty}$ be a filtration. Let $\{V_n,\beta_n, \xi_n, \zeta_n\}_{n=0}^\infty$ be sequences of non-negative random variables adapted to $\{\mathcal{F}_n\}_{n=0}^{\infty}$ such that:
+$$
+\mathbb{E}[V_{n+1} \mid \mathcal{F}_n] \leq (1+\beta_n)V_n+\xi_n-\zeta_n\quad \text{a.s. for all } n \geq 0
+$$
+where
+\begin{itemize}
+    \item $\sum_{n=0}^\infty \beta_n<\infty$ almost surely
+    \item $\sum_{n=0}^\infty \xi_n<\infty$ almost surely
+\end{itemize}
+Then:
+\begin{itemize}
+    \item $\lim_{n\to\infty}V_n = V_\infty$ exists and is finite almost surely
+    \item $\sum_{n=0}^\infty \zeta_n<\infty$ almost surely
+\end{itemize}
+\end{theorem}
+    
+\end{frame}
+
+\begin{frame}{Lemma 1}
+\begin{lemma}\label{lm:1}
+Let $\{\mathcal{F}(t)\}$ be an increasing sequence of $\sigma$-fields. For each $t$, let $\alpha(t)$, $w(t-1)$, and $B(t)$ be $\mathcal{F}(t)$-measurable scalar random variables. Let $C$ be a deterministic constant. Suppose that the following hold with probability 1:
+\begin{enumerate}
+\item[(a)] $\mathbb{E}[w(t) \mid \mathcal{F}(t)] = 0$;
+\item[(b)] $\mathbb{E}[w^2(t) \mid \mathcal{F}(t)] \leq B(t)$;
+\item[(c)] $\alpha(t) \in [0,1]$;
+\item[(d)] $\sum_{t=0}^{\infty} \alpha(t) = \infty$;
+\item[(e)] $\sum_{t=0}^{\infty} \alpha^2(t) \leq C$.
+\end{enumerate}
+Suppose that the sequence $\{B(t)\}$ is bounded with probability 1. Let $W(t)$ satisfy the recursion
+\begin{equation}
+W(t+1) = (1 - \alpha(t))W(t) + \alpha(t)w(t).
+\end{equation}
+Then $\lim_{t \to \infty} W(t) = 0$, with probability 1.
+\end{lemma}
+    
+\end{frame}
+
+\begin{frame}{Proof Sketch for Lemma 1}
+    The proof is based on Robbins-Siegmund Theorem
+\begin{enumerate}
+    \item We use the squared process $V(t) =W^2(t)$ and show that the squared process fits the condition of Robbins-Siegmund Theorem
+\begin{align*}
+\mathbb{E}[V(t+1) \mid \mathcal{F}(t)] &\leq V(t) + \alpha^2(t) K -\alpha(t) V(t)\\
+\mathbb{E}[V_{n+1} \mid \mathcal{F}_n] &\leq (1+\beta_n)V_n+\xi_n-\zeta_n\quad \text{a.s. for all } n \geq 0
+\end{align*}
+    \item Use Robbins-Siegmund Theorem to get convergence $V(t) \to V_\infty$ and $\sum_{t=0}^\infty \zeta_t = \sum_{t=0}^\infty \alpha (t)V(t)<\infty$ almost surely.
+    \item Prove $V_\infty=0$ almost surely by contradiction, hence the original process converges to zero almost surely.
+    \begin{align*}
+         P\{V_\infty\ge2\epsilon\}>\delta &\implies P(V(t)\ge \epsilon, t\ge T)>\delta\\
+         &\implies P\left(\sum_{t=0}^\infty \alpha (t)V(t)=\infty\right)>\delta
+    \end{align*}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Main Theorem 1 in Tsitsiklis 1994}
+Let $(\Omega, \mathcal{F},P)$ be a probability space with filtration $\{\mathcal{F}_t\}_{t=0}^\infty$. Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+If Assumption 1,2,4 holds, then, the sequence $x(t)$ is bounded with probability 1.
+
+\end{frame}
+\begin{frame}{Proof Sketch}
+\begin{enumerate}
+    \item Create a growing envelope $G(t)$ to track the growth of $x(t)$
+    \item Use this tracking and growing envelope to normalize the noise and this normalized noise fits the condition of lemma 1.
+    \item We use lemma 1 to show that the normalized noise converges to 0
+    \item Setup the contradiction by selecting a time $t_0$ that the noise is very small for all $t\ge t_0$
+    \item Derive the contradiction by showing the growing envelope is stablized after $t_0$ by induction
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Main Theorem 2 in Tsitsiklis 1994}
+Let $(\Omega, \mathcal{F},P)$ be a probability space with filtration $\{\mathcal{F}_t\}_{t=0}^\infty$. Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+$$
+x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(x(t)) + w_i(t)) 
+$$
+If Assumption 1,2,3 holds,then, the sequence $x(t)$ converges to $x^*$ with probability 1.
+    
+\end{frame}
+\begin{frame}{Proof Sketch}
+\begin{enumerate}
+    \item Show that $x(t)$ is bounded using Main theorem 1
+    \item Create a sequence of decreasing bounds $D_0, D_1, D_2,\cdots$ that converges to zero
+    \item Prove using induction that for each $k$, the proess eventually stays within the bounds given by $D_k$, this is the outer induction.
+    \item To prove the induction step in the outer induction, we use an inner induction to show that the process eventually moves to $D_{k+1}$.
+\end{enumerate}
+    
+\end{frame}
+
+\begin{frame}{Extension to Eventual Contraction}
+\textbf{Assumption 3 - Contraction:}\\
+There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that\\
+\begin{equation}
+\|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+\\
+\textbf{Assumption 3+ - Eventual contraction:}\\
+There exists a vector $x^* \in \mathbb{R}^n$, and positive linear operator $K$ with spectral radius $\rho(K)<1$ such that
+\begin{equation}
+|F(x) - x^*|\leq K|x - x^*|, \quad \forall x \in \mathbb{R}^n.
+\end{equation}
+    
+\end{frame}
+
+\begin{frame}{Lemma - Perturbed nonnegative matrix}
+\begin{lemma}\label{lm: perturbed}
+Let $A$ be a $n$-dimensional nonnegative square matrix with spectral radius $\rho(A)<1$. Then there exists a strictly positive matrix $B$ such that 
+$$
+A< B\text{ and $\rho(B)<1$}
+$$
+\end{lemma}
+\textbf{Remark}: One way to show this is via eigenvalue is continuous function of the matrix. But I prove this lemma using Gelfand's formula.
+    
+\end{frame}
+\begin{frame}{Gelfand's formula}
+\begin{lemma}[Gelfand's formula]\label{lm:gelfand}
+    If $B$ is any square matrix and $\|\cdot\|$ is any matrix norm, then
+    $$
+    \rho(B)^k\le \|B^k\|\quad \text{for all $k\in\mathbb{N}$}
+    $$
+    $$
+    \|B^k\|^{1/k}\to \rho(B)\text{ as $k\to\infty$}
+    $$
+\end{lemma}
+\begin{corollary}\label{col:gelfand col}
+    If $B$ is any square matrix and $\|\cdot\|$ is any matrix form, then if there exists $n\in\mathbb{N}$ such that 
+    $$
+    \|B^n\|<1
+    $$
+    this implies $\rho(B)<1$.
+\end{corollary}
+    
+\end{frame}
+
+\begin{frame}{Proof of the lemma}
+Let $J$ denote the $n$-dimensional square matrix with every entry equals to 1. We construct $B = A +\epsilon  J$. We show that there exists $0<\epsilon<1$ such that $\rho(B)<1$.\\
+    \\
+    Using the Gelfand's formula, we have there exists $N\in\mathbb{N}$ such that for all $n\ge N$, $\|A^n\|< 1$. Fix $n\ge N$. We set $\delta:= 1-\|A^n\|$.\\
+    \\
+    Moreover, we have 
+    \begin{align*}
+        \|B^n\| &= \|(A+\epsilon J)^n\|\\
+        &= \|A^n +  \epsilon (\Gamma_{1,1} +\cdots + \Gamma_{1,C^n_1})+\cdots +  \epsilon^{n-1}(\Gamma_{n-1, 1} + \cdots \Gamma_{n-1, C^{n}_{n-1}}) +\epsilon^n J^n\|
+    \end{align*}
+    for some square matrix $\Gamma_{i,j}$ and $C^i_j$ be the number of combinations of choosing $j$ objects from $i$ objects.
+    
+\end{frame}
+\begin{frame}{Remark on the expansion}
+Moreover, we have 
+    \begin{align*}
+        \|B^n\| &= \|(A+\epsilon J)^n\|\\
+        &= \|A^n +  \epsilon (\Gamma_{1,1} +\cdots + \Gamma_{1,C^n_1})+\cdots +  \epsilon^{n-1}(\Gamma_{n-1, 1} + \cdots \Gamma_{n-1, C^{n}_{n-1}}) +\epsilon^n J^n\|
+    \end{align*}
+    for some square matrix $\Gamma_{i,j}$ and $C^i_j$ be the number of combinations of choosing $j$ objects from $i$ objects.
+To motive this step, we have for $n=2$,
+    \begin{align*}
+        (A + \epsilon J)^2  &= A^2 + \epsilon AJ + \epsilon J A + \epsilon^2 J^2\\
+        &= A^2 + \epsilon (AJ +JA) +\epsilon ^2 J^2
+    \end{align*}
+    Hence, we have $\Gamma_{1,1} = AJ$ and $\Gamma_{1,2} = JA$ with $C^2_1 =2$.
+\end{frame}
+\begin{frame}{Proof}
+Moreover, we have 
+    \begin{align*}
+        \|B^n\| &= \|(A+\epsilon J)^n\|\\
+        &= \|A^n +  \epsilon (\Gamma_{1,1} +\cdots + \Gamma_{1,C^n_1})+\cdots +  \epsilon^{n-1}(\Gamma_{n-1, 1} + \cdots \Gamma_{n-1, C^{n}_{n-1}}) +\epsilon^n J^n\|
+    \end{align*}
+    for some square matrix $\Gamma_{i,j}$ and $C^i_j$ be the number of combinations of choosing $j$ objects from $i$ objects.
+\noindent Then by triangle inequality, we have
+    \begin{align*}
+         \|B^n\| &\le \|A^n\| + \sum_{k=1}^{n-1} \epsilon^k \left(\sum_{j=1}^{C^n_k} \|\Gamma_{k,j}\|\right) + \epsilon^n \|J^n\|
+    \end{align*}
+    
+\end{frame}
+\begin{frame}{Proof}
+Let 
+    $$
+    M:=\max_{1\le k,j\le n}\{\|\Gamma_{k,j}\|, \|J^n\|\}
+    $$
+    $$
+    \gamma: =\max_{1\le k\le n} C^n_k
+    $$
+    By finite dimension, we have $M$ and $\gamma$ is well-defined and finite. This gives
+   \begin{align*}
+         \|B^n\| &\le \|A^n\| + \gamma M\sum_{k=1}^{n} \epsilon^k\\
+         &<\|A^n\| + \gamma M n\epsilon \tag{$0<\epsilon<1$}
+    \end{align*}
+    Let $0<\epsilon <\frac{\delta}{\gamma Mn}$. Then, we have
+    $$
+    \|B^n\| = \|(A+\epsilon J)^n\|< \|A^n\| + \delta < 1
+    $$
+    By the previous corollary, this implies $\rho(B)<1$.
+    
+\end{frame}
+\begin{frame}{Main extension proof - Eventual contraction implies contraction with a specific weighted maximum norm}
+Suppose there exists a vector $x^*\in\mathbb{R}^n$ and a positive linear operator $K$ with spectral radius $\rho(K)<1$ such that 
+$$
+|F(x)-x^*|\le K|x-x^*|,\quad \forall x\in \mathbb{R}^n
+$$
+Then, this implies there exists a positive vector $v\in\mathbb{R}^n$ and a scalar $\beta\in [0,1)$, such that
+$$
+\|F(x)-x^*\|_v \le \beta\|x-x^*\|_v
+$$
+In other words, eventual contraction assumption implies contraction assumption.
+    
+\end{frame}
+\begin{frame}{Proof}
+First, since $K$ is a positive linear operator in a finite dimensional space, it can be represented by a nonnegative matrix with spectral radius $\rho(K)<1$.\\
+    \\
+    By lemma on perturbed nonnegative matrix, there exists a strictly positive matrix $\tilde K>K$ such that $\rho(\tilde K)<1$.\\
+    \\
+    Using the Perron-Frobenius theorem, we know
+    \begin{itemize}
+        \item the spectral radius $\beta:=\rho(\tilde K) =\frac{(\tilde Kv)_i}{v_i}<1 $ is a positive real simple eigenvalue of $\tilde K$
+        \item Its corresponding eigenvector $v$ is uniquely positive up to positive scaling. 
+    \end{itemize}
+    
+\end{frame}
+\begin{frame}{Proof}
+Hence, we have pointwise 
+    $$
+    |F_i(x)-x^*_i|\le (K|x-x^*|)_i \le (\tilde K|x-x^*|)_i,\quad i=1,2,\cdots, n
+    $$
+    as $K<\tilde K$. Using the matrix representation, we have
+    $$
+    (\tilde K|x-x^*|)_i= \sum_{j=1}^n \tilde K_{ij}|x_j-x_j^*|
+    $$
+    We define
+    $$
+    \|z\|_v:=\max_{1\le i\le n}\frac{|z_i|}{v_i},\quad \forall z\in \mathbb{R}^n
+    $$
+    as the weighted maximum norm using $v$. Hence, this implies
+    $$
+    \frac{|z_j|}{v_j}\le \max_{1\le i\le n}\frac{|z_i|}{v_i},\quad j=1,2,\cdots,n
+    $$
+    
+\end{frame}
+\begin{frame}{proof}
+    Hence,
+    $$
+    |z_j|\le v_j\|z\|_v,\quad j=1,2,\cdots,n
+    $$
+    We can apply this to $|x_j-x_j^*|$, we get
+    \begin{align*}
+        (\tilde K|x-x^*|)_i &= \sum_{j=1}^n \tilde K_{ij}|x_j-x_j^*|\\
+        &\le \sum_{j=1}^n \tilde K_{ij} v_j\|x-x^*\|_v\\
+        &= \|x-x^*\|_v\sum_{j=1}^n \tilde K_{ij}v_j\\
+        &= \|x-x^*\|_v(\tilde Kv)_i\\
+    \end{align*}
+    
+\end{frame}
+
+\begin{frame}{proof}
+This implies
+    $$
+    |F_i(x)-x^*_i|\le\|x-x^*\|_v(\tilde Kv)_i
+    $$
+    Now we divide both sides by $v_i$, we get
+    \begin{align*}
+        \frac{|F_i(x)-x^*_i|}{v_i}\le \frac{(\tilde Kv)_i}{v_i} \|x-x^*\|_v= \beta \|x-x^*\|_v
+    \end{align*}
+    for all $i=1,2,\cdots, n$. Hence, we have
+    $$
+    \|F(x)-x^*\|_v = \max_{1\le i \le n}\frac{|F_i(x)-x^*_i|}{v_i} \le\beta \|x-x^*\|_v
+    $$
+    This completes the proof.
+    
+\end{frame}
+\begin{frame}{Appendix - direct comparison with Tsitsiklis 1994 setup}
+    We consider iterative updates of a vector $x \in \mathbb{R}^n$ to solve the fixed-point equation $F(x^*) = x^*$, where $F: \mathbb{R}^n \mapsto \mathbb{R}^n$ with component mappings $F_i: \mathbb{R}^n \mapsto \mathbb{R}$.\\
+\\
+Let $x(t)$ denote the state at discrete time $t \in \mathbb{N}$, with components $x_i(t)$. For each component $i$, we have:
+\begin{equation}\label{eq:update_rule_tsi}
+x_i(t + 1) = 
+\begin{cases}
+x_i(t), & t \notin T^i \\
+x_i(t) + \alpha_i(t)(F_i(x^i(t)) - x_i(t) + w_i(t)), & t \in T^i
+\end{cases}
+\end{equation}
+where:
+\begin{itemize}
+\item $T^i \subset \mathbb{N}$ is the set of update times for component $i$
+\item $\alpha_i(t) \in [0,1]$ is the stepsize parameter
+\item $w_i(t)$ is a noise term
+\item $x^i(t) = (x_1(\tau_1^i(t)), \ldots, x_n(\tau_n^i(t)))$ contains possibly outdated information with $0 \leq \tau_j^i(t) \leq t$
+\end{itemize}
+All variables are defined on a probability space $(\Omega, \mathcal{F}, P)$ with an increasing sequence of $\sigma$-fields $\{\mathcal{F}(t)\}_{t=0}^{\infty}$ representing the algorithm's history.
+\end{frame}
+\begin{frame}{Simplified setup notation}
+Let $x(t)$ denote the state at discrete time $t\in\mathbb{N}$ with component $x_i(t)$. For each component, we have
+\begin{equation}
+    x_i(t+1) = (1-\alpha_i(t))x_i(t) + \alpha_i(t)(F_i(\textcolor{blue}{x(t)}) + w_i(t)) 
+\end{equation}\label{eq:x_t}
+
+
+    $$
+    \mathbf{x}(t+1) =(I-\mathbf{A}(t)) \mathbf{x}(t) + \mathbf{A}(t)(\mathbf{F}(\mathbf{x}(t)) +\mathbf{w}(t))
+    $$
+    where
+    $$
+    \mathbf{x}(t) = \begin{pmatrix}
+        x_1(t)\\
+        \vdots\\
+        x_n(t)
+    \end{pmatrix},\mathbf{A}(t) = \begin{pmatrix}
+        \alpha_1(t) &  \cdots & 0\\
+        \vdots  & \ddots & 0\\
+        0 &\cdots & \alpha_n(t)
+    \end{pmatrix},\mathbf{F}(\mathbf{x}(t)) = \begin{pmatrix}
+        F_1(\mathbf{x}(t))\\
+        \vdots\\
+        F_n(\mathbf{x}(t))
+    \end{pmatrix},\mathbf{w}(t) = \begin{pmatrix}
+        w_1(t)\\
+        \vdots\\
+        w_n(t)
+    \end{pmatrix}
+    $$
+\end{frame}
+\begin{frame}{Martingale, sub- and super-martingale}
+\begin{definition}
+    Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space with filtration $\mathbb{F} =(\mathcal{F}(t))_{t\ge 0}$. A stochastic process $X = (X(t))_{t\ge 0}$ is called a martingale with respect to the filtration $\mathbb{F}$ if
+    \begin{enumerate}
+        \item $X$ is adaped to $\mathbb{F}$
+        \item $\mathbb{E}_{\mathbb{P}} |X(t)|<\infty$ for all $t\ge 0$
+        \item For $s\le t$, $\mathbb{E}_{\mathbb{P}} (X(t)|\mathcal{F}(s)) = X(s)$
+    \end{enumerate}
+    A stochastic process $X(t)$ is called a submartingale if the third condition becomes
+    $$
+    s\le t, \mathbb{E}_{\mathbb{P}} (X(t)|\mathcal{F}(s))\ge X(s)
+    $$
+    A stochastic process $X(t)$ is called a supermartingale if the third condition becomes
+    $$
+    s\le t, \mathbb{E}_{\mathbb{P}} (X(t)|\mathcal{F}(s))\le X(s)
+    $$
+\end{definition}
+    
+\end{frame}
+\begin{frame}{Full proof for Lemma 1}
+    \begin{proof}
+        Let us first note that, without loss of generality, we can assume that $B(t) \leq K$ for some constant $K$ almost surely, since the sequence $\{B(t)\}$ is bounded with probability 1.\\
+\\
+\textbf{Step 1: Use the squared process}\\
+\\
+We analyze the evolution of the squared process $V(t) = W^2(t)$. From the recursion for $W(t)$, we have:
+\begin{align*}
+W(t+1) &= (1 - \alpha(t))W(t) + \alpha(t)w(t)
+\end{align*}
+
+\noindent Squaring both sides yields:
+\begin{align*}
+W^2(t+1) &= \left((1 - \alpha(t))W(t) + \alpha(t)w(t)\right)^2 \\
+&= (1 - \alpha(t))^2W^2(t) + 2(1-\alpha(t))\alpha(t)W(t)w(t) + \alpha^2(t)w^2(t)
+\end{align*}
+    \end{proof}
+\end{frame}
+\begin{frame}{Full proof for lemma 1 part 2}
+\begin{proof}
+\noindent Taking the conditional expectation with respect to $\mathcal{F}(t)$:
+\begin{align*}
+\mathbb{E}[W^2(t+1) \mid \mathcal{F}(t)] &= (1 - \alpha(t))^2W^2(t) + 2(1-\alpha(t))\alpha(t)W(t)\mathbb{E}[w(t) \mid \mathcal{F}(t)] + \alpha^2(t)\mathbb{E}[w^2(t) \mid \mathcal{F}(t)]
+\end{align*}
+\noindent Using the conditions $\mathbb{E}[w(t) \mid \mathcal{F}(t)] = 0$ and $\mathbb{E}[w^2(t) \mid \mathcal{F}(t)] \leq B(t)\le K$, we obtain:
+\begin{align*}
+\mathbb{E}[V(t+1) \mid \mathcal{F}(t)] &\leq (1 - \alpha(t))^2V(t) + \alpha^2(t)K \\
+&= (1 - 2\alpha(t) + \alpha^2(t))V(t) + \alpha^2(t)K \\
+&= V(t) - 2\alpha(t)V(t) + \alpha^2(t)V(t) + \alpha^2(t)K \\
+&= V(t) - \alpha(t)V(t)(2 - \alpha(t)) + \alpha^2(t)K
+\end{align*}
+
+\end{proof}
+    
+\end{frame}
+\begin{frame}{Full proof of lemma 1}
+\begin{proof}
+    \noindent Since $\alpha(t) \in [0,1]$, we have $(2 - \alpha(t)) \geq 1$, which gives:
+\begin{align*}
+\mathbb{E}[V(t+1) \mid \mathcal{F}(t)] &\leq V(t) - \alpha(t)V(t) + \alpha^2(t)K \\
+&= (1 - \alpha(t))V(t) + \alpha^2(t)K\\
+&= V(t) + \alpha^2(t) K -\alpha(t) V(t)
+\end{align*}
+\end{proof}
+    
+\end{frame}
+\begin{frame}{Full proof of lemma 1}
+\begin{proof}
+    \textbf{Step 2: Use \autoref{thm:robbins siegmund}}\\
+\\
+\noindent Now, we let
+\begin{itemize}
+    \item $\xi_t = \alpha^2(t)K$, we have 
+    $$
+    \sum_{t=0}^\infty \xi_t  = \sum_{t=0}^\infty \alpha(t)^2K = K\sum_{t=0}^\infty \alpha^2(t) <\infty
+    $$
+    by our assumption. 
+    \item $\zeta_t = \alpha(t)V(t)$ is nonnegative and adapted to the filtration. 
+\end{itemize}
+Hence, we use \autoref{thm:robbins siegmund}, we get
+\begin{itemize}
+    \item $\lim_{t\to\infty} V(t) = V_\infty$ exists and is finite almost surely
+    \item $\sum_{t=0}^\infty \zeta_t = \sum_{t=0}^\infty \alpha(t) V(t)<\infty$ almost surely.
+\end{itemize}
+\end{proof}
+\end{frame}
+\begin{frame}{Full proof of lemma 1}
+\begin{proof}
+    \textbf{Step 3: Prove $V_\infty =0$ almost surely by contradiction}\\
+\\
+Suppose that $P(V_\infty\ge 2\epsilon)>\delta$ for some $\epsilon, \delta>0$. Then we have on the set $\{\omega: V_\infty(\omega)\ge 2\epsilon\}$, by the definition of limit, for every $\omega\in \{\omega: V_\infty(\omega)\ge 2\epsilon\}$, there exists $T(\omega)\in\mathbb{N}$ such that for all $t\ge T(\omega)$, $V(t,\omega)\ge \epsilon$. Hence for all $\omega\in\{V_\infty\ge \epsilon\}$:
+$$
+\sum_{t=0}^\infty \zeta_t(\omega) = \sum_{t=0}^\infty \alpha(t)V(t,\omega)\ge \sum_{t=T(\omega)}^\infty \alpha(t) V(t,\omega)\ge \epsilon\sum_{t=T(\omega)}^\infty \alpha (t)
+$$
+By $\sum_{t=0}^\infty \alpha (t) = \infty$, we have $\sum_{t=T(\omega)}^\infty \alpha(t) = \infty$. Hence
+$$
+\sum_{t=0}^\infty \zeta_t(\omega) \ge \epsilon\sum_{t=T(\omega)}^\infty \alpha (t) = \infty
+$$
+\end{proof}
+\end{frame}
+\begin{frame}{Full proof of lemma 1}
+\begin{proof}
+    This implies 
+$$
+\left\{\omega: \sum_{t=0}^\infty \zeta_t(\omega)=\infty\right\}\supseteq \{\omega: V_\infty(\omega)\ge 2\epsilon\}
+$$
+Hence
+$$
+P\left(\sum_{t=0}^\infty \zeta_t =  \infty\right) \ge P\left(V_\infty \ge 2\epsilon\right)>\delta
+$$
+This contradicts to $\sum_{t=0}^\infty \zeta_t<\infty$ almost surely.\\
+\\
+Hence, this contradiction gives $V_\infty =0$ almost surely.
+\end{proof}
+    
+\end{frame}
+\end{document}

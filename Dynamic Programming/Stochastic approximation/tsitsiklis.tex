@@ -39,7 +39,7 @@ We assume
 \end{enumerate}
     
 \end{assumption}
-\begin{assumption}[Contraction]\label{ass:contraction}
+\begin{assumption} [Contraction]\label{ass:contraction}
 There exists a vector $x^* \in \mathbb{R}^n$, a positive vector $v$, and a scalar $\beta \in [0,1)$, such that
 \begin{equation}
 \|F(x) - x^*\|_v \leq \beta \|x - x^*\|_v, \quad \forall x \in \mathbb{R}^n.
@@ -164,11 +164,23 @@ Hence, we use \autoref{thm:robbins siegmund}, we get
 \end{itemize}
 \textbf{Step 3: Prove $V_\infty =0$ almost surely by contradiction}\\
 \\
-Suppose that $V_\infty>\epsilon$ almost surely for some $\epsilon>0$. Then we have
+Suppose that $P(V_\infty\ge 2\epsilon)>\delta$ for some $\epsilon, \delta>0$. Then we have on the set $\{\omega: V_\infty(\omega)\ge 2\epsilon\}$, by the definition of limit, for every $\omega\in \{\omega: V_\infty(\omega)\ge 2\epsilon\}$, there exists $T(\omega)\in\mathbb{N}$ such that for all $t\ge T(\omega)$, $V(t,\omega)\ge \epsilon$. Hence for all $\omega\in\{V_\infty\ge \epsilon\}$:
 $$
-\sum_{t=0}^\infty \epsilon \alpha(t) =\epsilon\sum_{t=0}^\infty \alpha(t) <\infty
+\sum_{t=0}^\infty \zeta_t(\omega) = \sum_{t=0}^\infty \alpha(t)V(t,\omega)\ge \sum_{t=T(\omega)}^\infty \alpha(t) V(t,\omega)\ge \epsilon\sum_{t=T(\omega)}^\infty \alpha (t)
 $$
-This implies $\sum_{t=0}^\infty \alpha(t)<\infty$ which contradicts to the assumption that $\sum_{t=0}^\infty \alpha(t) = \infty$.\\
+By $\sum_{t=0}^\infty \alpha (t) = \infty$, we have $\sum_{t=T(\omega)}^\infty \alpha(t) = \infty$. Hence
+$$
+\sum_{t=0}^\infty \zeta_t(\omega) \ge \epsilon\sum_{t=T(\omega)}^\infty \alpha (t) = \infty
+$$
+This implies 
+$$
+\left\{\omega: \sum_{t=0}^\infty \zeta_t(\omega)=\infty\right\}\supseteq \{\omega: V_\infty(\omega)\ge 2\epsilon\}
+$$
+Hence
+$$
+P\left(\sum_{t=0}^\infty \zeta_t =  \infty\right) \ge P\left(V_\infty \ge 2\epsilon\right)>\delta
+$$
+This contradicts to $\sum_{t=0}^\infty \zeta_t<\infty$ almost surely.\\
 \\
 Hence, this contradiction gives $V_\infty =0$ almost surely.
 \end{proof}

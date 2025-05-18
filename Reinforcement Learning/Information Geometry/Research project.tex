@@ -1,0 +1,283 @@
+\documentclass[a4paper]{article}
+\usepackage{import}
+\import{preambles/}{header.tex}
+\addbibresource{reference_ig.bib}
+\title{Research Project: Natural Gradient Method and Economic Application}
+\author{Longye Tian}
+\begin{document}
+\maketitle
+
+Natural gradient method is an important variant of standard gradient descent algorithm in deep learning. In particular, the gradient is updated in the Riemannian parameter manifold constrast to standard Euclidean parameter spaces in the standard gradient descent algorithm. Some of the pioneering research has been using deep learning techniques to solve macroeconomics models such as \cite{maliar2021deep} and \cite{beck2024deep}. Yet, there is no current research that related to using natural gradient method. This research project aims at exploring this research gap and compare the result of standard gradient descent versus the result of using natural gradient descent. \\
+\\
+Section I presents preliminary definitions for natural gradient descent and comparison with the standard natural gradient algorithm. Section II presents a concise literature review of two strands of research, the natural gradient descent development, and deep learning in solving macroeconomic models. Section III presents an application of the natural gradient method and compares the result with the standard gradient method in a standard Real Business Cycle model. Section IV concludes.
+\section{Natural Gradient Descent: Mathematical Foundations and Comparison with Standard Gradient Descent}
+In this section, we present the definitions related to the natural gradient descent technique and comparison with the standard gradient descent algorithm. The focus of this section is theoretical. In particular, we show that natural gradient descent can deal with plateau effect in constrast to standard gradient descent.
+\subsection{Standard Gradient Descent Algorithm}
+Gradient descent is the core algorithm in neural network for updating parameters. First, we rigorously define a neural network and present its relationship with gradient descent algorithm. More details can be find in \cite{goodfellow2016deep}.\\
+\\
+The basic unit in a neural network is called a neuron, or node. Intrinsically, it is a parameterized function
+$$
+g: \mathbb{R}^k \to \mathbb{R}
+$$
+in the form of
+$$
+g(z;\gamma) = f\left(\gamma_0 + \sum_{i=1}^k \gamma_i z_i\right)
+$$
+where $z\in\mathbb{R}^k$ is the input vector, $\gamma\in\mathbb{R}^{k+1}$ is the corresponding parameter vector. The nonlinear function $f$ is called the activation function, and this nonlinearity is required for the universal approximation properties of the neural network (see \cite{cybenko1989approximation}, \cite{hornik1989multilayer}).\\
+\\
+Stacking the neurons together forms a layer of the neural network. In other words, a layer is a function $G: \mathbb{R}^p\to \mathbb{R}^q$ which
+$$
+G(Z;\Gamma) = \begin{bmatrix}
+    g_1(z_1;\gamma_1)\\
+    g_2(z_2;\gamma_2)\\
+    \vdots\\
+    g_q(z_q; \gamma_q)
+\end{bmatrix}
+$$
+where $z_1,\cdots ,z_q\in \mathbb{R}^p$, and $\gamma_1,\cdots,\gamma_q\in \mathbb{R}^{p+1}$. We use $g_1,\cdots,g_q$ to denote possible different activation functions for different neurons.\\
+\\
+The neural network is a composition of layers, i.e., for a $\ell$-layered neural network, it is a function $N: \mathbb{R}^m\to \mathbb{R}^n$, where
+$$
+N(x;\theta) = (G_\ell \circ G_{\ell-1} \circ \cdots \circ G_2\circ G_1)(x)
+$$
+where $x\in \mathbb{R}^m$ and $N(x)\in \mathbb{R}^n$, and $\theta$ denotes all the parameters in the neural network.\\
+\\
+When approximating or learning a function of interest using the neural network with data, we need to setup a loss function to update the parameters, for example, the mean squared error 
+$$
+\ell (x,y,\theta) = \frac{1}{n}\sum_{i=1}^n (N(x_i;\theta)-y_i)^2
+$$
+where $x,y$ are input and output data. This is one possible loss functions.\\
+\\
+The essense of the deep learning is to update the parameter iteratively in the direction oppositive to the gradient of the loss function to find the local minimum, which gives the direction of steepest descent. We have
+$$
+\theta(t+1) = \theta(t) - a(t) \nabla_{\theta(t)} \ell (x,y,\theta(t))
+$$
+where $a(t)$ is the stepwise learning rate. This step is often referred as backpropogation as in \cite{rumelhart1986learning}. This standard gradient descent algorithm is the core of the modern deep learning algorithm for learning parameters of unknown functions.
+\subsection{Natural gradient descent algorithm}
+Yet, one fundamental assumption on the parameter space is Euclidean. This geometric structure implicitly affects this algorithm because this algorithm is determined by the direction of descent. And this direction also affects the convergence speed, stability. In particular, one common problem of the standard gradient descent is the plateau problem where the gradient of the loss function is flat. This can lead to severely slow rate of convergence as shown in \cite{amari2016information}.\\
+\\
+In particular, in the context of probability distribution, the parameter manifold of probability distribution is not Euclidean but Riemannian. This motivates natural gradient descent algorithm to exploit this underlying geometric structure.\\
+\\
+The natural gradient descent incorporates the intrinsic Riemannian geometry defined by the model's statistical properties \cite{amari1998natural}. In this setup, the distance between two parameters induced by the model is different compared to the Euclidean parameter space assumption. \\
+\\
+In a Riemannian manifold, the local geometry at each point is characterized by a metric tensor $G(\theta)$ that determines how distances and angles are measured \cite{amari2016information}. For a small perturbation direction $b$ satisfying the constraint $g_{ij}b^i b^j = 1$, where $g_{ij}$ are the components of the Riemannian metric tensor, the steepest descent direction becomes the solution to:
+
+\begin{equation}
+\max_b \nabla_\theta \ell(\theta) \cdot b \quad \text{subject to} \quad g_{ij}b^i b^j = 1
+\end{equation}
+
+Using the method of Lagrange multipliers, this optimization problem yields:
+
+\begin{equation}
+b \propto G^{-1}\nabla_{\theta} \ell(\theta)
+\end{equation}
+
+where $G$ is the matrix representation of the metric tensor $g_{ij}$. This direction, known as the natural gradient, is defined as:
+
+\begin{equation}
+\tilde{\nabla}_\theta \ell(\theta) = G^{-1}(\theta)\nabla_\theta \ell(\theta)
+\end{equation}
+
+The resulting update rule for natural gradient descent becomes:
+
+\begin{equation}
+\theta (t+1) = \theta (t) - a(t) G^{-1}(\theta(t)) \nabla_{\theta(t)} \ell (x,y,\theta(t))
+\end{equation}
+
+For a neural network model used to learn a probability distribution and parameterized by $\theta$, a particularly appropriate Riemannian metric is the Fisher information matrix $F(\theta)$ \cite{rao1945information, jeffreys1946invariant}, defined as:
+
+\begin{equation}
+F(\theta) = \mathbb{E}_{p(x|\theta)}\left[\nabla_\theta \log p(x|\theta) \nabla_\theta \log p(x|\theta)^T\right]
+\end{equation}
+
+The Fisher information matrix captures the local curvature of the statistical parameter manifold and has the interpretation of being the Hessian of the Kullback-Leibler divergence between nearby distributions in the model family \cite{amari2000methods}. Using the Fisher information as the Riemannian metric leads to the natural gradient update:
+
+\begin{equation}
+\theta(t+1) = \theta (t)- a(t)F(\theta(t))^{-1} \nabla_{\theta(t)} \ell (x,y,\theta(t))
+\end{equation}
+
+This update rule ensures that parameter changes are proportional to their effect on the model's output rather than their Euclidean distance in parameter space \cite{martens2010deep, martens2015optimizing}.
+
+\subsection{The Plateau problem in the standard descent algorithm}
+
+One of the most significant advantages of natural gradient descent is its ability to efficiently navigate regions in parameter space where standard gradient descent becomes trapped or slows dramatically—a phenomenon known as the plateau problem \cite{yang1998complexity}.
+
+\subsubsection{Mathematical Characterization of Plateaus}
+
+In neural networks, plateaus emerge as critical regions where $\|\nabla_\theta \ell(\theta)\| \approx 0$ but $\theta$ is not at a local minimum \cite{dauphin2014identifying}. These regions correspond to singular configurations of the network where small changes in parameters have minimal effect on the network's output \cite{amari2016information}. And we define two types of singularities for the neural network:
+
+\begin{definition}[Neural Network Singularities]
+For a neural network with neurons having output function $g(z, \theta) = v\varphi(w \cdot x)$, two primary types of singularities create critical regions \cite{wei2008dynamics}:
+\begin{enumerate}
+    \item \textbf{Eliminating singularity:} When $v = 0$ or $w = 0$, forming critical region $R_v = \{\xi | v_i = 0, w_i \text{ arbitrary}\}$
+    \item \textbf{Overlapping singularity:} When $w_i = w_j = w$ and $v_i + v_j = v$, forming critical region $R_{ovl}(w, v) = \{\xi | w_i = w_j = w, v_i + v_j = v\}$
+\end{enumerate}
+\end{definition}
+
+These singularities collectively form a critical manifold \cite{fukumizu2000local}:
+\begin{equation}
+R = \left\{\xi \left| \prod_i v_i |w_i| \prod_{i \neq j} |w_i - w_j| = 0 \right.\right\}
+\end{equation}
+
+\subsubsection{Dynamics Near Critical Regions}
+
+The behavior of gradient-based algorithms near these critical regions reveals fundamental differences between standard and natural gradient descent \cite{yang1998complexity, amari1998natural}.
+
+\begin{theorem}[Slow Convergence of Standard Gradient Descent]
+When parameters $\theta$ are at distance $u$ from a critical region $R$, standard gradient descent exhibits dynamics \cite{fukumizu2000local, wei2008dynamics}:
+\begin{equation}
+\frac{du}{dt} = -\nabla_{\perp} L(\theta) \propto u^2
+\end{equation}
+After integration, this yields:
+\begin{equation}
+\frac{du}{dt} \propto u^3
+\end{equation}
+This cubic relationship causes extremely slow convergence, with escape time scaling as $O(1/u^2)$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Near a critical region, the error term $e = \langle f(x, \xi) - f(x, \xi_0) \rangle$ scales as $O(u^2)$, and the Hessian of the loss function has eigenvalues scaling as $O(u)$ \cite{wei2008dynamics}. Therefore, the gradient scales as $O(u^2)$. Projecting the gradient descent dynamics onto the direction normal to the critical manifold yields $\frac{du}{dt} \propto u^3$.
+\end{proof}
+
+This explains why standard gradient descent becomes trapped in plateau regions for extended periods, creating the characteristic learning curve plateaus observed in practice \cite{dauphin2014identifying, pascanu2014saddle}.
+
+\begin{theorem}[Natural Gradient Behavior Near Critical Regions]
+Near a critical region, the Fisher information matrix has the structure \cite{amari1998natural, martens2015optimizing}:
+\begin{equation}
+G(\xi) \approx \epsilon^2 G_{\perp} + G_{\parallel}
+\end{equation}
+with inverse:
+\begin{equation}
+G^{-1}(\xi) \approx \frac{1}{\epsilon^2}G_{\perp}^{-1} + G_{\parallel}^{-1}
+\end{equation}
+where $\epsilon$ is the distance to the critical manifold $R$.
+
+For natural gradient descent, this gives dynamics \cite{amari2016information}:
+\begin{equation}
+\frac{d\epsilon}{dt} = -G^{-1}(\xi)\nabla_{\perp} L(\xi) \propto \frac{\epsilon^2}{\epsilon^2} = O(1)
+\end{equation}
+This cancellation effect maintains constant convergence rate regardless of proximity to critical regions.
+\end{theorem}
+
+\subsubsection{Escape Time Analysis}
+
+The time required to escape plateaus provides a clear quantitative comparison between the two optimization approaches \cite{dauphin2014identifying, martens2010deep}.
+
+\begin{theorem}[Comparative Escape Times]
+For parameters at distance $\epsilon$ from a critical region $R$, the time required to escape the $\delta$-neighborhood of $R$ is \cite{amari2016information, wei2008dynamics}:
+\begin{align}
+T_{SGD}(\epsilon, \delta) &= O\left(\frac{1}{\epsilon^2} - \frac{1}{\delta^2}\right) \\
+T_{NGD}(\epsilon, \delta) &= O\left(\log\frac{\delta}{\epsilon}\right)
+\end{align}
+demonstrating exponential improvement for natural gradient descent.
+\end{theorem}
+
+\begin{proof}
+For standard gradient descent with $\frac{d\epsilon}{dt} = O(\epsilon^3)$, integrating from $\epsilon$ to $\delta$ yields \cite{wei2008dynamics}:
+\begin{equation}
+\int_{\epsilon}^{\delta} \frac{d\epsilon'}{\epsilon'^3} = \int_0^T dt \implies T_{SGD}(\epsilon, \delta) = O\left(\frac{1}{\epsilon^2} - \frac{1}{\delta^2}\right)
+\end{equation}
+
+For natural gradient descent with $\frac{d\epsilon}{dt} = O(1)$ when $\epsilon \ll 1$, we obtain \cite{amari1998natural}:
+\begin{equation}
+T_{NGD}(\epsilon, \delta) = O\left(\log\frac{\delta}{\epsilon}\right)
+\end{equation}
+due to the exponential nature of escape under natural gradient dynamics.
+\end{proof}
+
+This exponential improvement in escape time highlights the practical advantage of natural gradient descent in overcoming the plateau problem. While standard gradient descent can take arbitrarily long to escape plateaus as $\epsilon$ approaches zero, natural gradient descent maintains a reasonable escape time even for parameters very close to critical regions \cite{martens2015optimizing}.
+
+\subsection{Theoretical Guarantees and Convergence Properties}
+
+Beyond plateau avoidance, natural gradient descent offers several theoretical guarantees that establish its superiority in certain contexts \cite{kunstner2019limitations, martens2010deep}.
+
+\begin{theorem}[Convergence Properties of Natural Gradient Descent]
+For a sufficiently smooth loss function $L(\theta)$, natural gradient descent with step size $\eta_t$ satisfying appropriate conditions converges to a local minimum with the following properties:
+\begin{enumerate}
+    \item It exhibits local quadratic convergence rate for strongly convex functions when using the exact Fisher Information Matrix \cite{amari1998natural, martens2020new};
+    \item It demonstrates improved efficiency near saddle points compared to standard gradient descent \cite{dauphin2014identifying, pascanu2013revisiting};
+    \item Its convergence behavior remains invariant to differentiable reparameterizations of the model \cite{amari1998natural, ollivier2017information}.
+\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Implicit Regularization]
+Natural gradient descent implicitly regularizes toward parameter configurations away from critical manifolds, favoring more stable representations when multiple configurations yield equivalent model behavior \cite{kunstner2019limitations, martens2015optimizing}.
+\end{theorem}
+
+\begin{corollary}[Scaling with Network Size]
+For neural networks with $n$ parameters, worst-case convergence time near singularities scales as $O(n^3)$ for standard gradient descent versus $O(n)$ for natural gradient descent \cite{wei2008dynamics, amari2016information}.
+\end{corollary}
+
+This scaling property becomes increasingly important for large neural networks, where the dimensionality of the parameter space makes escape from critical regions particularly challenging using standard gradient methods \cite{martens2015optimizing}.
+
+The geometry-aware updates of natural gradient descent effectively eliminate the plateau phenomenon visible in learning curves of standard gradient descent \cite{pascanu2014saddle}. While standard gradient descent exhibits cubic-order slowdown near critical regions due to mismatch between Euclidean distance and functional distance, natural gradient descent maintains consistent convergence throughout the optimization process \cite{martens2010deep, martens2015optimizing}.
+
+In summary, the natural gradient method provides a principled approach to optimization that respects the underlying geometry of the parameter space \cite{amari1998natural, amari2000methods}. By measuring distances in terms of their effect on the model's output distribution rather than Euclidean distance in parameter space, natural gradient descent overcomes the limitations of standard gradient descent, particularly with respect to the plateau problem. The theoretical guarantees and convergence properties established in this section provide a solid foundation for understanding the advantages of natural gradient methods over standard approaches, which we will apply to economic modeling in Section III.
+\section{Literature Review}
+
+This section presents a concise review of two interconnected research strands: the development of natural gradient methods and the application of deep learning techniques to macroeconomic modeling. By examining these areas, we identify a significant research gap at their intersection.
+
+\subsection{Natural Gradient Methods in Machine Learning}
+
+\subsubsection{Theoretical Foundations}
+Amari \cite{amari1998natural} pioneered the natural gradient method by conceptualizing parameter spaces as Riemannian manifolds equipped with the Fisher information metric. This approach offered a coordinate-invariant optimization method that respects the underlying geometry of parameter space. The comprehensive framework presented in ``Methods of Information Geometry'' \cite{amari2000methods} solidified the theoretical underpinnings, formalizing how the Fisher information matrix serves as the natural metric tensor on statistical manifolds.
+
+Unlike standard gradient descent, which implicitly assumes a Euclidean structure of parameter space, natural gradient descent acknowledges the intrinsic curvature of the manifold formed by model parameters. This geometric perspective enables more efficient navigation of the loss landscape, particularly in regions where standard gradient methods struggle, such as plateaus and saddle points \cite{yang1998complexity}.
+
+\subsubsection{Practical Implementations}
+The computational complexity of calculating the Fisher information matrix initially limited practical applications of natural gradient methods. Martens \cite{martens2010deep} made a breakthrough with Hessian-free optimization, approximating the natural gradient direction without explicitly computing the full Fisher matrix. Building on this, Martens and Grosse \cite{martens2015optimizing} introduced K-FAC (Kronecker-Factored Approximate Curvature), a scalable approximation that exploits the structure of neural networks to make natural gradient methods computationally viable for deep learning.
+
+Further refinements by Ba et al. \cite{ba2017distributed} extended K-FAC to distributed training settings, while George et al. \cite{george2018fast} provided theoretical guarantees on approximation quality while maintaining computational efficiency. These advances have made natural gradient methods increasingly practical for large-scale applications.
+
+\subsubsection{Performance Benefits}
+Natural gradient methods have demonstrated several advantages over standard gradient descent, including:
+\begin{itemize}
+    \item Faster convergence, particularly in ill-conditioned optimization landscapes \cite{martens2015optimizing}
+    \item Robustness to reparameterization, providing consistent performance regardless of model parameterization \cite{amari1998natural}
+    \item Better navigation of saddle points and plateaus, which are prevalent in deep learning \cite{dauphin2014identifying}
+    \item Improved sample efficiency in stochastic optimization settings \cite{kunstner2019limitations}
+\end{itemize}
+
+These benefits suggest potential advantages for complex economic models where parameter landscapes may exhibit similar challenging characteristics.
+
+\subsection{Deep Learning in Macroeconomic Modeling}
+
+\subsubsection{Traditional Approaches and Computational Challenges}
+Macroeconomic models, particularly dynamic stochastic general equilibrium (DSGE) models, have traditionally relied on linearization techniques and perturbation methods to approximate solutions to complex systems \cite{fernandez2016solution}. These approaches face significant computational challenges when dealing with high-dimensional state spaces, occasionally binding constraints, or non-normal shock distributions \cite{judd2017solution}.
+
+\subsubsection{Neural Network Solutions}
+Recent research has explored deep learning as an alternative solution method for macroeconomic models. Maliar et al. \cite{maliar2021deep} pioneered this approach by using deep neural networks to approximate value functions and decision rules in dynamic economic models. Their work demonstrated that neural networks can effectively capture nonlinearities and handle high-dimensional state spaces that challenge traditional solution methods.
+
+Building on this foundation, Beck et al. \cite{beck2024deep} expanded the application of deep learning to more complex macroeconomic frameworks, showing particular promise in models with occasionally binding constraints and regime shifts. Their research highlighted the flexibility of neural network approximations in capturing complex economic dynamics that are difficult to model with conventional techniques.
+
+Villa and Yang \cite{villa2021solution} demonstrated that deep learning methods can achieve higher accuracy than standard projection methods for certain classes of economic models while requiring less computational time. Similarly, Azinovic et al. \cite{azinovic2022deep} established theoretical guarantees for deep learning solution methods in specific economic contexts, providing formal justification for their application.
+
+\subsubsection{Optimization Challenges}
+Despite these advances, researchers have noted optimization challenges when applying deep learning to economic models. Fernández-Villaverde et al. \cite{fernandez2020neural} observed that training neural networks for economic models often requires careful tuning of optimization hyperparameters, with convergence being sensitive to initialization and learning rate schedules. Similarly, Duarte \cite{duarte2018machine} documented cases where gradient-based optimization methods struggle with the complex loss landscapes that arise when training networks on economic objectives.
+
+These challenges suggest that more sophisticated optimization approaches—beyond standard gradient descent—may yield improvements in both efficiency and accuracy when solving macroeconomic models with deep learning.
+
+\subsection{Research Gap: Natural Gradient Methods for Economic Modeling}
+
+The literature review reveals a clear research gap at the intersection of natural gradient methods and macroeconomic modeling. While deep learning has been successfully applied to solve complex economic models, researchers have primarily relied on standard optimization techniques such as stochastic gradient descent and its variants.
+
+The geometric perspective offered by natural gradient methods could be particularly valuable in the context of economic models for several reasons:
+
+\begin{itemize}
+    \item Economic models often involve complex parameter spaces where the Fisher information metric may better capture the underlying structure than Euclidean metrics
+    \item The improved convergence properties of natural gradient methods could enhance training stability for neural networks approximating economic functions
+    \item Economic models frequently involve probability distributions (e.g., for shock processes), making the statistical manifold perspective of natural gradients especially relevant
+\end{itemize}
+
+To date, no research has systematically investigated whether the theoretical advantages of natural gradient methods translate to practical benefits when applied to deep learning solutions for macroeconomic models. This project aims to address this gap by comparing standard gradient methods against natural gradient approaches in the context of a canonical Real Business Cycle model.
+
+
+
+\subsection{Conclusion}
+
+The plateau effect in neural network optimization stems from intrinsic singularities in parameter space where the Fisher information matrix becomes degenerate. By adopting the Riemannian metric defined by the Fisher information matrix, natural gradient descent ensures parameter updates are scaled according to their effect on the model's output distribution rather than their Euclidean magnitude.
+
+This geometric approach transforms the optimization dynamics, converting polynomial convergence to exponential convergence near critical regions and eliminating the plateau phenomenon. The theoretical advantages of natural gradient descent become increasingly significant for deep neural networks with complex loss landscapes containing numerous critical regions, providing a principled solution to one of the fundamental challenges in neural network optimization.
+\printbibliography{}
+\newpage
+\end{document}

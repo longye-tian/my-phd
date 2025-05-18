@@ -97,7 +97,7 @@
 \end{figure}
     
 \end{frame}
-\begin{frame}{Weisfeilei-Lehman (WL) test}
+\begin{frame}{Weisfeiler-Lehman (WL) test}
 \begin{figure}
     \centering
     \includegraphics[width=0.8\linewidth]{Network/Graph Neural Network/Weisfeiler-Lehman.png}
@@ -107,11 +107,11 @@
 \begin{itemize}
     \item $G = (V,E, X_V)$    
     \item In the $k$-th layer
-    $$
-    h_v^{k} = COMBINE^{(k)}\left(h_v^{k-1}, a_v^{(k)}\right), a_v^{(k)} = AGGREGATE^{(k)}\left(\{h_u^{k-1}: u\in \mathcal{N}(v)\}\right\)
-    $$
-    \item Looks really like the iteration step in the WL test
+        $$
+    h_v^{k} = COMBINE^{(k)}\left(h_v^{k-1}, a_v^{(k)}\right), a_v^{(k)} = AGGREGATE^{(k)}\left(\{h_u^{k-1}: u\in \mathcal{N}(v)\}\right)
+        $$ 
 \end{itemize} 
+Looks really like the iteration step in the WL test
 \end{frame}
 \begin{frame}{Key Theorem}
     \begin{theorem}
@@ -135,7 +135,7 @@ $$
 \end{frame}
 \begin{frame}{Discussion}
 \begin{itemize}
-    \item Is 1-WL good enough? (Fail to distinguish regular graph with $n$ nodes)
+    \item Is 1-WL good enough? (Fail to distinguish a regular graph with $n$ nodes)
     \begin{figure}
         \centering
         \includegraphics[width=0.7\linewidth]{Network/Graph Neural Network/1-WL fail.png}
@@ -146,7 +146,8 @@ $$
 \end{frame}
 \begin{frame}{Future outlooks}
 \begin{itemize}
+\item Perturbations: What happens if there is a shock to one nodes? How will this shock propogates through the network
+\item Two network are the ``same'' if all or random shock has the same propagation
 \end{itemize}
-    
 \end{frame}
 \end{document}
