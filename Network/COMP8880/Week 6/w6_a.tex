@@ -1,0 +1,238 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+\title{Network Science: Clustering and Label Propagation\\Study Guide for COMP 4880/8880}
+\author{Exam Preparation}
+\date{}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+
+\begin{document}
+\maketitle
+
+\section{Introduction and Motivation}
+\textit{Covers: Course overview and clustering motivation (pages 1-3, 8)}
+
+Clustering in networks addresses a fundamental question: how do we identify groups or communities within complex networked data? Unlike traditional data clustering where we work with points in Euclidean space, network clustering must respect the graph structure and connectivity patterns.
+
+The key insight is that we can represent data points as nodes in a graph, where edge weights reflect similarity between points. This transforms clustering from a geometric problem into a graph partitioning problem, leading to powerful spectral methods that leverage the eigenstructure of graph matrices.
+
+\section{Data Clustering Fundamentals}
+\textit{Covers: Traditional clustering concepts (pages 6-7)}
+
+\subsection{K-means Algorithm}
+Traditional K-means clustering seeks to partition $n$ data points $\{x_1, \ldots, x_n\}$ where $x_i \in \mathbb{R}^d$ into $K$ clusters by minimizing the distortion:
+
+$$J = \sum_{n=1}^N \sum_{k=1}^K r_{nk} \|x_n - \mu_k\|^2$$
+
+where $r_{nk}$ is a binary indicator (1 if point $x_n$ belongs to cluster $k$, 0 otherwise) and $\mu_k$ represents the cluster centroid.
+
+The algorithm alternates between:
+\begin{enumerate}
+\item \textbf{Assignment step}: Assign each point to the nearest cluster center
+\item \textbf{Update step}: Recompute cluster centers as the mean of assigned points
+\end{enumerate}
+
+\textbf{Limitation}: K-means assumes clusters are spherical and works poorly with complex manifold structures that commonly appear in network data.
+
+\section{Network Representation for Data Clustering}
+\textit{Covers: Similarity graphs and network construction (pages 9-11)}
+
+\subsection{From Data Points to Networks}
+We construct a similarity graph $G = (V, E)$ where vertices represent data points and edges encode pairwise similarities. The affinity matrix $W$ has entries $W_{ij}$ representing the similarity between points $i$ and $j$.
+
+\subsection{Common Similarity Graph Constructions}
+
+\textbf{$\varepsilon$-neighborhood graph}: Connect points $i$ and $j$ if $\|x_i - x_j\| < \varepsilon$. This creates unweighted edges since distances are roughly uniform within the threshold.
+
+\textbf{$k$-nearest neighbor graph}: Connect vertex $i$ to vertex $j$ if $j$ is among the $k$ nearest neighbors of $i$. Two variants exist:
+\begin{itemize}
+\item \textit{Standard k-NN}: Directed edges, asymmetric
+\item \textit{Mutual k-NN}: Undirected edges only when both points are mutual k-nearest neighbors
+\end{itemize}
+
+\textbf{Fully connected graph}: Connect all points with positive similarity, using Gaussian similarity:
+$$W_{ij} = \exp\left(-\frac{\|x_i - x_j\|^2}{2\sigma^2}\right)$$
+
+The parameter $\sigma$ controls the neighborhood width, playing a similar role to $\varepsilon$ in the $\varepsilon$-neighborhood graph.
+
+\section{Graph Laplacians: The Mathematical Foundation}
+\textit{Covers: Laplacian matrices and their properties (pages 4-5, 12-13)}
+
+\subsection{Unnormalized Graph Laplacian}
+For a weighted graph with adjacency matrix $W$ and degree matrix $D$ (where $D_{ii} = \sum_j W_{ij}$), the unnormalized Laplacian is:
+$$L = D - W$$
+
+\begin{theorem}[Quadratic Form of Laplacian]
+For any vector $x \in \mathbb{R}^n$:
+$$x^T L x = \sum_{i,j \in E} W_{ij}(x_i - x_j)^2$$
+\end{theorem}
+
+This reveals the Laplacian's key property: it measures how much a function $x$ varies across edges of the graph. Small eigenvalues correspond to slowly-varying functions.
+
+\textbf{Key Properties of $L$}:
+\begin{enumerate}
+\item $L$ is symmetric and positive semi-definite
+\item Smallest eigenvalue is $\lambda_1 = 0$ with eigenvector $\mathbf{1}$ (constant function)
+\item Number of zero eigenvalues equals number of connected components
+\item $\lambda_2$ (algebraic connectivity) measures how well-connected the graph is
+\end{enumerate}
+
+\subsection{Normalized Graph Laplacian}
+The normalized Laplacian addresses degree heterogeneity:
+$$L_{sym} = D^{-1/2}LD^{-1/2} = I - D^{-1/2}WD^{-1/2}$$
+
+Alternatively, the random walk normalized Laplacian:
+$$L_{rw} = D^{-1}L = I - D^{-1}W$$
+
+The normalized versions have eigenvalues in $[0, 2]$ and better numerical properties for clustering.
+
+\section{Spectral Clustering Methods}
+\textit{Covers: Different spectral clustering algorithms (pages 14-17)}
+
+\subsection{Unnormalized Spectral Clustering}
+\textbf{Algorithm}:
+\begin{enumerate}
+\item Construct similarity matrix $S$ and weighted adjacency matrix $W$
+\item Compute unnormalized Laplacian $L = D - W$
+\item Find first $k$ eigenvectors $u_1, \ldots, u_k$ of $L$
+\item Form matrix $U \in \mathbb{R}^{n \times k}$ with eigenvectors as columns
+\item Apply k-means to rows of $U$ to get final clustering
+\end{enumerate}
+
+\subsection{Normalized Spectral Clustering (Shi-Malik)}
+\textbf{Algorithm}:
+\begin{enumerate}
+\item Construct similarity graph with adjacency matrix $W$
+\item Compute unnormalized Laplacian $L$
+\item Solve generalized eigenvalue problem $Lu = \lambda Du$ for first $k$ eigenvectors
+\item Apply k-means to the eigenvector matrix
+\end{enumerate}
+
+\subsection{Normalized Spectral Clustering (Ng-Jordan-Weiss)}
+\textbf{Algorithm}:
+\begin{enumerate}
+\item Construct similarity graph with adjacency matrix $W$
+\item Compute normalized Laplacian $L_{sym}$
+\item Find first $k$ eigenvectors $u_1, \ldots, u_k$ of $L_{sym}$
+\item Form matrix $T$ by normalizing rows of $U$ to unit length: $T_{ij} = U_{ij}/(\sum_k U_{ik}^2)^{1/2}$
+\item Apply k-means to rows of $T$
+\end{enumerate}
+
+\textbf{Why normalize rows?} This step projects points onto the unit sphere, making k-means more effective for the subsequent clustering step.
+
+\section{Normalized Cut and Graph Partitioning}
+\textit{Covers: Ncut formulation and relaxation (pages 18-21)}
+
+\subsection{Cut and Normalized Cut}
+For a partition $A_1, \ldots, A_k$ of vertices, the \textbf{cut} measures total edge weight between clusters:
+$$\text{cut}(A_1, \ldots, A_k) = \frac{1}{2}\sum_{i=1}^k W(A_i, \overline{A_i})$$
+
+The \textbf{normalized cut} addresses cluster size imbalance:
+$$\text{Ncut}(A_1, \ldots, A_k) = \sum_{i=1}^k \frac{\text{cut}(A_i, \overline{A_i})}{\text{vol}(A_i)}$$
+
+where $\text{vol}(A_i) = \sum_{j \in A_i} d_j$ is the volume (total degree) of cluster $A_i$.
+
+\subsection{Relaxation to Spectral Problem}
+The discrete Ncut optimization is NP-hard, but we can relax it to a continuous problem. For the two-cluster case, define indicator function:
+$$f_i = \begin{cases}
+\sqrt{\frac{\text{vol}(\overline{A})}{\text{vol}(A)}} & \text{if } v_i \in A \\
+-\sqrt{\frac{\text{vol}(A)}{\text{vol}(\overline{A})}} & \text{if } v_i \in \overline{A}
+\end{cases}$$
+
+The relaxed problem becomes:
+$$\min_{f \in \mathbb{R}^n} f^T L f \quad \text{subject to } \quad Df \perp \mathbf{1}, \quad f^T D f = \text{vol}(V)$$
+
+By substituting $g = D^{1/2}f$, this transforms to the standard eigenvalue problem for $L_{sym}$, showing that \textbf{normalized spectral clustering solves the relaxed normalized cut problem}.
+
+\subsection{Random Walk Interpretation}
+Ncut has an elegant probabilistic interpretation. For disjoint sets $A, B$:
+$$\text{Ncut}(A, \overline{A}) = P(\overline{A}|A) + P(A|\overline{A})$$
+
+This represents the probability that a random walk starting in one cluster immediately jumps to the other cluster. Good clusters should have low transition probabilities between them.
+
+\section{Label Propagation}
+\textit{Covers: Semi-supervised learning on graphs (pages 22-25)}
+
+\subsection{Problem Setup}
+In semi-supervised learning, we have:
+\begin{itemize}
+\item Labeled nodes: $V_L$ with known labels $Y_L$
+\item Unlabeled nodes: $V_U$ with unknown labels $Y_U$
+\end{itemize}
+
+Goal: Propagate labels from labeled to unlabeled nodes using graph structure.
+
+\subsection{Label Propagation Algorithm (Zhu-Ghahramani)}
+The algorithm uses a transition matrix $T$ where $T_{ij} = P(j \to i) = \frac{W_{ij}}{\sum_k W_{kj}}$.
+
+\textbf{Block structure}:
+$$T = \begin{bmatrix} T_{LL} & T_{UL} \\ T_{LU} & T_{UU} \end{bmatrix}$$
+
+\textbf{Iterative update}:
+$$Y_U^{(t+1)} = T_{UU} Y_U^{(t)} + T_{UL} Y_L$$
+
+\textbf{Convergence}: The algorithm converges to the analytical solution:
+$$Y_U^* = (I - T_{UU})^{-1} T_{UL} Y_L$$
+
+\textbf{Key insight}: The final solution doesn't depend on initialization, making the method robust.
+
+\subsection{Label Spreading (Zhou et al.)}
+A variant that allows labeled nodes to change slightly:
+$$F(t+1) = \alpha S F(t) + (1-\alpha) Y$$
+
+where $S = D^{-1/2}WD^{-1/2}$ is the normalized adjacency matrix and $\alpha \in (0,1)$ controls the balance between neighborhood influence and original labels.
+
+\textbf{Analytical solution}:
+$$F^* = (I - \alpha S)^{-1} Y$$
+
+The matrix $(I - \alpha S)^{-1}$ acts as a \textbf{graph diffusion kernel}, encoding how information spreads through the network.
+
+\section{Connections and Unified View}
+\textit{Covers: Relationships between methods (pages 19-21, 26)}
+
+\subsection{Spectral Clustering ↔ Normalized Cut}
+Normalized spectral clustering directly solves the relaxed normalized cut problem. The eigenvectors of the normalized Laplacian provide the optimal continuous solution to the graph partitioning objective.
+
+\subsection{Label Propagation ↔ Random Walks}
+Label propagation can be viewed as running random walks from unlabeled nodes and asking: "What labels do I encounter?" The transition probabilities naturally encode the graph structure.
+
+\subsection{Unified Framework}
+All methods share common elements:
+\begin{enumerate}
+\item \textbf{Graph construction}: Transform data into similarity graph
+\item \textbf{Matrix analysis}: Study eigenstructure of graph matrices (Laplacian, transition matrix)
+\item \textbf{Optimization}: Minimize objectives respecting graph structure
+\item \textbf{Discrete assignment}: Convert continuous solutions to discrete clusters/labels
+\end{enumerate}
+
+The choice between methods depends on whether you have labeled data (label propagation) or need purely unsupervised clustering (spectral methods), and whether you want to emphasize local connectivity (unnormalized) or global balance (normalized).
+
+\section{Practical Considerations and Summary}
+
+\textbf{Algorithm Selection Guidelines}:
+\begin{itemize}
+\item Use \textbf{unnormalized spectral clustering} when clusters have similar sizes
+\item Use \textbf{normalized spectral clustering} when clusters have very different sizes
+\item Use \textbf{label propagation} when you have some labeled examples
+\item The Ng-Jordan-Weiss normalization often works better in practice
+\end{itemize}
+
+\textbf{Key Mathematical Insights}:
+\begin{itemize}
+\item Eigenvectors of graph Laplacians encode cluster structure
+\item Small eigenvalues correspond to slowly-varying functions on the graph
+\item Normalization addresses degree heterogeneity in real networks
+\item Random walk perspectives provide intuitive interpretations
+\end{itemize}
+
+These methods form the foundation of modern network analysis, connecting spectral graph theory, optimization, and machine learning in a principled framework for understanding structure in networked data.
+
+\end{document}

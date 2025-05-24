@@ -1,0 +1,277 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{COMP4880/8880 Study Guide}
+\lhead{Link Prediction \& Recommender Systems}
+\cfoot{\thepage}
+
+\title{\textbf{Link Prediction and Recommender Systems}\\
+\large Study Guide for Final Exam}
+\author{Based on Course Materials}
+\date{Semester 1, 2025}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction to Link Prediction}
+\textit{Coverage: Document Pages 2-3, 5}
+
+Link prediction is one of the most commercially valuable problems in network science. The fundamental question is: given a snapshot of a network at time $t$, can we predict which new edges will appear at time $t+1$?
+
+\subsection{Problem Formulation}
+Consider a network $G = (V, E)$ observed at time $t$. We want to predict missing edges or future connections. This involves:
+
+\begin{itemize}
+\item \textbf{Input:} Current network structure $G_t$
+\item \textbf{Output:} Ranked list of node pairs likely to form edges
+\item \textbf{Applications:} Social network friend suggestions, biological pathway prediction, collaboration networks
+\end{itemize}
+
+The challenge lies in distinguishing between truly missing edges and edges that will never exist. We need scoring functions that assign higher scores to more likely connections.
+
+\subsection{Evaluation Methodology}
+To evaluate link prediction algorithms, we split the network temporally:
+\begin{itemize}
+\item \textbf{Training Period:} Use edges up to time $t$ to learn patterns
+\item \textbf{Test Period:} Predict edges that appear between $t$ and $t+\Delta t$
+\item \textbf{Core Set:} Focus on nodes active in both periods to ensure fair comparison
+\end{itemize}
+
+Performance is measured by how well the algorithm ranks true future edges above random pairs.
+
+\section{Link Prediction Methods}
+\textit{Coverage: Document Pages 8-10}
+
+Various approaches exist for scoring potential edges. Each method captures different aspects of network structure that indicate likely connections.
+
+\subsection{Distance-Based Methods}
+
+\textbf{Graph Distance:} The intuition is that closer nodes are more likely to connect. We use the negative shortest path length:
+$$\text{score}(x,y) = -d(x,y)$$
+
+However, this method has limitations: it assigns the same score to all node pairs at the same distance, ignoring other structural properties.
+
+\subsection{Neighborhood-Based Methods}
+
+These methods assume that nodes with many common neighbors are likely to connect.
+
+\textbf{Common Neighbors:} Simply count shared neighbors:
+$$\text{score}(x,y) = |\Gamma(x) \cap \Gamma(y)|$$
+where $\Gamma(x)$ denotes the neighbors of node $x$.
+
+\textbf{Jaccard Coefficient:} Normalizes by total neighbors to avoid bias toward high-degree nodes:
+$$\text{score}(x,y) = \frac{|\Gamma(x) \cap \Gamma(y)|}{|\Gamma(x) \cup \Gamma(y)|}$$
+
+\textbf{Adamic-Adar Index:} Weights common neighbors by their rarity:
+$$\text{score}(x,y) = \sum_{z \in \Gamma(x) \cap \Gamma(y)} \frac{1}{\log|\Gamma(z)|}$$
+
+The intuition is that connections through low-degree nodes provide stronger evidence than connections through hubs.
+
+\textbf{Preferential Attachment:} Based on the "rich get richer" principle:
+$$\text{score}(x,y) = |\Gamma(x)| \cdot |\Gamma(y)|$$
+
+\subsection{Path-Based Methods}
+
+\textbf{Katz Index:} Counts paths of all lengths, with exponential decay for longer paths:
+$$\text{score}(x,y) = \sum_{\ell=1}^{\infty} \beta^{\ell} \cdot |\text{paths}^{(\ell)}_{x,y}|$$
+
+where $\beta < 1$ is a damping parameter and $\text{paths}^{(\ell)}_{x,y}$ represents paths of length $\ell$ from $x$ to $y$.
+
+\subsection{Random Walk Methods}
+
+\textbf{Hitting Time:} The expected time for a random walk starting at $x$ to reach $y$:
+$$H_{x,y} = \mathbb{E}[\text{time to reach } y \text{ starting from } x]$$
+
+The score is $-H_{x,y}$, as shorter hitting times suggest stronger connections.
+
+\textbf{Commute Time:} The expected time for a round trip:
+$$C_{x,y} = H_{x,y} + H_{y,x}$$
+
+\textbf{Rooted PageRank:} Modification of PageRank where we periodically jump back to a specific starting node with probability $\alpha$:
+$$\pi_x(y) = \alpha \cdot \mathbf{1}_{x}(y) + (1-\alpha) \sum_{z} \pi_x(z) \cdot P_{z,y}$$
+
+where $P_{z,y}$ is the transition probability from $z$ to $y$.
+
+\section{Recommender Systems Foundation}
+\textit{Coverage: Document Pages 11-13}
+
+Recommender systems predict user preferences for items they haven't yet encountered. This connects directly to link prediction in bipartite user-item networks.
+
+\subsection{Problem Setup}
+We have:
+\begin{itemize}
+\item \textbf{Users:} Set $U = \{u_1, u_2, \ldots, u_m\}$
+\item \textbf{Items:} Set $I = \{i_1, i_2, \ldots, i_n\}$
+\item \textbf{Interactions:} Observed user-item interactions (ratings, purchases, clicks)
+\end{itemize}
+
+The goal is to recommend items that users will find relevant or rate highly.
+
+\subsection{Data Representations}
+
+\textbf{Activity Sets:} For each user $u$, define $I_u$ as the set of items they've interacted with. Similarly, for each item $i$, define $U_i$ as the set of users who've interacted with it.
+
+\textbf{Interaction Matrix:} Create matrices to capture relationships:
+\begin{itemize}
+\item \textbf{Rating Matrix } $R$: Entry $R_{u,i}$ contains user $u$'s rating for item $i$
+\item \textbf{Consumption Matrix } $C$: Binary matrix where $C_{u,i} = 1$ if user $u$ interacted with item $i$
+\end{itemize}
+
+The key challenge is that these matrices are extremely sparse—most users interact with only a tiny fraction of available items.
+
+\subsection{Memory-Based vs Model-Based Approaches}
+
+\textbf{Memory-Based (Neighborhood):} Use similarity functions directly on the original data without learning parameters. These methods find similar users or items and make recommendations based on their preferences.
+
+\textbf{Model-Based:} Learn representations (parameters) for users and items that can generalize beyond the observed data. The original interaction matrix isn't used directly at prediction time.
+
+\section{Similarity Measures for Recommendation}
+\textit{Coverage: Document Pages 13-15}
+
+Understanding how to measure similarity between users or items is crucial for memory-based recommender systems.
+
+\subsection{Set-Based Similarity}
+When we only have binary interaction data (user liked/didn't like), we can compute similarity using set operations.
+
+\textbf{Jaccard Similarity:} For two items $i$ and $j$:
+$$\text{sim}(i,j) = \frac{|U_i \cap U_j|}{|U_i \cup U_j|}$$
+
+This measures the overlap in users who interacted with both items, normalized by the total number of users who interacted with either item.
+
+\subsection{Vector-Based Similarity}
+When we have rating data, we can treat user preferences as vectors and compute geometric similarity.
+
+\textbf{Cosine Similarity:} Measures the angle between rating vectors:
+$$\text{sim}(u,v) = \frac{R_u \cdot R_v}{||R_u|| \cdot ||R_v||} = \frac{\sum_i R_{u,i} \cdot R_{v,i}}{\sqrt{\sum_i R_{u,i}^2} \cdot \sqrt{\sum_i R_{v,i}^2}}$$
+
+The intuition is that users with similar rating patterns (regardless of scale) are considered similar.
+
+\textbf{Pearson Correlation:} Accounts for different rating scales by centering the data:
+$$\text{sim}(u,v) = \frac{\sum_i (R_{u,i} - \bar{R_u})(R_{v,i} - \bar{R_v})}{\sqrt{\sum_i (R_{u,i} - \bar{R_u})^2} \cdot \sqrt{\sum_i (R_{v,i} - \bar{R_v})^2}}$$
+
+where $\bar{R_u}$ is user $u$'s average rating. This handles the case where one user consistently rates higher than another but has similar preferences.
+
+\subsection{The Netflix Prize Context}
+The Netflix Prize (2006-2009) was a landmark competition that advanced recommender systems research significantly. Netflix released 100 million movie ratings and challenged teams to improve their recommendation accuracy by 10\%. The competition highlighted the importance of matrix factorization techniques and ensemble methods.
+
+\section{Matrix Factorization for Recommendations}
+\textit{Coverage: Document Pages 17-20}
+
+Matrix factorization became the dominant approach for recommender systems after the Netflix Prize, offering a powerful way to handle sparse data and discover latent factors.
+
+\subsection{Basic Matrix Factorization}
+The core idea is to approximate the sparse rating matrix $R$ (size $|U| \times |I|$) as the product of two dense matrices:
+$$R \approx \gamma_U \cdot \gamma_I^T$$
+
+where:
+\begin{itemize}
+\item $\gamma_U$ is $|U| \times K$ (user factor matrix)
+\item $\gamma_I$ is $|I| \times K$ (item factor matrix)  
+\item $K$ is much smaller than $|U|$ and $|I|$ (typically 50-200)
+\end{itemize}
+
+Each user and item is represented by a $K$-dimensional latent factor vector. The predicted rating is:
+$$\hat{R}_{u,i} = \gamma_u \cdot \gamma_i = \sum_{k=1}^K \gamma_{u,k} \cdot \gamma_{i,k}$$
+
+\subsection{Relationship to SVD}
+This approach is inspired by Singular Value Decomposition (SVD), which decomposes a matrix as $M = U\Sigma V^T$. However, standard SVD has two major limitations for recommendation:
+
+\textbf{Missing Data Problem:} SVD requires complete matrices, but rating matrices are extremely sparse (typically $<1\%$ filled).
+
+\textbf{Computational Complexity:} Computing SVD for matrices with millions of users and items is computationally prohibitive.
+
+Matrix factorization for recommendation addresses these by only fitting the observed entries and using iterative optimization.
+
+\subsection{Learning the Factorization}
+We minimize the squared error on observed ratings plus regularization:
+$$\min_{\gamma_U, \gamma_I} \sum_{(u,i) \in \text{observed}} (R_{u,i} - \gamma_u \cdot \gamma_i)^2 + \lambda(||\gamma_u||^2 + ||\gamma_i||^2)$$
+
+The regularization term $\lambda$ prevents overfitting by keeping the factor vectors small.
+
+This can be solved using:
+\begin{itemize}
+\item \textbf{Gradient Descent:} Iteratively update factors in the direction that reduces error
+\item \textbf{Alternating Least Squares:} Fix user factors and solve for item factors, then vice versa
+\end{itemize}
+
+\subsection{Interpretation of Latent Factors}
+The $K$ dimensions can often be interpreted as underlying preferences or item characteristics:
+\begin{itemize}
+\item For movies: genre preferences (comedy vs drama), recency (old vs new), target audience (adult vs family)
+\item For products: price sensitivity, brand preference, functionality needs
+\end{itemize}
+
+Users and items with similar factor vectors will have high predicted ratings, capturing collaborative filtering effects automatically.
+
+\section{Advanced Topics and Connections}
+\textit{Coverage: Document Pages 19-21}
+
+\subsection{Link Prediction as Matrix Factorization}
+The connection between link prediction and collaborative filtering runs deep. Both problems can be viewed as predicting missing entries in sparse matrices:
+
+\begin{itemize}
+\item \textbf{Link Prediction:} Predict missing entries in the adjacency matrix
+\item \textbf{Collaborative Filtering:} Predict missing entries in the user-item rating matrix
+\end{itemize}
+
+This unified view, termed "dyadic prediction," allows methods from one domain to be applied to the other.
+
+\subsection{Method Comparison}
+Different link prediction methods excel in different scenarios:
+
+\begin{itemize}
+\item \textbf{Neighborhood methods} work well for networks with strong clustering
+\item \textbf{Path-based methods} capture longer-range dependencies
+\item \textbf{Matrix factorization} handles large, sparse networks effectively
+\item \textbf{Random walk methods} incorporate global network structure
+\end{itemize}
+
+The choice depends on network characteristics, computational constraints, and available side information.
+
+\subsection{Practical Considerations}
+Real-world systems face additional challenges:
+
+\textbf{Cold Start:} How to make recommendations for new users or items with no interaction history.
+
+\textbf{Scalability:} Methods must handle millions of users and items efficiently.
+
+\textbf{Temporal Dynamics:} User preferences and item popularity change over time.
+
+\textbf{Evaluation Metrics:} Beyond accuracy, we care about diversity, novelty, and fairness of recommendations.
+
+\section{Key Takeaways for the Exam}
+
+\subsection{Core Concepts to Remember}
+\begin{enumerate}
+\item Link prediction methods exploit different network structures—understand when each is appropriate
+\item Similarity measures in recommender systems capture different aspects of user/item relationships
+\item Matrix factorization discovers latent factors that explain observed interactions
+\item Both problems fundamentally involve predicting missing edges in bipartite graphs
+\item Evaluation requires careful temporal splitting to avoid data leakage
+\end{enumerate}
+
+\subsection{Mathematical Formulations}
+Be prepared to:
+\begin{itemize}
+\item Calculate common neighbors, Jaccard coefficient, and Adamic-Adar scores
+\item Explain the matrix factorization objective function
+\item Compute cosine and Pearson similarities
+\item Understand the relationship between SVD and collaborative filtering
+\end{itemize}
+
+\subsection{Practical Applications}
+These techniques power real-world systems including social media friend suggestions, e-commerce recommendations, content discovery platforms, and scientific collaboration prediction.
+
+\end{document}

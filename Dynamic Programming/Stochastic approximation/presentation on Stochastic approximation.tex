@@ -632,4 +632,56 @@ Hence, this contradiction gives $V_\infty =0$ almost surely.
 \end{proof}
     
 \end{frame}
+\begin{frame}{Assumption of noise variance in Q-learning}
+In short, in Q-learning, the assumption there exists constant $A$ and $B$ such that 
+$$
+\mathbb{E}[w_i^2(t)|\mathcal{F}(t)]\le A +B\max_j\max_{\tau\le t}|x_j(\tau)|^2,\quad \forall i,t
+$$
+is equivalent to assume the reward process has bounded variance.
+\end{frame}
+\begin{frame}{Q-learning}
+In finite dimension, we have the following update equation for the Q-learning:
+$$
+Q(s,a;t+1)  =Q (s,a,t) +\alpha(s,a,t) [R(s,a)+ \beta \min_{a'} Q(s',a',t)-Q(s,a,t)]
+$$
+This gives us the $F(Q(s,a)) = \mathbb{E}[R(s,a)]+\beta \mathbb{E}\left[\min_{a'} Q(S'(s,a),a'
+)\right]$
+Hence, we have
+$$
+Q(s,a;t+1)  =Q (s,a,t) +\alpha(s,a,t) [F(Q(s,a,t))+w(s,a,t)-Q(s,a,t)]
+$$
+\end{frame}
+\begin{frame}{Q-learning noise}
+For the noise part, we have
+$$
+w(s,a,t) = r(s,a)-\mathbb{E}(R(s,a))+\min_{a'} Q(s',a',t) -\mathbb{E}\left[\min_{a'}Q(S'(s,a),a',t)\right]
+$$
+Hence, the variance is
+$\mathbb{E}[w(s,a,t)^2]= \mathbb{E}[(r(s,a)-\mathbb{E}[R(s,a)])^2]+\mathbb{E}[(\min_{a'} Q(s',a',t)-\mathbb{E}[\min_{a'} Q(S'(s,a),a',t)])^2]$
+The first term
+$$
+\mathbb{E}[(r(s,a)-\mathbb{E}[R(s,a)])^2] = Var(R(s,a))
+$$
+The second term is 
+$$
+Var(\min_{a'} Q(S'(s,a),a',t))\le \mathbb{E}[(\min_{a'}Q(S'(s,a),a',t))^2]\le \max_{s\in S}\max_{a\in A}Q(s,a,t)^2
+$$
+
+\end{frame}
+\begin{frame}{Q-learning}
+Hence, we have
+$$
+\mathbb{E}[w(s,a,t)^2]\le Var(R(s,a))+ \max_{s\in S}\max_{a\in A}Q(s,a,t)^2
+$$
+And compare to 
+    $$
+\mathbb{E}[w_i^2(t)|\mathcal{F}(t)]\le A +B\max_j\max_{\tau\le t}|x_j(\tau)|^2,\quad \forall i,t
+$$
+We need 
+$Var(R(s,a))$ to be constant and bounded.
+\end{frame}
+
+
+
+
 \end{document}

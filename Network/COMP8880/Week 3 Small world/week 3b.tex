@@ -1,0 +1,424 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{enumitem}
+\geometry{margin=2cm}
+\usepackage{hyperref}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{example}{Example}
+\title{Small World Networks and Navigation: Exam Study Guide}
+\author{COMP 4880/8880 Network Science}
+\date{}
+\begin{document}
+\maketitle
+\section{Introduction and Motivation (Pages 1-7)}
+\subsection{The Small World Phenomenon}
+The small world phenomenon refers to the surprising property that in many real-world networks, any two nodes can be connected by remarkably short paths. This concept gained prominence through:
+\textbf{Milgram's Experiment (1967):} Stanley Milgram conducted an experiment where people in Nebraska tried to send letters to a target person in Boston through chains of acquaintances. Key findings:
+\begin{itemize}
+\item Average chain length was about 6 intermediaries ("six degrees of separation")
+\item People successfully found short paths using only local information
+\item Geographic distance progressively decreased as chains approached the target
+\end{itemize}
+\textbf{Real-World Examples:} Table 3.2 (page 5) shows various networks exhibit small world properties:
+\begin{itemize}
+\item Internet: $\langle d \rangle = 6.98$, $d_{max} = 26$
+\item WWW: $\langle d \rangle = 11.27$, $d_{max} = 93$
+\item Email networks: $\langle d \rangle = 5.88$, $d_{max} = 18$
+\end{itemize}
+The formula $\langle d \rangle \approx \frac{\ln N}{\ln\langle k \rangle}$ provides a reasonable approximation for average distance.
+\subsection{The Paradox}
+Real networks exhibit two seemingly contradictory properties:
+\begin{itemize}
+\item \textbf{High clustering:} Friends of friends tend to be friends (local structure)
+\item \textbf{Low diameter:} Short paths exist between any two nodes (global property)
+\end{itemize}
+Random graphs (Erdős-Rényi) have low diameter but essentially no clustering. Regular lattices have high clustering but large diameter. How can we have both?
+\section{The Watts-Strogatz Model (Pages 8-17)}
+\subsection{Model Construction}
+The Watts-Strogatz model creates small world networks through a simple process:
+\begin{enumerate}
+\item Start with a ring of $n$ nodes, each connected to $k$ nearest neighbors
+\item With probability $p$, rewire each edge to a random node
+\item Alternative: Add random edges with probability $p$ (preserving base structure)
+\end{enumerate}
+\subsection{Key Properties}
+The model exhibits a phase transition as $p$ increases from 0 to 1:\\
+\\
+\textbf{Clustering Coefficient:}\\
+$$
+C(p) = C(0)\cdot (1-p)^3
+$$
+Where $C(0) = \frac{3(k-2)}{4(k-1)}$ for the initial ring. The clustering remains high even for small $p$ because rewiring affects only a small fraction of triangles.\\
+\\
+\textbf{Average Path Length:}\\
+For small $p$, the path length drops dramatically while clustering remains high. This creates the "small world regime" where $0.001 < p < 0.1$.\\
+\\
+\textbf{Diameter Analysis (Alternative 2D Grid):}\\
+Starting with a square grid where each node has one random long-range edge:
+\begin{itemize}
+\item Partition grid into $2 \times 2$ subgraphs (supernodes)
+\item Each supernode has 4 outgoing long-range edges
+\item Creates a 4-regular random graph on supernodes
+\item Diameter is $O(\log n)$
+\end{itemize}
+\section{Network Navigation (Pages 18-24)}
+\subsection{Decentralized Search Problem}
+The key insight from Milgram's experiment: people can find short paths using only local information. This leads to the decentralized search problem:
+\begin{definition}[Decentralized Search]
+Given:
+\begin{itemize}
+\item Source node $s$ knows only its neighbors and target $t$'s location
+\item No global knowledge of network structure
+\item Geographic navigation: choose neighbor closest to target
+\end{itemize}
+Find: Path from $s$ to $t$
+\end{definition}
+\subsection{Navigation in Watts-Strogatz Networks}
+\begin{theorem}
+Decentralized search in Watts-Strogatz networks (with uniformly random long-range links) requires $\Omega(\sqrt{n})$ steps in expectation for 1D rings, and $\Omega(n^{2/3})$ steps for 2D grids.
+\end{theorem}
+\textbf{Proof Sketch (1D case):}
+\begin{enumerate}
+\item Define $K$ = interval of $\sqrt{n}$ nodes around target
+\item Probability any node has link to $K$ is $\frac{2\sqrt{n}}{n} = \frac{2}{\sqrt{n}}$
+\item Expected steps to reach $K$ is $\frac{\sqrt{n}}{2}$
+\item Once in $K$, need $O(\sqrt{n})$ more steps
+\item Total: $\Omega(\sqrt{n})$ steps
+\end{enumerate}
+This uses the \textbf{principle of deferred decisions}: we can assume random links are created only when nodes are visited.
+\section{Kleinberg's Model (Pages 25-37)}
+\subsection{Model Definition}
+Kleinberg's key insight: geographic bias in long-range connections enables efficient navigation.
+\begin{definition}[Kleinberg's Model]
+\begin{itemize}
+\item Nodes on a $d$-dimensional grid
+\item Each node has local connections to nearest neighbors
+\item One long-range connection with probability:
+$P(u\rightarrow v)=d(u,v)−\alpha\sum_{w\neq u}d(u,w)−\alpha P(u \rightarrow v) = \frac{d(u,v)^{-\alpha}}{\sum_{w \neq u} d(u,w)^{-\alpha}}P(u\rightarrow v)=\sum_{w\neq u}-\alpha d(u,v)−\alpha$
+where $d(u,v)$ is grid distance and $\alpha \geq 0$ is the parameter
+\end{itemize}
+\end{definition}
+\subsection{Navigation Performance}
+\begin{theorem}[Kleinberg 2000]
+Decentralized search time in $d$-dimensional grids:
+\begin{itemize}
+\item $\alpha = d$: $O((\log n)^2)$ steps (efficient)
+\item $\alpha \neq d$: $\Omega(n^{\beta})$ steps for some $\beta > 0$ (inefficient)
+\end{itemize}
+\end{theorem}
+For the special case of 2D grids ($d=2$), only $\alpha = 2$ enables polylogarithmic search time.
+\subsection{Why $\alpha = d$ Works}
+The key insight is that $P(u \rightarrow v) \sim d(u,v)^{-d}$ creates a scale-invariant distribution:
+\begin{itemize}
+\item Number of nodes at distance $r$: $\Theta(r^{d-1})$ (surface area of sphere)
+\item Probability of linking to each: $\Theta(r^{-d})$
+\item Total probability to any node at distance $r$: $\Theta(r^{d-1}) \cdot \Theta(r^{-d}) = \Theta(1/r)$
+\item This gives equal probability across all distance scales!
+\end{itemize}
+\section{Proof of Kleinberg's Navigation Theorem (Pages 29-33)}
+\subsection{Upper Bound for $\alpha = 1$ in 1D}
+We prove that greedy routing takes $O((\log n)^2)$ steps when $\alpha = 1$.
+\textbf{Phase-based Analysis:}
+\begin{itemize}
+\item Divide search into phases: phase $j$ when distance to target is between $2^j$ and $2^{j+1}$
+\item Total phases: $O(\log n)$
+\item Goal: Show each phase takes $O(\log n)$ steps in expectation
+\end{itemize}
+\textbf{Key Steps:}
+
+\textbf{Normalizing constant bound:}
+$$
+Z = \sum_{w\neq v} \frac{1}{d(v,w)}\le 2\sum_{k=1}^{n/2} \frac{1}{k}\le 2\ln n
+$$
+
+Therefore: $P(v \rightarrow w) \geq \frac{1}{\log n} \cdot \frac{1}{d(v,w)}$
+
+\textbf{Progress probability:}
+In phase $j$ (distance $\leq 2^j$ to target), probability of halving distance:
+\begin{itemize}
+\item Set $I$ = nodes within distance $2^{j-1}$ of target
+\item $|I| \geq 2^{j-1}$ nodes
+\item For any $w \in I$: $d(v,w) \leq \frac{3}{2} \cdot 2^j$
+\item $P(v \rightarrow I) \geq \frac{2^{j-1}}{3 \cdot 2^j \log n} = \frac{1}{6\log n}$
+\end{itemize}
+\textbf{Phase length:}
+Expected steps in phase $j$:
+$$
+\mathbb{E}[X_j]\le \frac{1}{1/(6\log n)}=6\log n
+$$
+\textbf{Total time:}
+$$
+\mathbb{E}[\text{Total steps}] = \sum_{j=1}^{\log n} \mathbb{E}[X_j]\le 6\log n\cdot \log n = \mathcal{O}((\log n)^2)
+$$
+
+\subsection{Extension to Higher Dimensions}
+For $d$-dimensional grids with $\alpha = d$:
+\begin{itemize}
+\item Number of nodes at distance $r$: $\Theta(r^d)$
+\item Probability density: $r^{-d}$
+\item Similar analysis yields $O((\log n)^2)$ search time
+\end{itemize}
+\section{Lower Bounds and Impossibility Results (Pages 21, 36)}
+\subsection{Why Other Values of $\alpha$ Fail}
+\textbf{Case $\alpha < d$ (too many long links):}
+\begin{itemize}
+\item Long-range links overshoot the target
+\item Cannot make consistent progress toward target
+\item Search time: $\Omega(n^{(d-\alpha)/d})$
+\end{itemize}
+\textbf{Case $\alpha > d$ (too many short links):}
+\begin{itemize}
+\item Links are too local to make significant progress
+\item Must traverse many intermediate regions
+\item Search time: $\Omega(n^{(\alpha-d)/(d+1)})$
+\end{itemize}
+\section{Key Takeaways for the Exam}
+\subsection{Conceptual Understanding}
+\begin{enumerate}
+\item Small world networks combine high clustering with short paths
+\item Watts-Strogatz creates small worlds via random rewiring
+\item Navigation requires both network structure AND search algorithm
+\item Geographic information enables efficient decentralized search
+\end{enumerate}
+\subsection{Mathematical Results}
+\begin{enumerate}
+\item Watts-Strogatz diameter: $O(\log n)$
+\item Navigation in Watts-Strogatz: $\Omega(\sqrt{n})$ (1D), $\Omega(n^{2/3})$ (2D)
+\item Kleinberg optimal: $\alpha = d$ gives $O((\log n)^2)$ search
+\item Scale-invariance at $\alpha = d$ is crucial for navigation
+\end{enumerate}
+\subsection{Proof Techniques}
+\begin{enumerate}
+\item Phase-based analysis for upper bounds
+\item Principle of deferred decisions for random structures
+\item Probabilistic arguments for expected values
+\item Geometric series for summing over phases
+\end{enumerate}
+\textbf{Remember:} The key insight is that successful navigation requires the right balance between local structure (clustering) and long-range connections with appropriate distance-dependent probabilities.
+
+\section*{Instructions}
+This practice exam contains questions in the format you'll see on the actual exam: True/False, Multiple Choice, and Short Answer questions. Each question includes a detailed solution to help you prepare effectively.
+\section{True/False Questions}
+\subsection{Question T1}
+\textbf{Statement:} In the Watts-Strogatz model with rewiring probability $p = 0.01$, the clustering coefficient drops to less than $10\%$ of its original value.\\
+\\
+\textbf{Answer:} False\\
+\\
+\textbf{Explanation:} The clustering coefficient in the Watts-Strogatz model follows $C(p) = C(0) \cdot (1-p)^3$.For $p = 0.01$:
+$$
+C(0.01) = C(0)\cdot (1-0.01)^3  = C(0)\cdot 0.99^3\approx C(0)\cdot 0.97
+$$
+So the clustering coefficient remains at approximately $97\%$ of its original value, not less than $10\%$.
+\subsection{Question T2}
+\textbf{Statement:} Milgram's experiment demonstrated that people can find short paths in social networks using only local information.\\
+\\
+\textbf{Answer:} True\\
+\\
+\textbf{Explanation:} This is the key finding of Milgram's experiment. Participants successfully routed letters from Nebraska to Boston with an average of 6 intermediaries, using only knowledge of their immediate contacts and the target's location.
+\subsection{Question T3}
+\textbf{Statement:} In Kleinberg's model, navigation is efficient for any value of the parameter $\alpha > 0$.\\
+\\
+\textbf{Answer:} False\\
+\\
+\textbf{Explanation:} Navigation is only efficient when $\alpha = d$ (where $d$ is the dimension of the grid). For $\alpha \neq d$, decentralized search requires polynomial time in $n$, not polylogarithmic time.
+\subsection{Question T4}
+\textbf{Statement:} The diameter of the Watts-Strogatz model is $O(\log n)$ even for very small rewiring probability $p$.\\
+\\
+\textbf{Answer:} True\\
+\\
+\textbf{Explanation:} Even a small number of random long-range edges creates shortcuts that reduce the diameter from $O(n)$ to $O(\log n)$. This is why the ``small world regime" exists for $p$ as small as $0.001$.
+\section{Multiple Choice Questions}
+\subsection{Question M1}
+In a 2D grid with Kleinberg's model, what value of $\alpha$ enables efficient decentralized search?
+\begin{enumerate}[label=(\alph*)]
+\item $\alpha = 0$
+\item $\alpha = 1$
+\item $\alpha = 2$
+\item $\alpha = 4$
+\end{enumerate}
+\textbf{Answer:} (c) $\alpha = 2$\\
+\\
+\textbf{Explanation:} For efficient navigation in Kleinberg's model, we need $\alpha = d$ where $d$ is the dimension. In a 2D grid, $d = 2$, so $\alpha = 2$ is optimal. This creates a scale-invariant distribution where the probability of having a link at any distance scale is roughly constant.
+\subsection{Question M2}
+What is the expected search time for decentralized navigation in a 1D Watts-Strogatz network with $n$ nodes?
+\begin{enumerate}[label=(\alph*)]
+\item $O(\log n)$
+\item $O((\log n)^2)$
+\item $O(\sqrt{n})$
+\item $O(n)$
+\end{enumerate}
+\textbf{Answer:} (c) $O(\sqrt{n})$\\
+\\
+\textbf{Explanation:} With uniformly random long-range links, the probability of having a link to a region of size $\sqrt{n}$ around the target is $O(1/\sqrt{n})$. Therefore, it takes $\Omega(\sqrt{n})$ steps in expectation to find such a link.
+\subsection{Question M3}
+Which of the following best describes the small world phenomenon?
+\begin{enumerate}[label=(\alph*)]
+\item High clustering and high diameter
+\item Low clustering and low diameter
+\item High clustering and low diameter
+\item Low clustering and high diameter
+\end{enumerate}
+\textbf{Answer:} (c) High clustering and low diameter\\
+\\
+\textbf{Explanation:} Small world networks combine the local structure of regular networks (high clustering) with the global efficiency of random networks (low diameter/short paths).
+\subsection{Question M4}
+In Kleinberg's 1D model with $\alpha = 1$, what is the normalizing constant $Z$ approximately equal to?
+\begin{enumerate}[label=(\alph*)]
+\item $O(1)$
+\item $O(\log n)$
+\item $O(\sqrt{n})$
+\item $O(n)$
+\end{enumerate}
+\textbf{Answer:} (b) $O(\log n)$\\
+\\
+\textbf{Explanation:} $Z = \sum_{w \neq v} \frac{1}{d(v,w)} \approx 2\sum_{k=1}^{n/2} \frac{1}{k} \approx 2\ln(n/2) = O(\log n)$. This is the harmonic series approximation.
+\section{Short Answer Questions}
+\subsection{Question S1}
+Consider a Watts-Strogatz model starting with a ring of $n = 1000$ nodes where each node is connected to its $k = 4$ nearest neighbors. If we set the rewiring probability to $p = 0.1$, calculate:
+\begin{enumerate}[label=(\alph*)]
+\item The initial clustering coefficient $C(0)$
+\item The clustering coefficient after rewiring $C(0.1)$
+\item The approximate diameter of the network
+\end{enumerate}
+\textbf{Solution:}\\
+\\
+(a) Initial clustering coefficient:
+$$
+C(0) = \frac{3(k-2)}{4(k-1)} = \frac{3(4-2)}{4(4-1)} = \frac{6}{12}=0.5
+$$
+(b) After rewiring:
+$$
+C(0.1) = C(0)\cdot (1-p)^3 = 0.5\times (1-0.1)^3 = 0.5\times 0.9^3 = 0.5\times 0.729 = 0.3645
+$$
+(c) Approximate diameter:
+The diameter is approximately $O(\log n)$. Using the formula $\langle d \rangle \approx \frac{\ln N}{\ln \langle k \rangle}$:
+$$
+\langle d\rangle\approx \frac{\ln 1000}{\ln 4}\approx \frac{6.91}{1.39}\approx 5
+$$
+The diameter would be roughly $2-3$ times this, so approximately $10-15$.
+\subsection{Question S2}
+In Kleinberg's 1D model with $n = 10,000$ nodes and $\alpha = 1$, a message is currently at a node that is distance $d = 100$ from the target. What is the probability that the long-range link from this node reaches within distance 50 of the target?\\
+\\
+\textbf{Solution:}\\
+\\
+First, calculate the normalizing constant:
+$$
+Z\approx 2\ln n = 2\ln (10000)\approx 2\times 9.21=18.42
+$$
+The probability of linking to any specific node at distance $r$ is:
+$$
+P(r) =\frac{1/r}{Z}
+$$
+The probability of linking to the interval $[50, 100]$ from the target:
+$$
+P(\text{reach within $50$}) = \sum_{r=50}^{100}\frac{1/r}{Z}\approx \frac{1}{Z}\int_{50}^{100}\frac{1}{r}\, dr \approx 0.0376
+$$
+So there's approximately a $3.76\%$ chance of halving the distance in one step.
+\subsection{Question S3}
+Explain why decentralized search in a 2D grid with Kleinberg's model fails when $\alpha = 0$ (uniform random links). Provide both intuitive reasoning and mathematical justification.\\
+\\
+\textbf{Solution:}\\
+\\
+\textbf{Intuitive Reasoning:}\\
+With $\alpha = 0$, long-range links are uniformly distributed across all nodes. This means:\\
+\\
+Links mostly go to very distant nodes (since there are many more distant nodes than nearby ones) These links "overshoot" the target and don't help with navigation
+Once near the target, the probability of having a useful shortcut is extremely small\\
+\\
+\textbf{Mathematical Justification:}\\
+Let the current distance to target be $d$. The number of nodes within distance $d/2$ is $O(d^2)$, while the total number of nodes is $O(n)$.
+Probability of halving distance: $P = \frac{O(d^2)}{O(n)}$
+For $d = \sqrt{n}$: $P = O(1)$ (good progress)
+For $d < \sqrt{n}$: $P = o(1)$ (very slow progress)
+Therefore, navigation gets "stuck" when $d < \sqrt{n}$, leading to search time $\Omega(\sqrt{n})$.
+\subsection{Question S4}
+A network follows the degree distribution from Table 3.2 (page 5). If the average degree is $\langle k \rangle = 6$ and the network has $n = 100,000$ nodes:
+\begin{enumerate}[label=(\alph*)]
+\item Calculate the expected average distance using the approximation formula
+\item Explain why real networks might deviate from this approximation
+\end{enumerate}
+\textbf{Solution:}\\
+\\
+(a) Using the approximation formula:\\
+$$
+\langle d\rangle \approx \frac{\ln N}{\ln \langle k\rangle} \approx 6.43
+$$
+(b) Real networks deviate because:\\
+\\
+They have degree heterogeneity (hubs), not captured by using average degree
+They have community structure, creating longer paths between communities
+The approximation assumes tree-like structure, but real networks have cycles
+Directedness in networks (like WWW) can increase distances
+The formula assumes random connections, but real networks have correlations
+
+\subsection{Question S5}
+Prove that in the small world regime of the Watts-Strogatz model (small $p$), it takes very few random edges to create shortcuts. Specifically, show that with $p = \frac{c\log n}{kn}$ for constant $c > 1$, the network is connected with high probability.\\
+\\
+\textbf{Solution:}\\
+\\
+Expected number of random edges added:
+$$
+\mathbb{E}[\text{random edges}]=\frac{1}{2}\cdot kn\cdot p=\frac{2\log n}{2}
+$$
+This creates a random graph $G(n, \frac{c\log n}{n})$ overlaid on the ring.
+From random graph theory, $G(n, \frac{c\log n}{n})$ is connected with high probability when $c > 1$.\\
+\\
+Key insight: Even though most edges remain local (clustering stays high), the $O(\log n)$ random edges are sufficient to:
+\begin{itemize}
+    \item Connect different parts of the ring
+    \item Create shortcuts that reduce diameter to $O(\log n)$
+    \item Maintain the small world property
+\end{itemize}
+
+
+This explains why the transition to small world behavior occurs at very small $p \approx \frac{\log n}{n}$.
+\section{Challenging Problems}
+\subsection{Question C1}
+Consider a variant of Kleinberg's model where each node has $k$ long-range links instead of just one. How does this affect the search time when $\alpha = d$? Provide a rigorous analysis.\\
+\\
+\textbf{Solution:}\\
+With $k$ long-range links and $\alpha = d$:
+\textbf{Modified probability:} Each link independently follows $P(u \rightarrow v) \sim d(u,v)^{-d}$
+\textbf{Progress probability:} In phase $j$ (distance $\approx 2^j$), probability at least one of $k$ links halves distance:
+$$
+P(\text{progress}) = 1-(1-\frac{c}{\log n})^k \approx 1-e^{-kc/\log n}\approx \frac{kc}{\log n}
+$$
+\textbf{Phase length:} Expected steps in phase $j$:
+$$
+\mathbb{E}[X_j] \approx \frac{\log n}{kc}
+$$
+\textbf{Total search time:}
+$$
+\mathbb{E}[Total] = O(\log n)\times \frac{\log n}{k} = O(\frac{(\log n)^2}{k})
+$$
+Therefore, $k$ long-range links improve search time by a factor of $k$, but the improvement is only linear in $k$.
+\subsection{Question C2}
+Explain why the principle of deferred decisions is valid in the analysis of Watts-Strogatz navigation. What assumptions does it require?\\
+\\
+\textbf{Solution:}\\
+\\
+\textbf{Validity:} The principle states that we can assume random decisions (like edge destinations) are made only when observed, rather than predetermined.\\
+\\
+\textbf{Why it works:}\\
+\\
+\textbf{Independence:} Each random edge is chosen independently\\
+\\
+\textbf{Memorylessness:} The probability distribution doesn't depend on past choices\\
+\\
+\textbf{Observation order:} The order in which we observe edges doesn't affect their distribution\\
+\\
+\textbf{Required assumptions:}\\
+\begin{itemize}
+    \item Edges are rewired independently with probability $p$
+    \item Destination of each rewired edge is uniformly random
+    \item The search algorithm doesn't use information about unvisited edges
+    \item No edge is observed twice (no cycles in search path)
+\end{itemize}
+
+\textbf{Application:} This allows us to analyze the search as if each node generates its long-range link only when visited, simplifying probability calculations significantly.
+\end{document}

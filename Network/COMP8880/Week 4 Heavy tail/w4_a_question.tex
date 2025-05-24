@@ -1,0 +1,455 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{framed}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{COMP 4880/8880 - Practice Exam}
+\lhead{Heavy-Tailed Distributions}
+\cfoot{\thepage}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% Define solution environment
+\definecolor{solutioncolor}{rgb}{0.2,0.4,0.6}
+\newenvironment{solution}
+{\color{solutioncolor}\begin{framed}\textbf{Solution:}\par}
+{\end{framed}}
+
+\title{\textbf{Heavy-Tailed Distributions\\Practice Exam Questions with Detailed Solutions}}
+\author{COMP 4880/8880 Network Science}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\textbf{Instructions:} This practice exam contains various question types similar to those you'll encounter on the actual exam. Work through each question carefully, then check your understanding against the detailed solutions provided.
+
+\section{True/False Questions}
+
+\subsection{Question T1}
+\textbf{True or False:} A distribution is heavy-tailed if and only if it has infinite variance.
+
+\begin{solution}
+\textbf{False.} 
+
+This is a common misconception. While many heavy-tailed distributions do have infinite variance (like Pareto with $\alpha \leq 2$), having infinite variance is neither necessary nor sufficient for being heavy-tailed.
+
+\textbf{Counterexample showing infinite variance doesn't imply heavy-tailed:} Consider a discrete distribution where $P(X = n) = \frac{c}{n^2 \log^2 n}$ for $n \geq 3$. This distribution has infinite variance but decays faster than any power law, making it light-tailed.
+
+\textbf{Counterexample showing heavy-tailed doesn't require infinite variance:} The LogNormal distribution is heavy-tailed (satisfies the formal definition $\lim_{x \to \infty} \sup \frac{\bar{F}(x)}{e^{-\mu x}} = \infty$ for all $\mu > 0$) but has finite moments of all orders.
+
+The correct definition of heavy-tailed depends on the tail decay rate being slower than exponential, not on the finiteness of moments.
+\end{solution}
+
+\subsection{Question T2}
+\textbf{True or False:} If $X$ follows a Pareto distribution with parameter $\alpha = 1.5$, then the sample mean will converge to the population mean as sample size increases.
+
+\begin{solution}
+\textbf{True.}
+
+When $\alpha > 1$, the Pareto distribution has finite mean $E[X] = \frac{\alpha x_{\min}}{\alpha - 1}$. Since $\alpha = 1.5 > 1$, the mean exists and equals $E[X] = \frac{1.5 x_{\min}}{0.5} = 3x_{\min}$.
+
+By the Strong Law of Large Numbers, since the mean is finite, the sample mean $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ will converge almost surely to the population mean: $\bar{X}_n \xrightarrow{a.s.} E[X]$ as $n \to \infty$.
+
+However, it's crucial to note that this convergence will be much slower than for light-tailed distributions because:
+1. The variance is infinite (since $\alpha = 1.5 < 2$)
+2. The Central Limit Theorem doesn't apply in its standard form
+3. Extreme values will occasionally cause large deviations from the mean
+
+This is why Taleb emphasizes that "the law of large numbers works too slowly in the real world" for heavy-tailed distributions.
+\end{solution}
+
+\subsection{Question T3}
+\textbf{True or False:} The Weibull distribution is always heavy-tailed.
+
+\begin{solution}
+\textbf{False.}
+
+The Weibull distribution is heavy-tailed only when its shape parameter $\alpha < 1$. Let's examine why:
+
+The Weibull CCDF is $\bar{F}(x) = e^{-(\beta x)^{\alpha}}$.
+
+For heavy-tailed behavior, we need $\lim_{x \to \infty} \sup \frac{\bar{F}(x)}{e^{-\mu x}} = \infty$ for all $\mu > 0$.
+
+\textbf{Case 1: $\alpha < 1$}
+$$\frac{\bar{F}(x)}{e^{-\mu x}} = \frac{e^{-(\beta x)^{\alpha}}}{e^{-\mu x}} = e^{\mu x - (\beta x)^{\alpha}}$$
+
+As $x \to \infty$, since $\alpha < 1$, we have $(\beta x)^{\alpha}$ grows slower than $\mu x$, so the ratio goes to infinity. This gives heavy-tailed behavior.
+
+\textbf{Case 2: $\alpha = 1$}
+The Weibull reduces to exponential: $\bar{F}(x) = e^{-\beta x}$. This is light-tailed by definition.
+
+\textbf{Case 3: $\alpha > 1$}
+$(\beta x)^{\alpha}$ grows faster than any linear function, making the tail decay even faster than exponential - definitely light-tailed.
+
+Therefore, Weibull is heavy-tailed if and only if $\alpha < 1$.
+\end{solution}
+
+\section{Multiple Choice Questions}
+
+\subsection{Question M1}
+For a Pareto distribution with $\alpha = 2.5$ and $x_{\min} = 1$, what is the mean residual life function $m(x)$?
+
+\begin{enumerate}[label=(\Alph*)]
+\item $m(x) = \frac{x}{1.5}$
+\item $m(x) = \frac{x}{2.5}$  
+\item $m(x) = \frac{1.5}{x}$
+\item $m(x) = 2.5$
+\item $m(x) = \frac{2.5x}{1.5}$
+\end{enumerate}
+
+\begin{solution}
+\textbf{Answer: (A) $m(x) = \frac{x}{1.5}$}
+
+For a Pareto distribution, the mean residual life function is:
+$$m(x) = E[X - x | X > x] = \frac{x}{\alpha - 1}$$
+
+This can be derived from the residual life distribution. For Pareto, we have:
+$$\bar{R}_x(t) = \frac{\bar{F}(x+t)}{\bar{F}(x)} = \left(\frac{x}{x+t}\right)^{\alpha} = \left(1 + \frac{t}{x}\right)^{-\alpha}$$
+
+The mean residual life is:
+$$m(x) = \int_0^{\infty} \bar{R}_x(t) dt = \int_0^{\infty} \left(1 + \frac{t}{x}\right)^{-\alpha} dt$$
+
+Substituting $u = 1 + \frac{t}{x}$, so $dt = x du$:
+$$m(x) = x \int_1^{\infty} u^{-\alpha} du = x \left[\frac{u^{-\alpha+1}}{-\alpha+1}\right]_1^{\infty} = \frac{x}{\alpha-1}$$
+
+With $\alpha = 2.5$:
+$$m(x) = \frac{x}{2.5 - 1} = \frac{x}{1.5}$$
+
+This result shows the "blow-up" property: the longer you've already waited (larger $x$), the longer you expect to continue waiting. This is fundamentally different from exponential distributions where $m(x)$ is constant.
+\end{solution}
+
+\subsection{Question M2}
+Which of the following best explains the "catastrophe principle" for heavy-tailed distributions?
+
+\begin{enumerate}[label=(\Alph*)]
+\item The largest observation dominates the sum of all observations
+\item The variance grows without bound as sample size increases
+\item The mean doesn't exist for most heavy-tailed distributions
+\item Extreme events are more likely than in light-tailed distributions
+\item The distribution has no finite moments
+\end{enumerate}
+
+\begin{solution}
+\textbf{Answer: (A) The largest observation dominates the sum of all observations}
+
+The catastrophe principle states that for heavy-tailed distributions:
+$$\Pr(\max(X_1, \ldots, X_n) > t) \sim \Pr(X_1 + \cdots + X_n > t) \text{ as } t \to \infty$$
+
+This means the probability that the sum exceeds some large threshold is approximately equal to the probability that the maximum exceeds that threshold. In other words, when the sum is large, it's almost certainly because one observation is extremely large, not because all observations are moderately large.
+
+\textbf{Why the other options are incorrect:}
+\begin{itemize}
+\item (B) Variance may or may not exist, and this doesn't capture the essence of the catastrophe principle
+\item (C) Many heavy-tailed distributions have finite means (e.g., Pareto with $\alpha > 1$)
+\item (D) While true, this doesn't explain what the catastrophe principle specifically means
+\item (E) LogNormal distributions are heavy-tailed but have finite moments of all orders
+\end{itemize}
+
+\textbf{Real-world intuition:} In your class example, the total Twitter followers (sum) was dominated by one person with ~1 million followers (maximum), while everyone else had relatively few followers. This is the catastrophe principle in action.
+\end{solution}
+
+\subsection{Question M3}
+If $Y_1, Y_2, \ldots, Y_n$ are independent LogNormal random variables, what can we say about their product $P_n = Y_1 \times Y_2 \times \cdots \times Y_n$?
+
+\begin{enumerate}[label=(\Alph*)]
+\item $P_n$ follows a Pareto distribution
+\item $P_n$ follows a LogNormal distribution  
+\item $P_n$ follows a Weibull distribution
+\item $P_n$ converges to a Gaussian distribution by the CLT
+\item $P_n$ has no well-defined distribution
+\end{enumerate}
+
+\begin{solution}
+\textbf{Answer: (B) $P_n$ follows a LogNormal distribution}
+
+This follows from the multiplicative closure property of LogNormal distributions.
+
+\textbf{Mathematical proof:}
+If $Y_i \sim \text{LogNormal}(\mu_i, \sigma_i^2)$, then $\log Y_i \sim \text{Gaussian}(\mu_i, \sigma_i^2)$.
+
+For the product:
+$$\log P_n = \log(Y_1 \times Y_2 \times \cdots \times Y_n) = \log Y_1 + \log Y_2 + \cdots + \log Y_n$$
+
+Since each $\log Y_i$ is Gaussian, and the sum of independent Gaussian random variables is Gaussian:
+$$\log P_n \sim \text{Gaussian}\left(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2\right)$$
+
+Therefore:
+$$P_n \sim \text{LogNormal}\left(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2\right)$$
+
+\textbf{Special case:} If all $Y_i$ are identically distributed as $\text{LogNormal}(\mu, \sigma^2)$, then:
+$$P_n \sim \text{LogNormal}(n\mu, n\sigma^2)$$
+
+This property makes LogNormal distributions particularly important in modeling multiplicative processes, such as:
+\begin{itemize}
+\item Stock prices (where returns multiply over time)
+\item Population growth with random fluctuations
+\item File sizes in computer systems
+\item Income distributions in some economic models
+\end{itemize}
+\end{solution}
+
+\section{Short Answer Questions with Calculations}
+
+\subsection{Question S1}
+Consider a Pareto distribution with $\alpha = 1.8$ and $x_{\min} = 100$.
+
+\textbf{(a)} Calculate the probability that $X > 500$.
+
+\textbf{(b)} Given that $X > 300$, what is the probability that $X > 500$?
+
+\textbf{(c)} Explain why your answer to part (b) demonstrates a key property of heavy-tailed distributions.
+
+\begin{solution}
+\textbf{Part (a):}
+For Pareto distribution: $\bar{F}(x) = \Pr(X > x) = \left(\frac{x_{\min}}{x}\right)^{\alpha}$
+
+$$\Pr(X > 500) = \left(\frac{100}{500}\right)^{1.8} = (0.2)^{1.8} = 0.2^{1.8} \approx 0.0565$$
+
+\textbf{Part (b):}
+We need $\Pr(X > 500 | X > 300)$.
+
+Using conditional probability:
+$$\Pr(X > 500 | X > 300) = \frac{\Pr(X > 500 \cap X > 300)}{\Pr(X > 300)} = \frac{\Pr(X > 500)}{\Pr(X > 300)}$$
+
+First, calculate $\Pr(X > 300)$:
+$$\Pr(X > 300) = \left(\frac{100}{300}\right)^{1.8} = \left(\frac{1}{3}\right)^{1.8} \approx 0.1038$$
+
+Therefore:
+$$\Pr(X > 500 | X > 300) = \frac{0.0565}{0.1038} \approx 0.544$$
+
+Alternatively, we can use the scale invariance property directly:
+$$\Pr(X > 500 | X > 300) = \left(\frac{300}{500}\right)^{1.8} = (0.6)^{1.8} \approx 0.544$$
+
+\textbf{Part (c):}
+This demonstrates the \textbf{lack of "forgetfulness"} in heavy-tailed distributions, which contrasts sharply with exponential distributions.
+
+For an exponential distribution, we would have:
+$\Pr(X > a + b | X > a) = \Pr(X > b)$ (memoryless property)
+
+But for our Pareto distribution:
+$\Pr(X > 500 | X > 300) = 0.544 > \Pr(X > 200) = (100/200)^{1.8} = 0.287$
+
+The fact that we've already observed $X > 300$ makes it \textit{more likely} that $X$ will exceed 500 than if we had no prior information. This is the "residual life blow-up" property: knowing that an extreme event has already partially occurred increases our expectation of how extreme it will ultimately be.
+
+This has profound implications in network science - if we observe a cascade has already grown large, we should expect it to potentially grow much larger, rather than assuming it will end soon.
+\end{solution}
+
+\subsection{Question S2}
+A network researcher observes that node degrees in a social network follow a power-law distribution $P(k) \propto k^{-\gamma}$ for $k \geq k_{\min} = 5$, where $\gamma = 2.1$.
+
+\textbf{(a)} Write the properly normalized probability mass function.
+
+\textbf{(b)} What fraction of nodes have degree greater than 50?
+
+\textbf{(c)} If the network has $N = 10,000$ nodes, approximately how many nodes have degree greater than 100?
+
+\begin{solution}
+\textbf{Part (a):}
+For a discrete power-law (Pareto) distribution:
+$$P(k) = \frac{(\gamma-1)k_{\min}^{\gamma-1}}{k^{\gamma}}$$
+
+With $\gamma = 2.1$ and $k_{\min} = 5$:
+$$P(k) = \frac{(2.1-1) \cdot 5^{2.1-1}}{k^{2.1}} = \frac{1.1 \cdot 5^{1.1}}{k^{2.1}}$$
+
+Since $5^{1.1} = 5^{1.1} \approx 6.69$:
+$$P(k) = \frac{1.1 \times 6.69}{k^{2.1}} = \frac{7.36}{k^{2.1}}$$
+
+\textbf{Part (b):}
+The complementary cumulative distribution function (CCDF) for discrete power-law:
+$$\Pr(K > k) = \left(\frac{k_{\min}}{k}\right)^{\gamma-1}$$
+
+Therefore:
+$$\Pr(K > 50) = \left(\frac{5}{50}\right)^{2.1-1} = (0.1)^{1.1} = 0.1^{1.1} \approx 0.0794$$
+
+About 7.94\% of nodes have degree greater than 50.
+
+\textbf{Part (c):}
+$$\Pr(K > 100) = \left(\frac{5}{100}\right)^{1.1} = (0.05)^{1.1} \approx 0.0426$$
+
+Expected number of nodes with degree $> 100$:
+$$N \times \Pr(K > 100) = 10,000 \times 0.0426 = 426 \text{ nodes}$$
+
+\textbf{Key insight:} Notice how even with a relatively steep power-law ($\gamma = 2.1$), we still expect over 400 nodes out of 10,000 to have degree greater than 100 when the minimum degree is only 5. This demonstrates the "heavy tail" - there's substantial probability mass in the extreme values, unlike exponential or Gaussian distributions where such extreme values would be negligibly rare.
+
+This has important implications for network robustness: a small number of very high-degree "hub" nodes can have disproportionate influence on network connectivity and dynamics.
+\end{solution}
+
+\section{Conceptual Questions}
+
+\subsection{Question C1}
+Explain why the Central Limit Theorem fails for heavy-tailed distributions with infinite variance, and describe what happens instead. Use the concept of stable distributions in your answer.
+
+\begin{solution}
+The Central Limit Theorem (CLT) fails for heavy-tailed distributions with infinite variance because one of its fundamental requirements is violated.
+
+\textbf{CLT Requirements and Failure:}
+The standard CLT requires:
+\begin{enumerate}
+\item Independent, identically distributed random variables
+\item \textbf{Finite mean} $\mu = E[X_i]$
+\item \textbf{Finite variance} $\sigma^2 = \text{Var}[X_i] < \infty$
+\end{enumerate}
+
+For heavy-tailed distributions like Pareto with $\alpha \leq 2$, the variance is infinite, violating requirement 3.
+
+\textbf{Why Variance Matters for CLT:}
+The CLT works by showing that the standardized sum:
+$$Z_n = \frac{S_n - n\mu}{\sigma\sqrt{n}} = \frac{\sum_{i=1}^n X_i - n\mu}{\sigma\sqrt{n}}$$
+converges to $\mathcal{N}(0,1)$.
+
+When $\sigma = \infty$, this standardization is meaningless - we can't divide by infinity.
+
+\textbf{What Happens Instead - Stable Distributions:}
+The Generalized Central Limit Theorem tells us that if we have proper scaling constants $a_n$ and centering constants $b_n$:
+$$\frac{S_n - b_n}{a_n} \xrightarrow{d} Z$$
+
+where $Z$ is $\alpha$-stable for some $\alpha \in (0, 2]$.
+
+\textbf{Key differences:}
+\begin{itemize}
+\item \textbf{Scaling:} Instead of $a_n = \sigma\sqrt{n}$, we have $a_n = n^{1/\alpha}$ where $\alpha < 2$
+\item \textbf{Limiting Distribution:} Not Gaussian, but $\alpha$-stable with heavy tails
+\item \textbf{Convergence Rate:} Much slower than $\sqrt{n}$
+\end{itemize}
+
+\textbf{Physical Interpretation:}
+In heavy-tailed systems, the sum $S_n$ is dominated by a few extremely large values rather than the accumulated effect of many moderate values. The $\alpha$-stable distribution captures this behavior - it has the same "scale invariance" and heavy-tailed properties as the original distribution.
+
+\textbf{Practical Consequence:}
+This means that for heavy-tailed data:
+\begin{itemize}
+\item Sample means fluctuate wildly and converge very slowly
+\item Confidence intervals based on Gaussian assumptions are meaningless
+\item Extreme values have disproportionate influence on sums and averages
+\item We need much larger sample sizes to get reliable estimates
+\end{itemize}
+
+As Taleb emphasizes: "The law of large numbers works too slowly in the real world" for heavy-tailed distributions.
+\end{solution}
+
+\subsection{Question C2}
+A network scientist claims that since most real-world networks have finite size, heavy-tailed degree distributions can't truly exist in practice - they can only be approximations. Evaluate this claim using concepts from the course.
+
+\begin{solution}
+This claim reflects a common misconception about heavy-tailed distributions and their practical relevance. Let me evaluate it from several perspectives:
+
+\textbf{The Claim's Partial Validity:}
+There is some mathematical truth to this claim:
+\begin{itemize}
+\item True power-laws require infinite support: $x \in [x_{\min}, \infty)$
+\item Real networks have finite maximum degree (bounded by network size)
+\item Exact scale invariance requires infinite scales to be meaningful
+\end{itemize}
+
+\textbf{Why the Claim Misses the Point:}
+
+\textbf{1. Asymptotic Behavior Matters in Practice}
+Even finite networks can exhibit heavy-tailed behavior over the observable range. What matters is whether the distribution's tail decays slower than exponential for the values we can actually observe.
+
+For example, if a network has $N = 10^6$ nodes, and we observe degree distributions that follow $P(k) \propto k^{-\gamma}$ for $k \in [1, 1000]$, this is practically heavy-tailed even though it's technically truncated.
+
+\textbf{2. The "Broccoli Argument"}
+As mentioned in the course, we can distinguish different scales in real objects like broccoli - they exhibit scale-invariant properties over multiple orders of magnitude even though they're finite. The same applies to networks.
+
+\textbf{3. Statistical Consequences Remain}
+The key properties that make heavy-tailed distributions important persist in finite approximations:
+\begin{itemize}
+\item \textbf{Catastrophe Principle:} A few nodes still dominate network properties
+\item \textbf{Non-Gaussian Fluctuations:} Sample statistics still exhibit non-classical behavior
+\item \textbf{Slow Convergence:} Sample means still converge slowly to population values
+\end{itemize}
+
+\textbf{4. Empirical Evidence}
+The Clauset, Shalizi & Newman (2009) analysis of real networks shows:
+\begin{itemize}
+\item Many networks exhibit power-law-like behavior over significant ranges
+\item The exact functional form (pure power-law vs. power-law with cutoff) is less important than the heavy-tailed nature
+\item LogNormal distributions often fit data as well as power-laws, but both are heavy-tailed
+\end{itemize}
+
+\textbf{5. Theoretical Mechanisms Still Apply}
+The generative mechanisms that produce heavy tails (preferential attachment, multiplicative processes, etc.) operate in finite networks and produce approximately heavy-tailed distributions.
+
+\textbf{The Correct Perspective:}
+The scientist should think of heavy-tailed distributions as:
+\begin{itemize}
+\item \textbf{Models, not reality:} Like all mathematical models, they're useful approximations
+\item \textbf{Asymptotic descriptions:} They describe behavior in the limit of large sizes/times
+\item \textbf{Qualitatively different:} The key insight is that they're qualitatively different from light-tailed distributions, not that they're exactly power-laws
+\end{itemize}
+
+\textbf{Conclusion:}
+The claim is technically correct but practically irrelevant. Heavy-tailed distributions are useful models for understanding network behavior, even in finite systems. The important distinction is between "approximately heavy-tailed" (which many real networks are) and "light-tailed" (which would lead to fundamentally different behavior).
+
+As Holme (2019) argues: "Knowledge of whether or not a distribution is heavy-tailed is far more important than whether it can be fit using a power law."
+\end{solution}
+
+\section{Application Questions}
+
+\subsection{Question A1}
+Consider a simple model of information cascade in a network: at each time step, the cascade spreads to a number of new nodes drawn from a Pareto distribution with $\alpha = 1.5$ and $x_{\min} = 1$.
+
+\textbf{(a)} What is the expected number of new nodes infected at each step?
+
+\textbf{(b)} After observing that a cascade has already infected 1000 nodes in one step, what is the expected number of additional nodes it will infect in that same step?
+
+\textbf{(c)} Explain how this relates to the "residual life blow-up" property and why it matters for predicting cascade sizes.
+
+\begin{solution}
+\textbf{Part (a):}
+For Pareto distribution with $\alpha = 1.5 > 1$, the mean exists:
+$$E[X] = \frac{\alpha x_{\min}}{\alpha - 1} = \frac{1.5 \times 1}{1.5 - 1} = \frac{1.5}{0.5} = 3$$
+
+Expected number of new nodes infected at each step is 3.
+
+\textbf{Part (b):}
+This asks for the mean residual life: $E[X - 1000 | X > 1000]$.
+
+For Pareto distribution:
+$$m(x) = \frac{x}{\alpha - 1} = \frac{x}{1.5 - 1} = 2x$$
+
+Therefore:
+$$E[X - 1000 | X > 1000] = m(1000) = 2 \times 1000 = 2000$$
+
+The cascade is expected to infect an additional 2000 nodes.
+
+\textbf{Part (c):}
+This demonstrates the \textbf{residual life blow-up property}, which has profound implications for cascade prediction:
+
+\textbf{1. Non-intuitive Scaling:}
+While the unconditional expectation is only 3 nodes, observing that 1000 nodes are already infected dramatically changes our expectation to 2000 additional nodes. This is counterintuitive - learning that an extreme event is occurring makes us expect it to be even more extreme.
+
+\textbf{2. Cascade Prediction Challenges:}
+Traditional models might assume that once a cascade reaches a certain size, it's likely to stop growing rapidly. Heavy-tailed models suggest the opposite: large cascades tend to become much larger.
+
+\textbf{3. Early Warning Systems:}
+This property makes early detection crucial. By the time we observe a cascade has grown large, it's likely to grow much larger. Prevention efforts should focus on very early stages.
+
+\textbf{4. Risk Assessment:}
+For network security or epidemic modeling, this means:
+\begin{itemize}
+\item Small cascades are usually inconsequential (expected size = 3)
+\item But large cascades, once detected, are likely to be catastrophic
+\item The "middle ground" of moderate-sized cascades is rare
+\end{itemize}
+
+\textbf{5. Policy Implications:}
+This supports a "prevention rather than response" strategy. Resources should be invested in preventing cascades from starting rather than trying to control them once they've grown large.
+
+\textbf{Mathematical Insight:}
+The factor of $\frac{x}{\alpha-1} = 2x$ means that the expected additional spread scales linearly with the observed size. This linear scaling (rather than logarithmic or bounded growth) is the mathematical signature of heavy-tailed behavior and explains why these systems can produce "black swan" events that are far larger than typical expectations would suggest.
+\end{solution}
+
+\textbf{Final Note:} These practice questions cover the breadth of concepts you'll need for the exam. Focus on understanding the underlying principles rather than memorizing formulas - the intuition behind heavy-tailed behavior is more important than the specific mathematical details. Remember that heavy-tailed distributions represent fundamentally different behavior from classical distributions, and this difference has profound implications for network science applications.
+
+\end{document}

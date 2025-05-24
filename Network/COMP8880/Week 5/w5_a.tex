@@ -1,0 +1,197 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+\title{Graph Spectrum: Essential Concepts for Network Science}
+\author{Study Guide for COMP4880/8880}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introduction to Spectral Graph Theory}
+\textit{Covers: Slides pages 1-3}
+
+Spectral graph theory studies the relationship between a graph's structural properties and the eigenvalues/eigenvectors of its associated matrices. This connection allows us to understand complex graph properties through linear algebra.
+
+\textbf{Key Insight:} The spectrum (set of eigenvalues) of graph matrices reveals hidden structural patterns that are not immediately obvious from visual inspection. For instance, whether a graph has two distinct clusters or is bipartite can be determined by examining specific eigenvalues.
+
+\textbf{Why This Matters:} Many practical problems in network analysis—such as community detection, graph partitioning, and recommendation systems—can be solved efficiently using spectral methods rather than combinatorial approaches.
+
+\section{Adjacency Matrix Spectrum}
+\textit{Covers: Slides pages 4-10}
+
+\subsection{Basic Properties}
+For an undirected graph $G = (V,E)$ with $n$ vertices, the adjacency matrix $A(G)$ is an $n \times n$ symmetric matrix where $A_{ij} = 1$ if there's an edge between vertices $i$ and $j$, and $0$ otherwise.
+
+\begin{theorem}[Spectral Theorem]
+Let $A \in \mathbb{R}^{n \times n}$ be a symmetric matrix. Then all eigenvalues of $A$ are real numbers, and there exists an orthonormal basis of $\mathbb{R}^n$ consisting of eigenvectors of $A$.
+\end{theorem}
+
+\textbf{Practical Implication:} Since adjacency matrices are symmetric, we can always find real eigenvalues $\alpha_1 \geq \alpha_2 \geq \ldots \geq \alpha_n$ and corresponding orthogonal eigenvectors.
+
+\subsection{Key Results}
+
+\begin{definition}[Spectral Radius]
+The spectral radius $\rho(A)$ of a matrix $A$ is the maximum of the absolute values of its eigenvalues.
+\end{definition}
+
+\begin{theorem}[Perron-Frobenius Theorem]
+Let $A \in \mathbb{R}^{n \times n}$ be a non-negative irreducible matrix. Then:
+\begin{enumerate}
+\item The spectral radius $\rho(A)$ is an eigenvalue with multiplicity one
+\item The eigenvector corresponding to $\rho(A)$ has all positive entries
+\end{enumerate}
+\end{theorem}
+
+\textbf{Graph Interpretation:} For a connected graph, the largest eigenvalue $\alpha_1$ is simple (multiplicity 1), and its eigenvector has entries of the same sign. This eigenvector often reveals important structural information about the graph.
+
+\begin{lemma}[Max Degree Upper Bound]
+Let $G$ be an undirected graph with maximum degree $d$. Then $\alpha_1 \leq d$, where $\alpha_1$ is the largest eigenvalue of the adjacency matrix.
+\end{lemma}
+
+\subsection{Bipartite Graphs and Symmetric Spectrum}
+
+\begin{lemma}[Bipartite Graph Spectrum]
+If $G$ is a bipartite graph and $\alpha$ is an eigenvalue of $A(G)$ with multiplicity $k$, then $-\alpha$ is also an eigenvalue with multiplicity $k$.
+\end{lemma}
+
+\textbf{Intuitive Explanation:} In a bipartite graph, vertices can be colored with two colors such that adjacent vertices have different colors. This symmetry creates a mirror-like property in the spectrum: for every positive eigenvalue, there's a corresponding negative eigenvalue of the same magnitude.
+
+\begin{proposition}[Spectral Characterization of Bipartite Graphs]
+An undirected graph $G$ with eigenvalues $\alpha_1 \geq \ldots \geq \alpha_n$ is bipartite if and only if $\alpha_i = -\alpha_{n-i+1}$ for each $1 \leq i \leq n$.
+\end{proposition}
+
+\section{Laplacian Matrix: The Heart of Spectral Graph Theory}
+\textit{Covers: Slides pages 11-16}
+
+\subsection{Definition and Basic Properties}
+
+\begin{definition}[Laplacian Matrix]
+Let $G$ be an undirected graph. The Laplacian matrix $L(G)$ is defined as $L(G) := D(G) - A(G)$, where $D(G)$ is the diagonal degree matrix and $A(G)$ is the adjacency matrix.
+\end{definition}
+
+\textbf{Why Laplacian Matters More Than Adjacency:} While the adjacency matrix tells us about direct connections, the Laplacian captures the "flow" or "diffusion" properties of the graph. It's more informative for understanding connectivity patterns.
+
+\subsection{Fundamental Properties}
+
+\begin{lemma}[Laplacian is Positive Semidefinite]
+The Laplacian matrix $L(G)$ of an undirected graph $G$ is positive semidefinite, and its smallest eigenvalue is zero with the all-ones vector being a corresponding eigenvector.
+\end{lemma}
+
+\begin{lemma}[Quadratic Form for Laplacian]
+Let $L$ be the Laplacian matrix of an undirected graph $G = (V,E)$. For any vector $x \in \mathbb{R}^n$:
+$$x^T L x = \sum_{ij \in E} (x(i) - x(j))^2$$
+\end{lemma}
+
+\textbf{Geometric Interpretation:} This quadratic form measures how much the function $x$ varies across edges. If $x$ assigns similar values to adjacent vertices, $x^T L x$ is small. This is why eigenvectors with small eigenvalues represent "smooth" functions on the graph.
+
+\subsection{Connectivity and Components}
+
+\begin{proposition}[Spectral Characterization of Connected Graphs]
+Let $G$ be an undirected graph with Laplacian eigenvalues $\lambda_1 \leq \ldots \leq \lambda_n$. Then $G$ is connected if and only if $\lambda_2 > 0$.
+\end{proposition}
+
+\textbf{Key Insight:} The second smallest eigenvalue $\lambda_2$ (called the algebraic connectivity) measures how well-connected the graph is. If $\lambda_2 = 0$, the graph is disconnected. The larger $\lambda_2$ is, the better connected the graph.
+
+\section{Normalized Matrices}
+\textit{Covers: Slides pages 17-18}
+
+\subsection{Motivation for Normalization}
+Raw adjacency and Laplacian matrices can be dominated by high-degree vertices. Normalization helps balance the influence of vertices with different degrees.
+
+\begin{definition}[Normalized Adjacency and Laplacian]
+For an undirected graph $G$ with no isolated vertices:
+\begin{align}
+\mathcal{A}(G) &:= D^{-1/2} A D^{-1/2} \quad \text{(Normalized Adjacency)}\\
+\mathcal{L}(G) &:= D^{-1/2} L D^{-1/2} = I - \mathcal{A}(G) \quad \text{(Normalized Laplacian)}
+\end{align}
+\end{definition}
+
+\begin{lemma}[Normalized Eigenvalue Bounds]
+For an undirected graph with no isolated vertices, if $\alpha_1 \geq \ldots \geq \alpha_n$ are eigenvalues of the normalized adjacency matrix and $\lambda_1 \leq \ldots \leq \lambda_n$ are eigenvalues of the normalized Laplacian, then:
+$$1 = \alpha_1 \geq \alpha_n \geq -1 \quad \text{and} \quad 0 = \lambda_1 \leq \lambda_n \leq 2$$
+\end{lemma}
+
+\textbf{Advantage of Normalization:} The eigenvalues are now bounded in known intervals, making them easier to interpret and compare across different graphs.
+
+\section{Spectral Graph Layout and Visualization}
+\textit{Covers: Slides pages 19-20}
+
+\subsection{The Intuition Behind Spectral Embedding}
+The eigenvectors of the Laplacian matrix provide natural coordinates for embedding graph vertices in Euclidean space. The key insight comes from the quadratic form interpretation:
+
+\textbf{Rayleigh Quotient:} For the Laplacian matrix $L$, the Rayleigh quotient is:
+$$R_L(x) := \frac{x^T L x}{x^T x} = \frac{\sum_{ij \in E} (x(i) - x(j))^2}{\sum_i x(i)^2}$$
+
+The eigenvector corresponding to the second smallest eigenvalue (the Fiedler vector) minimizes this quotient subject to being orthogonal to the constant vector. This means it assigns coordinates to vertices such that connected vertices have similar coordinates, while maintaining some spread in the embedding.
+
+\textbf{Practical Application:} Using the second and third eigenvectors as $x$ and $y$ coordinates often produces visually meaningful 2D layouts where graph structure is preserved—clusters appear as groups, and bridges become apparent as stretched regions.
+
+\section{Cheeger's Inequality and Graph Expansion}
+\textit{Covers: Slides pages 21-24}
+
+\subsection{Measuring Graph Connectivity}
+
+\begin{definition}[Edge Expansion and Conductance]
+For an undirected graph $G = (V,E)$:
+\begin{align}
+\Phi(S) &:= \frac{|\delta(S)|}{|S|} \quad \text{(Edge expansion of set $S$)}\\
+\phi(S) &:= \frac{|\delta(S)|}{\text{vol}(S)} \quad \text{(Conductance of set $S$)}
+\end{align}
+where $\delta(S)$ is the set of edges with one endpoint in $S$ and one in $V \setminus S$, and $\text{vol}(S) = \sum_{v \in S} \deg(v)$.
+
+The expansion $\Phi(G) := \min_{S:|S| \leq |V|/2} \Phi(S)$ and conductance $\phi(G) := \min_{S:\text{vol}(S) \leq |E|} \phi(S)$ measure the graph's overall connectivity.
+\end{definition}
+
+\subsection{The Fundamental Connection}
+
+\begin{theorem}[Cheeger's Inequality]
+Let $G = (V,E)$ be an undirected graph and let $\lambda_2$ be the second smallest eigenvalue of its normalized Laplacian matrix. Then:
+$$\frac{1}{2}\lambda_2 \leq \phi(G) \leq \sqrt{2\lambda_2}$$
+\end{theorem}
+
+\textbf{What This Means:}
+\begin{itemize}
+\item \textbf{Easy Direction} ($\phi(G) \geq \frac{1}{2}\lambda_2$): The conductance provides a lower bound for $\lambda_2$. This gives us a way to use spectral methods as a "relaxation" for finding sparse cuts.
+\item \textbf{Hard Direction} ($\phi(G) \leq \sqrt{2\lambda_2}$): We can "round" the spectral solution to find an actual sparse cut. This is the algorithmic power of the inequality.
+\end{itemize}
+
+\subsection{Applications and Implications}
+
+\textbf{Expander Graphs:} A graph is called an expander if $\phi(G) \geq c$ for some constant $c > 0$. By Cheeger's inequality, this is equivalent to $\lambda_2 \geq c'/2$ for some constant $c'$. Expander graphs have excellent connectivity properties and are crucial in theoretical computer science.
+
+\textbf{Sparse Cuts:} If we want to partition a graph into two parts with few edges between them (a sparse cut), Cheeger's inequality tells us that:
+\begin{enumerate}
+\item We can check if good cuts exist by computing $\lambda_2$
+\item We can find approximate sparse cuts using the Fiedler vector (eigenvector for $\lambda_2$)
+\end{enumerate}
+
+\textbf{Higher-Order Generalizations:} The inequality extends to higher eigenvalues:
+\begin{itemize}
+\item $\lambda_2 \approx 0$: Graph is close to being disconnected
+\item $\lambda_n \approx 2$: Graph has structure close to bipartite
+\item $\lambda_k \approx 0$: Graph is close to having $k$ connected components
+\end{itemize}
+
+\section{Summary and Key Takeaways}
+
+Spectral graph theory provides a powerful lens for understanding network structure through linear algebra. The key insights are:
+
+\begin{enumerate}
+\item \textbf{Adjacency Matrix:} Reveals degree patterns and bipartite structure through its symmetric spectrum
+\item \textbf{Laplacian Matrix:} Captures connectivity and enables graph partitioning through its smallest eigenvalues
+\item \textbf{Normalization:} Balances the influence of high and low degree vertices
+\item \textbf{Cheeger's Inequality:} Connects algebraic properties (eigenvalues) to combinatorial ones (expansion), enabling efficient algorithms for graph partitioning
+\end{enumerate}
+
+\textbf{For the Exam:} Focus on understanding the intuitive meaning of each result, the conditions under which theorems apply, and how eigenvalues relate to graph structure. Practice identifying bipartite graphs from their spectra and using the Laplacian quadratic form to understand connectivity.
+
+\end{document}

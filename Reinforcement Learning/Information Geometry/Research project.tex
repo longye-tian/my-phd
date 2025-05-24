@@ -144,17 +144,17 @@ This explains why standard gradient descent becomes trapped in plateau regions f
 \begin{theorem}[Natural Gradient Behavior Near Critical Regions]
 Near a critical region, the Fisher information matrix has the structure \cite{amari1998natural, martens2015optimizing}:
 \begin{equation}
-G(\xi) \approx \epsilon^2 G_{\perp} + G_{\parallel}
+G(\theta) \approx \epsilon^2 G_{\perp} + G_{\parallel}
 \end{equation}
 with inverse:
 \begin{equation}
-G^{-1}(\xi) \approx \frac{1}{\epsilon^2}G_{\perp}^{-1} + G_{\parallel}^{-1}
+G^{-1}(\theta) \approx \frac{1}{\epsilon^2}G_{\perp}^{-1} + G_{\parallel}^{-1}
 \end{equation}
 where $\epsilon$ is the distance to the critical manifold $R$.
 
 For natural gradient descent, this gives dynamics \cite{amari2016information}:
 \begin{equation}
-\frac{d\epsilon}{dt} = -G^{-1}(\xi)\nabla_{\perp} L(\xi) \propto \frac{\epsilon^2}{\epsilon^2} = O(1)
+\frac{d\epsilon}{dt} = -G^{-1}(\theta)\nabla_{\perp} \ell(\theta) \propto \frac{\epsilon^2}{\epsilon^2} = O(1)
 \end{equation}
 This cancellation effect maintains constant convergence rate regardless of proximity to critical regions.
 \end{theorem}
@@ -200,12 +200,17 @@ For a sufficiently smooth loss function $L(\theta)$, natural gradient descent wi
 \end{enumerate}
 \end{theorem}
 
-\begin{theorem}[Implicit Regularization]
-Natural gradient descent implicitly regularizes toward parameter configurations away from critical manifolds, favoring more stable representations when multiple configurations yield equivalent model behavior \cite{kunstner2019limitations, martens2015optimizing}.
+\begin{theorem}[Information Geometric Regularization Effect]
+For a neural network parameterized by $\theta$, natural gradient descent with update rule $\Delta\theta = -\eta G^{-1}(\theta)\nabla_\theta L(\theta)$ implicitly biases optimization away from critical manifolds by accounting for the local geometry of the parameter space \cite{amari2016information, kunstner2019limitations}. Specifically, in regions where multiple parameter configurations yield equivalent model behavior, natural gradient favors those with higher stability properties characterized by the eigenspectrum of the Fisher Information Matrix \cite{liang2019fisher, martens2020new}.
 \end{theorem}
 
-\begin{corollary}[Scaling with Network Size]
-For neural networks with $n$ parameters, worst-case convergence time near singularities scales as $O(n^3)$ for standard gradient descent versus $O(n)$ for natural gradient descent \cite{wei2008dynamics, amari2016information}.
+\begin{corollary}[Convergence Time Scaling]
+For a neural network with parameter dimension $n$, when initialized near a critical manifold at distance $\epsilon$, the expected time to escape to a fixed distance $\delta$ scales as \cite{zhang2019fast, martens2020new}:
+\begin{align}
+T_{SGD}(\epsilon, \delta, n) &= \Omega\left(n \cdot \left(\frac{1}{\epsilon^2} - \frac{1}{\delta^2}\right)\right) \\
+T_{NGD}(\epsilon, \delta, n) &= O\left(n \cdot \log\frac{\delta}{\epsilon}\right)
+\end{align}
+where the additional factor of $n$ arises from the dimensionality of the parameter space.
 \end{corollary}
 
 This scaling property becomes increasingly important for large neural networks, where the dimensionality of the parameter space makes escape from critical regions particularly challenging using standard gradient methods \cite{martens2015optimizing}.
@@ -272,12 +277,8 @@ The geometric perspective offered by natural gradient methods could be particula
 To date, no research has systematically investigated whether the theoretical advantages of natural gradient methods translate to practical benefits when applied to deep learning solutions for macroeconomic models. This project aims to address this gap by comparing standard gradient methods against natural gradient approaches in the context of a canonical Real Business Cycle model.
 
 
-
-\subsection{Conclusion}
-
-The plateau effect in neural network optimization stems from intrinsic singularities in parameter space where the Fisher information matrix becomes degenerate. By adopting the Riemannian metric defined by the Fisher information matrix, natural gradient descent ensures parameter updates are scaled according to their effect on the model's output distribution rather than their Euclidean magnitude.
-
-This geometric approach transforms the optimization dynamics, converting polynomial convergence to exponential convergence near critical regions and eliminating the plateau phenomenon. The theoretical advantages of natural gradient descent become increasingly significant for deep neural networks with complex loss landscapes containing numerous critical regions, providing a principled solution to one of the fundamental challenges in neural network optimization.
+\section{Application in Real Business Cycle model}
+The RBC model is one of the most basic dynamic stochastic general equilibrium models used in the macroeconomic studies. 
 \printbibliography{}
 \newpage
 \end{document}

@@ -1,0 +1,298 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{COMP 4880/8880 - Heavy-Tailed Distributions}
+\lhead{Network Science Exam Review}
+\cfoot{\thepage}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{property}{Property}
+
+\title{\textbf{Heavy-Tailed Distributions in Network Science\\Study Guide}}
+\author{COMP 4880/8880 Exam Review}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction to Heavy-Tailed Distributions}
+\textit{Covers slides 2-11}
+
+\subsection{What Makes a Distribution Heavy-Tailed?}
+
+A heavy-tailed distribution is fundamentally different from familiar distributions like the exponential or Gaussian. While these "light-tailed" distributions decay rapidly, heavy-tailed distributions maintain significant probability mass even for very large values.
+
+\begin{definition}[Heavy-Tailed Distribution]
+A distribution function $F$ is heavy-tailed if and only if, for all $\mu > 0$:
+$$\lim_{x \to \infty} \sup \frac{1-F(x)}{e^{-\mu x}} = \lim_{x \to \infty} \sup \frac{\bar{F}(x)}{e^{-\mu x}} = \infty$$
+\end{definition}
+
+\textbf{Intuitive Understanding:} This definition tells us that the tail of a heavy-tailed distribution decays slower than any exponential function. No matter how small we make $\mu$, the heavy-tailed distribution will eventually dominate $e^{-\mu x}$.
+
+\subsection{Visual Recognition}
+
+The key insight is in how we plot these distributions. On a linear scale, both exponential and Pareto (heavy-tailed) distributions look similar. However, on a logarithmic scale, the difference becomes clear:
+\begin{itemize}
+\item \textbf{Exponential:} Appears as a straight line (exponential decay)
+\item \textbf{Heavy-tailed:} Maintains curvature, showing much slower decay
+\end{itemize}
+
+This visual distinction is crucial for identifying heavy-tailed behavior in real data.
+
+\section{The Three Main Heavy-Tailed Distributions}
+\textit{Covers slides 12-27}
+
+\subsection{Pareto Distribution - The Canonical Example}
+
+The Pareto distribution is the most important heavy-tailed distribution, often called the "power-law" distribution.
+
+\begin{definition}[Pareto Distribution]
+For $x \geq x_{\min}$:
+$$\bar{F}(x) = \Pr(X > x) = \left(\frac{x_{\min}}{x}\right)^{\alpha}$$
+$$f(x) = \frac{\alpha x_{\min}^{\alpha}}{x^{\alpha+1}}$$
+\end{definition}
+
+\textbf{Key Properties:}
+\begin{itemize}
+\item \textbf{Scale Invariance:} This is the Pareto's defining characteristic. The distribution looks the same at all scales.
+\item \textbf{Moments:} 
+  \begin{align}
+  E[X] &= \begin{cases} 
+  \infty & \text{if } \alpha \leq 1 \\
+  \frac{\alpha x_{\min}}{\alpha-1} & \text{if } \alpha > 1
+  \end{cases}\\
+  \text{Var}[X] &= \begin{cases}
+  \infty & \text{if } \alpha \in (1,2] \\
+  \left(\frac{x_{\min}}{\alpha-1}\right)^2 \frac{\alpha}{\alpha-2} & \text{if } \alpha > 2
+  \end{cases}
+  \end{align}
+\end{itemize}
+
+\textbf{Connection to Exponential:} There's an elegant relationship: if $X \sim \text{Pareto}(x_{\min}, \alpha)$, then $\log(X/x_{\min}) \sim \text{Exponential}(\alpha)$.
+
+\subsection{Weibull Distribution}
+
+The Weibull distribution is particularly important for modeling failure times and has a rich connection to hazard rates.
+
+\begin{definition}[Weibull Distribution]
+$$f(x; \alpha, \beta) = \begin{cases}
+\alpha\beta(\beta x)^{\alpha-1}e^{-(\beta x)^{\alpha}} & \text{if } x \geq 0 \\
+0 & \text{if } x < 0
+\end{cases}$$
+$$\bar{F}(x; \alpha, \beta) = e^{-(\beta x)^{\alpha}}$$
+\end{definition}
+
+\textbf{Parameters:}
+\begin{itemize}
+\item $\alpha$: Shape parameter (determines tail behavior)
+\item $\beta$: Scale parameter (inverse scale)
+\end{itemize}
+
+\textbf{Heavy-Tail Condition:} Weibull is heavy-tailed when $\alpha < 1$.
+
+\textbf{Hazard Rate:} $q(t) = \alpha\beta^{\alpha}t^{\alpha-1}$
+\begin{itemize}
+\item If $\alpha < 1$: Decreasing hazard rate (failure becomes less likely over time)
+\item If $\alpha = 1$: Constant hazard rate (reduces to exponential)
+\item If $\alpha > 1$: Increasing hazard rate (aging effect)
+\end{itemize}
+
+\subsection{LogNormal Distribution}
+
+The LogNormal emerges naturally from multiplicative processes and has all finite moments.
+
+\begin{definition}[LogNormal Distribution]
+If $X \sim \text{LogNormal}(\mu, \sigma^2)$, then $\log(X) \sim \text{Gaussian}(\mu, \sigma^2)$.
+$$f(x; \mu, \sigma^2) = \frac{1}{x\sigma\sqrt{2\pi}} \exp\left(-\frac{(\ln x - \mu)^2}{2\sigma^2}\right)$$
+\end{definition}
+
+\textbf{Key Properties:}
+\begin{itemize}
+\item \textbf{Multiplicative Closure:} Product of LogNormals remains LogNormal
+\item \textbf{Finite Moments:} All moments exist, though they can be very large
+\item \textbf{Mean and Variance:}
+  \begin{align}
+  E[X] &= e^{\mu + \sigma^2/2}\\
+  \text{Var}[X] &= e^{2\mu + \sigma^2}(e^{\sigma^2} - 1)
+  \end{align}
+\end{itemize}
+
+\section{Key Properties of Heavy Tails}
+\textit{Covers slides 28-57}
+
+\subsection{Scale Invariance}
+
+Scale invariance is perhaps the most important property of heavy-tailed distributions.
+
+\begin{definition}[Scale Invariance]
+$F$ is scale invariant if there exists an $x_0$ and a function $g$ such that:
+$$\bar{F}(\lambda x) = g(\lambda)\bar{F}(x) \text{ for all } \lambda, x \text{ such that } \lambda x \geq x_0$$
+\end{definition}
+
+\begin{theorem}
+A distribution is scale invariant if and only if it is Pareto.
+\end{theorem}
+
+\textbf{Intuitive Meaning:} If you zoom in or out on the distribution, it looks fundamentally the same. This is like the fractal property in nature - think of coastlines or broccoli florets that look similar at different magnifications.
+
+\textbf{Asymptotic Scale Invariance:} Most heavy-tailed distributions are approximately scale invariant for large values, even if not exactly scale invariant everywhere.
+
+\subsection{The Catastrophe Principle}
+
+The catastrophe principle explains why extreme events dominate in heavy-tailed systems.
+
+\begin{definition}[Catastrophe Principle]
+A distribution $F$ satisfies the catastrophe principle if, for $n \geq 2$ independent random variables $X_1, X_2, \ldots, X_n$ with distribution $F$:
+$$\Pr(\max(X_1, X_2, \ldots, X_n) > t) \sim \Pr(X_1 + X_2 + \cdots + X_n > t) \text{ as } t \to \infty$$
+\end{definition}
+
+\textbf{Intuitive Understanding:} In heavy-tailed systems, the probability that the sum exceeds a large value is approximately the same as the probability that the maximum exceeds that value. This means one extremely large event dominates everything else.
+
+\textbf{Real-world Examples:}
+\begin{itemize}
+\item In your class polling example: One celebrity's million followers dominated the total
+\item Earthquake damage: A few massive earthquakes cause most of the total damage
+\item Wealth distribution: A few individuals hold most of the wealth
+\end{itemize}
+
+\subsection{Residual Life "Blow-up"}
+
+The residual life property shows how heavy-tailed distributions "remember" their past.
+
+\begin{definition}[Mean Residual Life]
+For a random variable $X$ with distribution function $F$:
+$$m(x) = E[X - x | X > x] = \int_0^{\infty} \bar{R}_x(t) dt$$
+where $\bar{R}_x(t) = \frac{\bar{F}(x+t)}{\bar{F}(x)}$ is the residual life distribution.
+\end{definition}
+
+\textbf{Behavior Comparison:}
+\begin{itemize}
+\item \textbf{Exponential:} $m(x) = \frac{1}{\mu}$ (constant - "memoryless")
+\item \textbf{Pareto:} $m(x) = \frac{x}{\alpha-1}$ (increasing in $x$)
+\end{itemize}
+
+\textbf{Intuitive Meaning:} For exponential distributions, knowing you've already waited doesn't change your expected remaining wait time. For heavy-tailed distributions, the longer you've already waited, the longer you expect to continue waiting. This is the opposite of our usual intuition!
+
+\subsection{The Pareto Principle and Lorenz Curves}
+
+The famous "80-20 rule" emerges naturally from Pareto distributions.
+
+For a Pareto distribution, the fraction of wealth $W(x)$ held by the richest $P(x)$ fraction of the population is:
+$$W(x) = \left(\frac{x}{x_{\min}}\right)^{-\alpha+1}$$
+
+The Lorenz curve plots this relationship, and the Gini coefficient measures inequality as the area between the Lorenz curve and the line of perfect equality.
+
+\section{Generating Heavy Tails: Additive and Multiplicative Processes}
+\textit{Covers slides 58-76}
+
+\subsection{When the Central Limit Theorem Fails}
+
+The Central Limit Theorem requires finite variance. For heavy-tailed distributions with infinite variance, we need different tools.
+
+\textbf{Classical CLT Requirements:}
+\begin{enumerate}
+\item Independent and identically distributed variables
+\item Finite mean
+\item Finite variance
+\end{enumerate}
+
+When these conditions aren't met (particularly finite variance), the sum doesn't converge to a Gaussian distribution.
+
+\subsection{Stable Distributions and Generalized CLT}
+
+\begin{definition}[Stable Distribution]
+A distribution $F$ is stable if, for any $n \geq 2$ i.i.d. random variables $X_1, \ldots, X_n$ with distribution $F$, there exist constants $c_n > 0$ and $d_n \in \mathbb{R}$ such that:
+$$X_1 + X_2 + \cdots + X_n \stackrel{d}{=} c_n X_1 + d_n$$
+\end{definition}
+
+\begin{theorem}[Generalized Central Limit Theorem]
+If $X_1, X_2, \ldots$ are i.i.d. with distribution $F$, then:
+$$\frac{(X_1 + X_2 + \cdots + X_n) - b_n}{a_n} \stackrel{d}{\to} Z$$
+if and only if $Z$ is $\alpha$-stable for some $\alpha \in (0, 2]$.
+\end{theorem}
+
+\textbf{Key Insight:} When $\alpha = 2$, we get the Gaussian (classical CLT). When $\alpha < 2$, we get heavy-tailed stable distributions.
+
+\subsection{Multiplicative Processes Generate LogNormal}
+
+\begin{theorem}[Multiplicative Central Limit Theorem]
+If $\{Y_i\}_{i \geq 1}$ are i.i.d. strictly positive random variables with $\text{Var}[\log Y_i] = \sigma^2 < \infty$, then:
+$$\left(\frac{Y_1 \cdot Y_2 \cdots Y_n}{\mu^n}\right)^{1/\sqrt{n}} \stackrel{d}{\to} H$$
+where $H \sim \text{LogNormal}(0, \sigma^2)$ and $\mu = e^{E[\log Y_i]}$.
+\end{theorem}
+
+\textbf{Intuitive Understanding:} Just as adding many random variables gives Gaussian distributions, multiplying many positive random variables gives LogNormal distributions.
+
+\subsection{Real-World Generation Mechanisms}
+
+\textbf{Random Walks:} Even simple symmetric random walks generate heavy tails in their return times. The return time $T$ satisfies:
+$$\Pr(T > x) \sim \sqrt{\frac{2}{\pi}} \frac{1}{\sqrt{x}}$$
+
+\textbf{Preferential Attachment:} In network growth, nodes that are already well-connected tend to attract more connections. This "rich get richer" mechanism generates power-law degree distributions:
+$$\bar{F}(x) \sim \beta x^{-\frac{1}{1-\alpha}}$$
+
+\section{Practical Implications and Why This Matters}
+
+\subsection{Statistical Consequences}
+
+When dealing with heavy-tailed data:
+\begin{enumerate}
+\item \textbf{Law of Large Numbers works slowly:} Sample means converge to population means much more slowly
+\item \textbf{Sample means can be misleading:} Small samples may not reflect the true mean
+\item \textbf{Standard deviation is not useful:} May not even exist mathematically
+\item \textbf{Linear regression fails:} The Gauss-Markov theorem doesn't apply
+\end{enumerate}
+
+\subsection{Network Science Applications}
+
+Heavy-tailed distributions appear throughout network science:
+\begin{itemize}
+\item \textbf{Degree distributions:} Many real networks have heavy-tailed degree distributions
+\item \textbf{Component sizes:} During network formation, component sizes often follow power laws
+\item \textbf{Cascade sizes:} Information diffusion and failure cascades show heavy-tailed behavior
+\item \textbf{Path lengths:} In some networks, path length distributions are heavy-tailed
+\end{itemize}
+
+Understanding these distributions is crucial for:
+\begin{itemize}
+\item Predicting extreme events (large cascades, major failures)
+\item Designing robust systems (accounting for "black swan" events)
+\item Proper statistical analysis of network data
+\item Understanding phase transitions in network processes
+\end{itemize}
+
+\section{Summary and Key Takeaways}
+
+Heavy-tailed distributions represent a fundamental departure from classical statistical thinking. They emerge naturally in complex systems and networks, where:
+
+\begin{enumerate}
+\item \textbf{Extreme events matter:} A few very large events dominate system behavior
+\item \textbf{Scale matters less:} Systems look similar across different scales
+\item \textbf{Memory exists:} Past events influence future expectations
+\item \textbf{Classical tools fail:} Standard statistical methods may not apply
+\end{enumerate}
+
+For your exam, focus on:
+\begin{itemize}
+\item Recognizing heavy-tailed behavior in data and models
+\item Understanding the three main distributions and their properties
+\item Knowing when classical statistical tools fail and why
+\item Connecting heavy-tailed distributions to network phenomena
+\item Understanding the mechanisms that generate heavy tails
+\end{itemize}
+
+The key insight is that heavy-tailed distributions are not exotic mathematical curiosities, but fundamental features of complex systems that require different analytical approaches and generate different intuitions about randomness and extreme events.
+
+\end{document}

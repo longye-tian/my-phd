@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{framed}
+
+\definecolor{answercolor}{rgb}{0.0, 0.4, 0.0}
+
+\newenvironment{answer}{\color{answercolor}\begin{framed}\textbf{Answer and Explanation:}}{\end{framed}}
+
+\title{Link Prediction and Recommender Systems: Practice Exam Questions}
+\author{COMP 4880/8880 Network Science}
+\date{Exam Preparation}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+This practice exam contains questions in the same format as your actual exam: True/False, Multiple Choice, and Short Answer questions with calculations. Each question includes detailed explanations to help you understand not just the correct answer, but the underlying reasoning and common misconceptions to avoid.
+
+\section{True/False Questions (1 point each)}
+
+\subsection{Question 1}
+\textbf{True or False:} The Adamic-Adar index gives higher scores to node pairs that share many common neighbors, regardless of how well-connected those common neighbors are.
+
+\begin{answer}
+\textbf{False.} The Adamic-Adar index specifically weights common neighbors by their rarity, giving higher importance to connections through low-degree nodes. The formula is $\sum_{z \in \Gamma(x) \cap \Gamma(y)} \frac{1}{\log|\Gamma(z)|}$, where the $\frac{1}{\log|\Gamma(z)|}$ term means that common neighbors with fewer connections (smaller $|\Gamma(z)|$) contribute more to the score. The intuition is that a connection through a hub node (with many connections) provides less evidence of a meaningful relationship than a connection through a specialized node (with few connections). For example, being connected through a celebrity on social media is less meaningful than being connected through a mutual close friend.
+\end{answer}
+
+\subsection{Question 2}
+\textbf{True or False:} In recommender systems, Pearson correlation similarity is always preferred over cosine similarity because it accounts for different user rating scales.
+
+\begin{answer}
+\textbf{False.} While Pearson correlation does account for different rating scales by centering the data (subtracting each user's average rating), this is not always preferable. Cosine similarity is often better when we want to focus on the relative preferences rather than absolute rating patterns. For instance, if one user consistently rates everything 1 point higher than another but has identical relative preferences, cosine similarity will correctly identify them as very similar, while Pearson correlation might not. Additionally, cosine similarity is computationally simpler and more robust to sparse data. The choice depends on the specific application and whether absolute rating differences or relative preference patterns are more important for the recommendation task.
+\end{answer}
+
+\subsection{Question 3}
+\textbf{True or False:} Matrix factorization for recommender systems is essentially the same as performing SVD on the user-item rating matrix.
+
+\begin{answer}
+\textbf{False.} While matrix factorization is inspired by SVD, they address fundamentally different problems. Standard SVD requires a complete matrix and decomposes it as $M = U\Sigma V^T$ where all entries are known. However, user-item rating matrices are extremely sparse (typically less than 1\% of entries are observed). Matrix factorization for recommendations only fits the observed entries and uses regularization to prevent overfitting, minimizing $\sum_{(u,i) \in \text{observed}} (R_{u,i} - \gamma_u \cdot \gamma_i)^2 + \lambda(||\gamma_u||^2 + ||\gamma_i||^2)$. This approach can handle missing data naturally and scales to very large, sparse matrices, unlike traditional SVD. The learned factors capture latent patterns in user preferences and item characteristics, making it more interpretable and effective for recommendation tasks.
+\end{answer}
+
+\section{Multiple Choice Questions (2 points each)}
+
+\subsection{Question 4}
+In a link prediction evaluation, you split your network data temporally with a training period and test period. The "Core" set refers to:
+
+\begin{enumerate}[label=(\alph*)]
+\item All nodes that exist in the training period
+\item All nodes that exist in the test period  
+\item Nodes that are active in both training and test periods
+\item The most highly connected nodes in the network
+\end{enumerate}
+
+\begin{answer}
+\textbf{(c) Nodes that are active in both training and test periods.}
+
+The Core set is crucial for fair evaluation in link prediction. If we tried to predict links for nodes that only appear in the test period, we would have no training data about their connection patterns, making prediction impossible. Similarly, nodes that disappear after the training period cannot form new links in the test period. By focusing on the Core set of nodes active in both periods, we ensure that we can both learn from their historical behavior and evaluate predictions for their future connections. This methodological choice helps avoid biases and ensures that our evaluation reflects the algorithm's true predictive capability rather than artifacts of the data splitting process.
+\end{answer}
+
+\subsection{Question 5}
+The Netflix Prize competition was significant for recommender systems research primarily because:
+
+\begin{enumerate}[label=(\alph*)]
+\item It provided the first large-scale movie rating dataset
+\item It demonstrated the superiority of memory-based methods over model-based methods
+\item It showed that matrix factorization and ensemble methods could significantly improve recommendation accuracy
+\item It proved that collaborative filtering is better than content-based filtering
+\end{enumerate}
+
+\begin{answer}
+\textbf{(c) It showed that matrix factorization and ensemble methods could significantly improve recommendation accuracy.}
+
+The Netflix Prize (2006-2009) was a watershed moment for recommender systems research. The competition challenged teams to improve Netflix's recommendation algorithm by 10\% on a dataset of 100 million movie ratings. The winning approaches were dominated by matrix factorization techniques and sophisticated ensemble methods that combined multiple algorithms. This competition demonstrated that moving beyond simple neighborhood-based methods to more sophisticated model-based approaches could yield substantial improvements in recommendation quality. The research it spurred led to matrix factorization becoming the dominant paradigm in recommender systems. The competition also highlighted the importance of handling the "cold start" problem and the challenges of scaling algorithms to massive datasets with millions of users and items.
+\end{answer}
+
+\subsection{Question 6}
+Which of the following best describes the relationship between link prediction and collaborative filtering?
+
+\begin{enumerate}[label=(\alph*)]
+\item They are completely different problems with no mathematical connection
+\item Both are instances of "dyadic prediction" - predicting relationships between pairs of entities
+\item Link prediction is a special case of collaborative filtering
+\item Collaborative filtering is a special case of link prediction
+\end{enumerate}
+
+\begin{answer}
+\textbf{(b) Both are instances of "dyadic prediction" - predicting relationships between pairs of entities.}
+
+This connection represents a fundamental insight in network science and machine learning. Both problems involve predicting missing entries in sparse matrices: link prediction predicts missing entries in adjacency matrices (will nodes $i$ and $j$ be connected?), while collaborative filtering predicts missing entries in user-item interaction matrices (will user $u$ like item $i$?). This unified view, termed "dyadic prediction," allows methods developed for one domain to be applied to the other. For example, matrix factorization techniques developed for collaborative filtering can be adapted for link prediction, and network-based similarity measures can inform recommender systems. This cross-pollination has been enormously productive, leading to hybrid approaches that leverage both network structure and user-item interactions.
+\end{answer}
+
+\section{Short Answer Questions with Calculations (5 points each)}
+
+\subsection{Question 7}
+Consider a small network with 4 nodes (A, B, C, D) where the current edges are: A-B, A-C, B-C, C-D. You want to predict whether edge A-D will form.
+
+Calculate the following similarity scores for the potential edge A-D:
+\begin{enumerate}[label=(\alph*)]
+\item Common neighbors score
+\item Jaccard coefficient  
+\item Adamic-Adar index
+\end{enumerate}
+
+Show your work and explain which method gives the highest score.
+
+\begin{answer}
+First, let me identify the neighborhoods:
+\begin{itemize}
+\item $\Gamma(A) = \{B, C\}$ (degree 2)
+\item $\Gamma(B) = \{A, C\}$ (degree 2)  
+\item $\Gamma(C) = \{A, B, D\}$ (degree 3)
+\item $\Gamma(D) = \{C\}$ (degree 1)
+\end{itemize}
+
+For the potential edge A-D:
+
+\textbf{(a) Common neighbors:} $|\Gamma(A) \cap \Gamma(D)| = |\{B,C\} \cap \{C\}| = |\{C\}| = 1$
+
+\textbf{(b) Jaccard coefficient:} $\frac{|\Gamma(A) \cap \Gamma(D)|}{|\Gamma(A) \cup \Gamma(D)|} = \frac{|\{C\}|}{|\{B,C\} \cup \{C\}|} = \frac{1}{|\{B,C\}|} = \frac{1}{2} = 0.5$
+
+\textbf{(c) Adamic-Adar index:} $\sum_{z \in \Gamma(A) \cap \Gamma(D)} \frac{1}{\log|\Gamma(z)|} = \frac{1}{\log|\Gamma(C)|} = \frac{1}{\log(3)} \approx \frac{1}{1.099} \approx 0.91$
+
+\textbf{Ranking:} Adamic-Adar (0.91) $>$ Jaccard (0.5) $>$ Common neighbors (1, but this is absolute count, not normalized).
+
+The Adamic-Adar index gives the highest normalized score because it recognizes that the common neighbor C has moderate degree (3), making the connection through C reasonably meaningful. The Jaccard coefficient is lower because it considers the union of all neighbors, diluting the signal.
+\end{answer}
+
+\subsection{Question 8}
+Two users have rated movies on a 1-5 scale as follows:
+\begin{itemize}
+\item User 1: Movie A=4, Movie B=2, Movie C=5, Movie D=1
+\item User 2: Movie A=5, Movie B=3, Movie C=4, Movie D=2  
+\end{itemize}
+
+Calculate the cosine similarity and Pearson correlation between these two users. Show all steps and explain what each measure captures.
+
+\begin{answer}
+Let $R_1 = [4, 2, 5, 1]$ and $R_2 = [5, 3, 4, 2]$
+
+\textbf{Cosine Similarity:}
+$$\text{cosine}(R_1, R_2) = \frac{R_1 \cdot R_2}{||R_1|| \cdot ||R_2||}$$
+
+Numerator: $R_1 \cdot R_2 = 4 \times 5 + 2 \times 3 + 5 \times 4 + 1 \times 2 = 20 + 6 + 20 + 2 = 48$
+
+Denominators: 
+$||R_1|| = \sqrt{4^2 + 2^2 + 5^2 + 1^2} = \sqrt{16 + 4 + 25 + 1} = \sqrt{46} \approx 6.78$
+$||R_2|| = \sqrt{5^2 + 3^2 + 4^2 + 2^2} = \sqrt{25 + 9 + 16 + 4} = \sqrt{54} \approx 7.35$
+
+Cosine similarity = $\frac{48}{6.78 \times 7.35} \approx \frac{48}{49.83} \approx 0.96$
+
+\textbf{Pearson Correlation:}
+First, compute means: $\bar{R_1} = \frac{4+2+5+1}{4} = 3$, $\bar{R_2} = \frac{5+3+4+2}{4} = 3.5$
+
+Centered vectors: $R_1' = [1, -1, 2, -2]$, $R_2' = [1.5, -0.5, 0.5, -1.5]$
+
+$$\text{Pearson} = \frac{\sum(R_1' \cdot R_2')}{\sqrt{\sum(R_1')^2} \cdot \sqrt{\sum(R_2')^2}}$$
+
+Numerator: $1 \times 1.5 + (-1) \times (-0.5) + 2 \times 0.5 + (-2) \times (-1.5) = 1.5 + 0.5 + 1 + 3 = 6$
+
+Denominators: $\sqrt{1^2 + 1^2 + 2^2 + 2^2} = \sqrt{10} \approx 3.16$, $\sqrt{1.5^2 + 0.5^2 + 0.5^2 + 1.5^2} = \sqrt{5} \approx 2.24$
+
+Pearson correlation = $\frac{6}{3.16 \times 2.24} \approx \frac{6}{7.08} \approx 0.85$
+
+\textbf{Interpretation:} Both measures show high similarity, but cosine similarity (0.96) is higher than Pearson correlation (0.85). This suggests the users have very similar relative preferences (high cosine similarity) but User 2 tends to rate slightly higher on average, which Pearson correlation detects by centering the data. Cosine similarity focuses purely on the pattern of preferences regardless of the absolute rating scale.
+\end{answer}
+
+\subsection{Question 9}
+Explain the key differences between memory-based and model-based approaches in recommender systems. Give one advantage and one disadvantage of each approach, and describe a scenario where each would be preferred.
+
+\begin{answer}
+\textbf{Memory-Based Approaches:}
+These methods use similarity functions directly on the original interaction data without learning parameters. They find similar users or items and make recommendations based on neighborhood preferences.
+
+\textit{Advantage:} Highly interpretable and intuitive. You can easily explain why a recommendation was made ("Users who liked movies X and Y also liked movie Z"). They also work well with small datasets and require no training phase.
+
+\textit{Disadvantage:} Poor scalability and performance on sparse data. Computing similarities between all user pairs becomes computationally prohibitive with millions of users, and meaningful similarities are hard to find when users have few interactions in common.
+
+\textbf{Model-Based Approaches:}
+These methods learn representations (parameters) for users and items that generalize beyond observed data. Matrix factorization is the most prominent example.
+
+\textit{Advantage:} Excellent scalability and performance on sparse data. They can discover latent factors that explain user preferences even when users have few direct overlaps, and they can be optimized for large-scale deployment.
+
+\textit{Disadvantage:} Less interpretable and require significant training time and computational resources. The learned latent factors may not have clear semantic meaning, making it harder to explain recommendations to users.
+
+\textbf{Scenarios:}
+\textit{Memory-based preferred:} Small-scale recommendation system for a niche community (like a local book club) where interpretability is crucial and the data is dense enough for meaningful similarities.
+
+\textbf{Model-based preferred:} Large-scale commercial platform like Netflix or Amazon where you have millions of users and items, sparse interaction data, and need to serve recommendations in real-time with high accuracy.
+\end{answer}
+
+\end{document}

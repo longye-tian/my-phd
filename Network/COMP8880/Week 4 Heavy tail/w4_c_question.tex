@@ -1,0 +1,455 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{framed}
+
+\definecolor{answercolor}{rgb}{0.0, 0.4, 0.0}
+\newenvironment{answer}{\color{answercolor}\begin{framed}\textbf{Answer and Explanation:}}{\end{framed}}
+
+\title{Heavy-Tailed Distributions: Practice Exam Questions}
+\author{COMP 4880/8880 Network Science}
+\date{Exam Preparation}
+
+\begin{document}
+\maketitle
+
+\section*{Instructions}
+This practice exam contains 25 questions in the same format as your actual exam: True/False, Multiple Choice, and Short Answer questions with calculations. Each question includes detailed explanations to help you understand not just the correct answer, but the underlying reasoning and common misconceptions to avoid.
+
+\section{True/False Questions (1 point each)}
+
+\subsection{Question 1}
+\textbf{True or False:} The Central Limit Theorem applies to all distributions, including heavy-tailed ones like the Pareto distribution.
+
+\begin{answer}
+\textbf{False.} The Central Limit Theorem requires four key conditions: identical distribution, independence, finite mean, and finite variance. Many heavy-tailed distributions, particularly Pareto distributions with shape parameter $\alpha \leq 2$, have infinite variance. When variance is infinite, the classical CLT does not apply, and the sum of such random variables does not converge to a Gaussian distribution. Instead, we need the Generalized Central Limit Theorem, which shows convergence to stable distributions other than the Gaussian.
+
+This is a crucial distinction because it explains why standard statistical methods fail catastrophically when applied to heavy-tailed data. The assumption of normality, which underlies most statistical inference, simply doesn't hold for these distributions.
+\end{answer}
+
+\subsection{Question 2}
+\textbf{True or False:} Heavy-tailed distributions are characterized by having more probability mass in their tails compared to light-tailed distributions like the exponential.
+
+\begin{answer}
+\textbf{True.} This is the defining characteristic of heavy-tailed distributions. While light-tailed distributions like the exponential decay extremely rapidly (exponentially fast), heavy-tailed distributions decay much more slowly, often following power laws. This means extreme events are much more probable than our intuition, trained on light-tailed phenomena, would suggest.
+
+For example, if $X \sim \text{Exponential}(\lambda)$, then $P(X > x) = e^{-\lambda x}$, which decays exponentially fast. In contrast, if $X \sim \text{Pareto}(\alpha)$, then $P(X > x) \sim x^{-\alpha}$, which decays much more slowly. This fundamental difference has profound implications for modeling real-world phenomena where extreme events matter.
+\end{answer}
+
+\subsection{Question 3}
+\textbf{True or False:} The return time of a simple random walk (with steps +1 or -1) follows a light-tailed distribution.
+
+\begin{answer}
+\textbf{False.} This is one of the most surprising results in probability theory. Even though the individual steps are bounded (and thus extremely light-tailed), the return time $T$ follows a heavy-tailed distribution with $P(T > x) \sim \sqrt{2/\pi} \cdot x^{-1/2}$.
+
+This demonstrates a counterintuitive principle: heavy-tailed behavior can emerge from processes with light-tailed components. The mechanism here is that while most returns happen quickly, there's a significant probability of very long excursions away from the origin. These rare but extreme events give the return time distribution its heavy tail.
+
+This example illustrates why heavy-tailed phenomena are so prevalent in nature - they can arise from simple, bounded processes through emergent complexity.
+\end{answer}
+
+\subsection{Question 4}
+\textbf{True or False:} For heavy-tailed distributions, the hazard rate typically increases over time.
+
+\begin{answer}
+\textbf{False.} For heavy-tailed distributions, the hazard rate typically decreases over time. The hazard rate $h(t) = f(t)/(1-F(t))$ represents the instantaneous failure rate given survival to time $t$.
+
+In heavy-tailed distributions, this leads to the counterintuitive property that the longer you've survived, the longer you're expected to continue surviving. This is fundamentally different from light-tailed distributions like the exponential, where the hazard rate is constant, or distributions with increasing hazard rates where "wear-out" effects dominate.
+
+The decreasing hazard rate is intimately connected to the "residual life blow-up" property of heavy-tailed distributions, where expected remaining lifetime increases with current age.
+\end{answer}
+
+\subsection{Question 5}
+\textbf{True or False:} Scale-free networks in the real world always exhibit perfect power-law degree distributions.
+
+\begin{answer}
+\textbf{False.} Recent empirical research shows that truly scale-free networks with perfect power-law degree distributions are actually quite rare in real-world data. Most real networks show approximate power-law behavior over limited ranges, with deviations due to finite-size effects, measurement noise, and other practical constraints.
+
+However, the key insight remains valid: understanding whether a network's degree distribution is heavy-tailed (rather than fitting perfect power laws) is crucial for predicting network behavior, robustness, and dynamics. The heavy-tailed nature matters more than the exact functional form.
+
+This reflects a broader principle in heavy-tailed modeling: the qualitative behavior (heavy-tailed vs. light-tailed) is often more important than the precise parametric form.
+\end{answer}
+
+\section{Multiple Choice Questions (2 points each)}
+
+\subsection{Question 6}
+Which of the following is NOT a key property of heavy-tailed distributions?
+
+\begin{enumerate}[label=(\Alph*)]
+    \item Scale invariance
+    \item Catastrophe principle  
+    \item Residual life blow-up
+    \item Constant hazard rate
+\end{enumerate}
+
+\begin{answer}
+\textbf{(D) Constant hazard rate.} A constant hazard rate is characteristic of the exponential distribution, which is light-tailed, not heavy-tailed. Heavy-tailed distributions typically have decreasing hazard rates.
+
+Let me explain each property:
+\begin{itemize}
+    \item \textbf{Scale invariance:} Heavy-tailed distributions look similar at different scales. This self-similarity is a defining characteristic.
+    \item \textbf{Catastrophe principle:} Extreme events are not just possible but inevitable and dominate the behavior of the system.
+    \item \textbf{Residual life blow-up:} The expected remaining lifetime grows without bound as you condition on longer survival times.
+    \item \textbf{Decreasing hazard rate:} The instantaneous failure rate decreases over time, meaning survival to time $t$ indicates likely survival to $t + \epsilon$.
+\end{itemize}
+
+Understanding these properties helps you recognize heavy-tailed phenomena and predict their behavior in real applications.
+\end{answer}
+
+\subsection{Question 7}
+In the Generalized Central Limit Theorem, if the underlying distribution has infinite variance, the sum of $n$ i.i.d. random variables scales as:
+
+\begin{enumerate}[label=(\Alph*)]
+    \item $\sqrt{n}$
+    \item $n$
+    \item $n^{1/\alpha}$ where $\alpha \in (1, 2)$
+    \item $\log n$
+\end{enumerate}
+
+\begin{answer}
+\textbf{(C) $n^{1/\alpha}$ where $\alpha \in (1, 2)$.} This is the key insight of the Generalized Central Limit Theorem. When the underlying distribution has infinite variance (as in Pareto distributions with $\alpha \leq 2$), the classical scaling of $\sqrt{n}$ no longer applies.
+
+Instead, we have scaling of the form $n^{1/\alpha}$ where $\alpha$ is the tail index of the heavy-tailed distribution. This means:
+\begin{itemize}
+    \item For $\alpha$ close to 2: scaling is approximately $\sqrt{n}$ (approaching classical behavior)
+    \item For $\alpha$ close to 1: scaling is approximately $n$ (much stronger than classical)
+    \item The smaller $\alpha$, the heavier the tail and the stronger the scaling
+\end{itemize}
+
+This different scaling explains why heavy-tailed phenomena converge much more slowly than classical theory predicts, and why sample averages can be misleading even with large sample sizes.
+\end{answer}
+
+\subsection{Question 8}
+Which mechanism is most likely to generate a log-normal distribution?
+
+\begin{enumerate}[label=(\Alph*)]
+    \item Adding many small independent effects
+    \item Multiplying many positive independent effects
+    \item Taking the maximum of many independent values
+    \item Preferential attachment in network growth
+\end{enumerate}
+
+\begin{answer}
+\textbf{(B) Multiplying many positive independent effects.} The Multiplicative Central Limit Theorem shows that products of positive random variables converge to log-normal distributions, just as sums converge to normal distributions under the classical CLT.
+
+Mathematically, if $Y_1, Y_2, \ldots, Y_n$ are positive i.i.d. random variables, then:
+$$\left(\frac{Y_1 \cdot Y_2 \cdots Y_n}{\mu^n}\right)^{1/\sqrt{n}} \rightarrow \text{LogNormal}(0, \sigma^2)$$
+
+This explains why log-normal distributions appear frequently in nature:
+\begin{itemize}
+    \item Stock prices (multiplicative returns)
+    \item Biological measurements (multiplicative growth processes)
+    \item Particle sizes (multiplicative fragmentation)
+    \item Income distributions (multiplicative economic factors)
+\end{itemize}
+
+The other options generate different distributions: (A) gives normal distributions, (C) gives extreme value distributions, and (D) gives power-law distributions.
+\end{answer}
+
+\subsection{Question 9}
+According to Taleb's analysis, which is the most serious practical consequence of heavy-tailed distributions?
+
+\begin{enumerate}[label=(\Alph*)]
+    \item They require more computational resources
+    \item Standard statistical methods become unreliable
+    \item They are harder to visualize
+    \item They only occur in theoretical models
+\end{enumerate}
+
+\begin{answer}
+\textbf{(B) Standard statistical methods become unreliable.} This is the crux of Taleb's critique of conventional statistics when applied to heavy-tailed phenomena. The three main consequences he identifies are:
+
+\begin{enumerate}
+    \item \textbf{Law of Large Numbers works too slowly:} Convergence to the true mean happens so slowly that it's practically useless.
+    \item \textbf{Sample means don't correspond to population means:} There's persistent bias, especially when the distribution is skewed.
+    \item \textbf{Standard deviation and variance become meaningless:} These metrics can be infinite or extremely unstable.
+\end{enumerate}
+
+This unreliability has catastrophic implications in fields like finance, insurance, and risk management, where decisions based on flawed statistical assumptions can lead to system-wide failures. The 2008 financial crisis is often cited as an example of what happens when heavy-tailed risks are modeled using light-tailed assumptions.
+
+Option (D) is particularly wrong - heavy-tailed phenomena are extremely common in real-world data, which is precisely why understanding them is so important.
+\end{answer}
+
+\subsection{Question 10}
+In preferential attachment models, new nodes connect to existing nodes with probability proportional to:
+
+\begin{enumerate}[label=(\Alph*)]
+    \item Their age in the network
+    \item Their current degree
+    \item Their clustering coefficient
+    \item Random selection
+\end{enumerate}
+
+\begin{answer}
+\textbf{(B) Their current degree.} Preferential attachment implements a "rich get richer" mechanism where nodes with higher degree are more likely to receive new connections. The probability that a new node connects to an existing node with degree $k$ is proportional to $k$.
+
+More precisely, the probability is:
+$$P(\text{connect to node with degree } k) = \frac{\alpha/t + (1-\alpha)k}{2t}$$
+
+where $\alpha$ is a mixing parameter and $t$ is the current time (number of nodes).
+
+This mechanism naturally generates power-law degree distributions because:
+\begin{itemize}
+    \item High-degree nodes become increasingly attractive
+    \item This creates a positive feedback loop
+    \item Early nodes have more opportunities to accumulate connections
+    \item The result is extreme inequality in degree distribution
+\end{itemize}
+
+This model explains why many real networks (social networks, citation networks, the web) exhibit heavy-tailed degree distributions. The mathematical analysis shows that this process leads to power laws with exponents typically between 2 and 3.
+\end{answer}
+
+\section{Short Answer Questions with Calculations (5 points each)}
+
+\subsection{Question 11}
+Consider a Pareto distribution with shape parameter $\alpha = 1.5$ and scale parameter $x_m = 1$. The probability density function is $f(x) = \frac{\alpha x_m^\alpha}{x^{\alpha+1}}$ for $x \geq x_m$.
+
+\textbf{(a)} Calculate $P(X > 4)$.
+\textbf{(b)} Does this distribution have finite mean? Finite variance? Justify your answers.
+\textbf{(c)} If you sample $n = 1000$ observations from this distribution, would you expect the sample mean to be close to the population mean? Explain.
+
+\begin{answer}
+\textbf{Solution:}
+
+\textbf{(a)} For a Pareto distribution, $P(X > x) = \left(\frac{x_m}{x}\right)^\alpha$ for $x \geq x_m$.
+
+$P(X > 4) = \left(\frac{1}{4}\right)^{1.5} = \frac{1}{4^{1.5}} = \frac{1}{8} = 0.125$
+
+\textbf{(b)} For a Pareto distribution with shape parameter $\alpha$:
+\begin{itemize}
+    \item Mean is finite if and only if $\alpha > 1$
+    \item Variance is finite if and only if $\alpha > 2$
+\end{itemize}
+
+Since $\alpha = 1.5$:
+\begin{itemize}
+    \item Mean exists because $1.5 > 1$. Specifically, $\mathbb{E}[X] = \frac{\alpha x_m}{\alpha - 1} = \frac{1.5 \times 1}{1.5 - 1} = 3$
+    \item Variance does NOT exist because $1.5 < 2$
+\end{itemize}
+
+\textbf{(c)} No, I would not expect the sample mean to be close to the population mean, despite having a finite population mean. This occurs because:
+
+\begin{enumerate}
+    \item The infinite variance means the Central Limit Theorem doesn't apply
+    \item The distribution is extremely skewed with very heavy tails
+    \item Extreme observations will have disproportionate influence on the sample mean
+    \item The convergence to the true mean is extremely slow (much slower than the usual $1/\sqrt{n}$ rate)
+\end{enumerate}
+
+With $n = 1000$, the sample mean could easily be 10, 100, or even 1000 times larger than the true mean of 3, depending on whether extreme values occur in the sample. This illustrates Taleb's point about the unreliability of sample statistics for heavy-tailed distributions.
+\end{answer}
+
+\subsection{Question 12}
+In a simple random walk starting at 0, each step is +1 with probability 1/2 and -1 with probability 1/2. The return time $T$ is the first time the walk returns to 0.
+
+\textbf{(a)} What type of distribution does $T$ follow (heavy-tailed or light-tailed)?
+\textbf{(b)} The probability $P(T > n)$ behaves asymptotically like $cn^{-\beta}$ for large $n$. What is the value of $\beta$?
+\textbf{(c)} Calculate the probability that it takes more than 100 steps to return to the origin (use the asymptotic formula with $c = \sqrt{2/\pi}$).
+
+\begin{answer}
+\textbf{Solution:}
+
+\textbf{(a)} The return time $T$ follows a heavy-tailed distribution. This is surprising because the individual steps are bounded (taking values only +1 or -1), yet the return time has a power-law tail.
+
+\textbf{(b)} The asymptotic behavior is $P(T > n) \sim \sqrt{\frac{2}{\pi}} n^{-1/2}$, so $\beta = 1/2$.
+
+This can be derived from the ballot theorem and properties of random walks. The key insight is that return times are dominated by rare but very long excursions away from the origin.
+
+\textbf{(c)} Using the asymptotic formula:
+$P(T > 100) \approx \sqrt{\frac{2}{\pi}} \times 100^{-1/2} = \sqrt{\frac{2}{\pi}} \times \frac{1}{10}$
+
+$= \frac{1}{10} \sqrt{\frac{2}{\pi}} = \frac{1}{10} \times 0.7979 \approx 0.0798$
+
+So there's approximately an 8% chance of taking more than 100 steps to return to the origin.
+
+\textbf{Interpretation:} This result demonstrates how heavy-tailed behavior emerges from simple processes. Even though most returns happen quickly (within a few steps), there's a significant probability of very long excursions. This heavy-tailed nature of return times has implications for many applications, from financial markets to queueing systems to biological processes.
+\end{answer}
+
+\subsection{Question 13}
+Consider the three consequences of heavy tails identified by Taleb. For a financial portfolio where daily returns follow a heavy-tailed distribution:
+
+\textbf{(a)} Explain why the Law of Large Numbers "works too slowly" in practical terms.
+\textbf{(b)} Why might the sample mean of returns be persistently biased?
+\textbf{(c)} What does it mean that "standard deviation is not useable" for risk management?
+
+\begin{answer}
+\textbf{Solution:}
+
+\textbf{(a) Law of Large Numbers works too slowly:}
+
+In heavy-tailed distributions, convergence to the true mean happens at a rate much slower than $1/\sqrt{n}$. For financial returns:
+\begin{itemize}
+    \item You might need millions of observations to get reliable estimates
+    \item Even with years of daily data, your sample mean could be far from the true expected return
+    \item Extreme market events (crashes, bubbles) have such large impact that they dominate decades of "normal" returns
+    \item By the time you have enough data for reliable estimates, the market structure may have fundamentally changed
+\end{itemize}
+
+\textbf{(b) Persistent sample bias:}
+
+Heavy-tailed distributions are typically highly skewed, leading to systematic bias:
+\begin{itemize}
+    \item The sample mean is sensitive to whether extreme events occur in your particular sample
+    \item If your sample period includes a major crash, the sample mean will be much lower than the true mean
+    \item If your sample period misses major crashes, the sample mean will be much higher than the true mean
+    \item This bias doesn't disappear quickly as you add more data - it persists for practically relevant sample sizes
+\end{itemize}
+
+\textbf{(c) Standard deviation becomes unusable:}
+
+For heavy-tailed distributions, standard deviation fails as a risk measure because:
+\begin{itemize}
+    \item The variance may be infinite, making standard deviation undefined
+    \item Even when finite, sample standard deviation is extremely unstable
+    \item A single extreme event can change your risk estimate by orders of magnitude
+    \item Standard deviation assumes symmetric, bell-shaped distributions - heavy tails are typically highly asymmetric
+    \item Risk models based on standard deviation (like Value-at-Risk) systematically underestimate the probability of extreme losses
+\end{itemize}
+
+\textbf{Practical implications:} These problems explain why quantitative finance models failed spectacularly during the 2008 crisis - they assumed light-tailed distributions when the reality was heavy-tailed, leading to massive underestimation of risks.
+\end{answer}
+
+\subsection{Question 14}
+Explain the difference between the classical Central Limit Theorem and the Generalized Central Limit Theorem in terms of:
+
+\textbf{(a)} The conditions required for each theorem to apply
+\textbf{(b)} The limiting distribution in each case
+\textbf{(c)} The scaling behavior (how the variance of the sum grows with $n$)
+
+\begin{answer}
+\textbf{Solution:}
+
+\textbf{(a) Conditions required:}
+
+\textbf{Classical CLT requires:}
+\begin{enumerate}
+    \item $X_i$ are identically distributed
+    \item $X_i$ are independent  
+    \item $X_i$ have finite mean $\mu$
+    \item $X_i$ have finite variance $\sigma^2$
+\end{enumerate}
+
+\textbf{Generalized CLT requires:}
+\begin{enumerate}
+    \item $X_i$ are identically distributed
+    \item $X_i$ are independent
+    \item $X_i$ may have infinite variance (condition 4 is relaxed)
+    \item Technical conditions on the tail behavior of the distribution
+\end{enumerate}
+
+\textbf{(b) Limiting distributions:}
+
+\textbf{Classical CLT:} The standardized sum converges to a Gaussian distribution:
+$$\frac{S_n - n\mu}{\sigma\sqrt{n}} \xrightarrow{d} \mathcal{N}(0,1)$$
+
+\textbf{Generalized CLT:} The appropriately normalized sum converges to an $\alpha$-stable distribution:
+$$\frac{S_n - b_n}{a_n} \xrightarrow{d} S_\alpha$$
+
+where $S_\alpha$ is $\alpha$-stable with $\alpha \in (0,2]$. When $\alpha < 2$, this is not Gaussian.
+
+\textbf{(c) Scaling behavior:}
+
+\textbf{Classical CLT:} 
+\begin{itemize}
+    \item Scaling: $a_n = \sigma\sqrt{n}$, $b_n = n\mu$
+    \item The variance of $S_n$ grows linearly: $\text{Var}(S_n) = n\sigma^2$
+    \item Standard deviation grows as $\sqrt{n}$
+\end{itemize}
+
+\textbf{Generalized CLT:}
+\begin{itemize}
+    \item Scaling: $a_n \sim n^{1/\alpha}$, where $\alpha < 2$
+    \item For $\alpha < 2$, variance is infinite, so we measure spread differently
+    \item The "scale" of $S_n$ grows as $n^{1/\alpha}$, which is faster than $\sqrt{n}$
+\end{itemize}
+
+\textbf{Key insight:} When variance is infinite ($\alpha < 2$), sums grow much faster than the classical $\sqrt{n}$ rate. This explains why heavy-tailed phenomena are dominated by extreme events and why standard statistical intuition fails so dramatically.
+\end{answer}
+
+\subsection{Question 15}
+A researcher claims that a network dataset follows a power-law degree distribution based on visual inspection of a log-log plot. Critically evaluate this claim by discussing:
+
+\textbf{(a)} What statistical tests should be performed to validate the power-law hypothesis?
+\textbf{(b)} What alternative heavy-tailed distributions should be considered?
+\textbf{(c)} Why might the distinction between "heavy-tailed" and "power-law" be more important than fitting the exact power-law exponent?
+
+\begin{answer}
+\textbf{Solution:}
+
+\textbf{(a) Statistical validation of power-law hypothesis:}
+
+Visual inspection of log-log plots is notoriously unreliable. Proper validation requires:
+
+\begin{enumerate}
+    \item \textbf{Goodness-of-fit test:} Use the Kolmogorov-Smirnov test to compare the empirical distribution to the fitted power law
+    \item \textbf{Bootstrap analysis:} Generate synthetic datasets from the fitted power law and compare their properties to the original data
+    \item \textbf{Likelihood ratio tests:} Compare the power law to alternative distributions (exponential, log-normal, stretched exponential)
+    \item \textbf{Parameter estimation:} Use maximum likelihood estimation rather than linear regression on log-log plots
+    \item \textbf{Determine $x_{min}$:} Find the threshold above which power-law behavior holds, as real networks often show power laws only in the tail
+\end{enumerate}
+
+\textbf{(b) Alternative heavy-tailed distributions:}
+
+Several other distributions can appear linear on log-log plots over limited ranges:
+\begin{itemize}
+    \item \textbf{Log-normal:} Often fits network data better than power laws
+    \item \textbf{Stretched exponential:} $P(X > x) \sim e^{-ax^b}$ with $0 < b < 1$
+    \item \textbf{Power law with exponential cutoff:} $P(X > x) \sim x^{-\alpha}e^{-x/x_c}$
+    \item \textbf{Weibull distribution:} Can exhibit heavy-tailed behavior for certain parameter ranges
+\end{itemize}
+
+Many of these alternatives provide better fits to real network data than pure power laws.
+
+\textbf{(c) Heavy-tailed vs. power-law distinction:}
+
+This distinction is crucial because:
+
+\begin{enumerate}
+    \item \textbf{Qualitative behavior matters more:} Whether a distribution is heavy-tailed determines fundamental properties like:
+    \begin{itemize}
+        \item Vulnerability to extreme events
+        \item Failure of standard statistical methods
+        \item Network robustness and fragility
+        \item Epidemic spreading dynamics
+    \end{itemize}
+    
+    \item \textbf{Perfect power laws are rare:} Recent research shows that truly scale-free networks are uncommon in real data
+    
+    \item \textbf{Finite-size effects:} Real networks have finite size, which introduces cutoffs and deviations from perfect scaling
+    
+    \item \textbf{Practical implications:} For applications like epidemic modeling or network robustness, knowing that the degree distribution is heavy-tailed is more important than the exact value of the power-law exponent
+\end{enumerate}
+
+\textbf{Bottom line:} Focus on understanding whether the network exhibits heavy-tailed behavior rather than obsessing over perfect power-law fits. The heavy-tailed nature drives the important phenomena, regardless of the exact functional form.
+\end{answer}
+
+\section*{Study Tips for Success}
+
+\subsection*{Key Concepts to Master}
+\begin{enumerate}
+    \item \textbf{When classical statistics fails:} Understand the conditions required for CLT and what happens when they're violated
+    \item \textbf{Thraee generation mechanisms:} Addition, multiplication, and extremal processes each produce different types of heavy tails
+    \item \textbf{Practical implications:} Heavy tails make standard methods unreliable - this is the most important practical point
+    \item \textbf{Scale vs. functional form:} Heavy-tailed behavior matters more than exact power-law fitting
+\end{enumerate}
+
+\subsection*{Common Exam Mistakes to Avoid}
+\begin{itemize}
+    \item Assuming CLT always applies without checking variance conditions
+    \item Confusing heavy-tailed with power-law (power-law is a subset of heavy-tailed)
+    \item Forgetting that bounded processes can still generate heavy-tailed outcomes
+    \item Not recognizing when sample statistics become unreliable
+\end{itemize}
+
+\subsection*{Calculation Skills to Practice}
+\begin{itemize}
+    \item Computing tail probabilities for Pareto distributions
+    \item Determining when means and variances exist
+    \item Understanding scaling relationships in limit theorems
+    \item Interpreting asymptotic behavior formulas
+\end{itemize}
+
+\end{document}
